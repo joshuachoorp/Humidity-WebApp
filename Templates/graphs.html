@@ -14,7 +14,7 @@
 </head>
 
 <header class="display-2">Charts</header>
-<form action="\table\">
+<form action="/">
     <button type="submit" name=back value="back">Back</button>
 </form>
 
@@ -23,8 +23,18 @@
     <div style="float: left; height: 500px; width: 500px">
         <h2>Bar Chart</h2>
         <canvas id="BarChart" width="450" height="300" style=" margin: auto"></canvas>
+
+        <!--Generating Chart into backend server-->
         <input type="hidden" id="barName" name="graphName" value="barChartName">
-        <button name="graphBase64" onclick="sendBar()">Download as PNG</button>
+        <button name="graphBase64" onclick="sendBar()">Generate PNG</button>
+        
+        <!--Download Chart to local user-->
+        <button type="submit" form="downloadBar">Download</button>
+        <form id="downloadBar" action="/dashboard/barChartName.png"></form>
+        
+            
+        
+        
         <!--Bar Chart Ideas
         <h3>Rainfall frequency - Show rain fall through the month/year</h3>
         <h3>Rainfall - Show rain fall through the month/year</h3>
@@ -33,8 +43,14 @@
     <div style="float: right; height: 500px; width: 500px">
         <h2>Line Chart</h2>
         <canvas id="LineChart" width="450" height="300" style=" margin: auto"></canvas>
+
+        <!--Generating Chart into backend server-->
         <input type="hidden" id="lineName" name="graphName" value="lineChartName">
-        <button name="graphBase64" onclick="sendLine()">Download as PNG</button>
+        <button name="graphBase64" onclick="sendLine()">Generate PNG</button>
+
+        <!--Download Chart to local user-->
+        <button type="submit" formaction="/dashboard/lineChartName.png" >Download</button>
+        <form id="downloadBar" action="/dashboard/barChartName.png"></form>
         <!--Line Chart Ideas
         <h3>Temperature trend through the month or year</h3>
         <h3>Humidity through the month or year</h3>

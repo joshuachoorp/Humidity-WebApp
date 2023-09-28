@@ -9,11 +9,13 @@ import pandas as pd
 
 app = Flask(__name__)
 
+# Index Page
 @app.route('/')
 def index():
     return render_template('index.html')
 
-    
+
+# Creating dashboard
 @app.route('/dashboard/', methods=['GET', 'POST'])
 def plot():
     # Data for Bar Chart
@@ -24,6 +26,7 @@ def plot():
     label2 = ['Jan', 'Feb', 'Mar', 'Apr', 'May']
     values2 = [65, 59, 80, 81, 56, 55, 40]
 
+    # Passing data to dashboard
     if request.method == 'POST' and request.form.get('plot') == 'dashboard':
         return render_template('graphs.html', chartLabel=label1, chartValue=values1, lineLabel = label2, lineValue = values2)
     
@@ -34,8 +37,9 @@ def plot():
         return 'Not a valid request method for this route'
 
 
+# Exports chart to backend Downloads folder
 @app.route('/dashboard/download', methods=['GET', 'POST'])
-def download():
+def downloadBackEnd():
     # Retrieve data sent by js file
     barChartBase64 = request.form['graphBase64']
     barChartName = request.form['graphName']
@@ -47,20 +51,25 @@ def download():
     with open("Downloads\\" + barChartName + ".png", "wb") as fh:
         fh.write(base64.b64decode(barChartBase64))
 
+    # Adding file type to input chart
     chartName = barChartName + ".png"
-    #downloadFile(barChartName + ".png")
 
     return redirect('/dashboard/' + chartName)
     
 
-
+# Allow users to download image of chart 
 @app.route('/dashboard/<filename>', methods=['GET'])
 def downloadFile(filename):
-    print("a")
+    
+    # Locate the current working directory and go to Downloads folder
     filepath = os.getcwd() + "\Downloads\\"
+
+    # Try to download the file
     try:
+        # Download image of graph to local user
         return send_file(filepath + filename, as_attachment=True)
     
+    # FileNotFoundError
     except FileNotFoundError:
         return abort(404)
 
