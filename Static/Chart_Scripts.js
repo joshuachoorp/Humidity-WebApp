@@ -70,6 +70,7 @@ function sendBar() {
     });
 }
 
+
 // Send line graph canvas to backend
 function sendLine() {
     var graphName = document.getElementById('lineName').value;
@@ -90,4 +91,31 @@ function sendLine() {
             console.log(error)
         }
     });
+}
+
+
+// Take screenshot of dashboard
+function screenshot(){
+    html2canvas(
+        document.getElementById('dashboard')).then(
+            function(canvas) {
+                document.body.appendChild(canvas);
+                
+                // Convert image of dashboard into base64
+                var base64URL = canvas.toDataURL('image/png');
+                // var dashboard = 
+
+                // AJAX request
+               $.ajax({
+                url: '/dashboard/download',
+                type: 'POST',
+                data: { 'graphBase64' : base64URL,
+                        'graphName' : 'dashboardName'
+                },
+                success: function(data){
+                     console.log('Upload successfully');
+                    }
+                });
+            });
+
 }
