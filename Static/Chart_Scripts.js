@@ -1,5 +1,6 @@
 // charts.js
 
+// CreateBarChart
 function createBarChart(data, labels) {
     var ctx = document.getElementById('BarChart').getContext('2d');
     var myChart = new Chart(ctx, {
@@ -42,5 +43,51 @@ function createLineChart(data, labels) {
             }]
         },
 
+    });
+}
+
+
+
+// Send bar graph canvas to backend
+function sendBar() {
+    var graphName = document.getElementById('barName').value;
+    var graph = document.getElementById('BarChart');
+    var graphDataURL = graph.toDataURL('image/png');
+    //console.log(dataURL);
+    //var base64 =  dataURL.replace(/^data:image\/(png|jpeg);base64,/, "");
+    //var base64 = getBase64Image(document.getElementById("BarChart")); 
+    console.log(graphDataURL)
+    
+    $.ajax({
+        url: '/dashboard/download',
+        type: 'POST',
+        data: { 'graphBase64' : graphDataURL,
+                'graphName' : graphName
+        },
+        error: function(error) {
+            console.log(error)
+        }
+    });
+}
+
+// Send line graph canvas to backend
+function sendLine() {
+    var graphName = document.getElementById('lineName').value;
+    var graph = document.getElementById('LineChart');
+    var graphDataURL = graph.toDataURL('image/png');
+    //console.log(dataURL);
+    //var base64 =  dataURL.replace(/^data:image\/(png|jpeg);base64,/, "");
+    //var base64 = getBase64Image(document.getElementById("BarChart")); 
+    console.log(graphDataURL)
+    
+    $.ajax({
+        url: '/dashboard/download',
+        type: 'POST',
+        data: { 'graphBase64' : graphDataURL,
+                'graphName' : graphName
+        },
+        error: function(error) {
+            console.log(error)
+        }
     });
 }
