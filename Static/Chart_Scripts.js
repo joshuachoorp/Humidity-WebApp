@@ -1,7 +1,7 @@
 // charts.js
 
 // CreateBarChart
-function createBarChart(data, labels) {
+function createBarChart(data, labels, title) {
     var ctx = document.getElementById('BarChart').getContext('2d');
     var myChart = new Chart(ctx, {
         type: 'bar',
@@ -16,6 +16,17 @@ function createBarChart(data, labels) {
             }]
         },
         options: {
+            plugins: {
+                title: {
+                   display: true,
+                   text: title,
+                   align: 'center',
+                   font: {
+                      weight: 'bold',
+                      size: 20
+                   },
+                }
+            },
             scales: {
                 y: {
                     beginAtZero: true
@@ -110,10 +121,8 @@ function screenshot(){
                 data: { 'graphBase64' : base64URL,
                         'graphName' : 'dashboardName'
                 },
-                success: function(data){
-                     console.log('Upload successfully');
-                    }
                 });
+                console.log(data)
             });
 
 }

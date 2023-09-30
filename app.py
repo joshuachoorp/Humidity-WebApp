@@ -1,11 +1,13 @@
 from pathlib import Path
 import base64
 import os
+import PlotWeather
 
 from distutils.command import upload
 from flask import Flask, render_template, request, redirect, flash, send_file, send_from_directory, current_app, abort
 import flask
 import pandas as pd
+import numpy as np
 
 app = Flask(__name__)
 
@@ -19,16 +21,17 @@ def index():
 @app.route('/dashboard/', methods=['GET', 'POST'])
 def plot():
     # Data for Bar Chart
-    label1 = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']
-    values1 = [5, 4, 3, 2, 1]
-
+    barTitle = 'Weather data for June in North Region'
+    label1 = list(PlotWeather.calMeanWeatherData(PlotWeather.northDataFilter('North', 6, 2023)).keys())
+    values1 = list(PlotWeather.calMeanWeatherData(PlotWeather.northDataFilter('North', 6, 2023)).values())
+    
     # Data for Line Graph
     label2 = ['Jan', 'Feb', 'Mar', 'Apr', 'May']
     values2 = [65, 59, 80, 81, 56, 55, 40]
 
     # Passing data to dashboard
     if request.method == 'POST' and request.form.get('plot') == 'dashboard':
-        return render_template('graphs.html', chartLabel=label1, chartValue=values1, lineLabel = label2, lineValue = values2)
+        return render_template('graphs.html', chartLabel=label1, chartValue=values1, chartTitle=barTitle, lineLabel = label2, lineValue = values2)
     
     elif request.method == 'GET':
         return redirect('/')
@@ -73,6 +76,34 @@ def downloadFile(filename):
     except FileNotFoundError:
         return abort(404)
 
+@app.route('/downloads/<filename>', methods=['GET'])
+def downloadFileTest(filename):
+    # Retrieve data sent by js file
+    barChartBase64 = request.form['graphBase64']
+    barChartName = request.form['graphName']
+    filepath = os.getcwd() + "\Downloads\\"
+
+    # Remove header of base64 string
+    barChartBase64 = barChartBase64.replace('data:image/png;base64,', '')
+
+    # Writing base64 string to png file to show image of graph
+    with open(filepath + barChartName + ".png", "wb") as fh:
+        fh.write(base64.b64decode(barChartBase64))
+
+    # Adding file type to input chart
+    chartName = barChartName + ".png"
+
+    # Locate the current working directory and go to Downloads folder
+    
+
+    # Try to download the file
+    try:
+        # Download image of graph to local user
+        return send_file(filepath + filename, as_attachment=True)
+    
+    # FileNotFoundError
+    except FileNotFoundError:
+        return abort(404)
 
 
 #Table view

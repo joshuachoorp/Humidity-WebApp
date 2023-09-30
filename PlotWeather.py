@@ -7,16 +7,24 @@ import datetime as datetime
 import numpy as np
 
 
-# Read csv file into Pandas Dataframe
-# dayfirst= True, parse_dates= True,   index_col=0,
-df = pd.read_csv("compiledRegionData.csv", encoding="unicode-escape", usecols=[0,1,2,3,4,5,6,7])
-#df = df.reset_index(inplace = True)
-#df = df.set_index('Date')
-pd.set_option('display.max_columns', None)
-df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y')
+def readFile():
+    # Read csv file into Pandas Dataframe
+    # dayfirst= True, parse_dates= True,   index_col=0,
+    df = pd.read_csv("Datasets/compiledRegionData.csv", encoding="unicode-escape", usecols=[0,1,2,3,4,5,6,7])
+    #df = df.reset_index(inplace = True)
+    #df = df.set_index('Date')
+    pd.set_option('display.max_columns', None)
+    df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y')
+    return df
 
+df = readFile()
 
 # filter weather data by month and region
+def northDataFilter(region, month, year):
+    df = readFile()
+    dataFilter_df = df.loc[(df['Region'] == region.capitalize()) & (df['Date'].dt.month == month) & (df['Date'].dt.year == year)]
+    return dataFilter_df 
+
 north_june_df = df.loc[(df['Region'] == 'North') & (df['Date'].dt.month == 6) & (df['Date'].dt.year == 2023)] 
 north_july_df = df.loc[(df['Region'] == 'North') & (df['Date'].dt.month == 7) & (df['Date'].dt.year == 2023)]
 north_aug_df =  df.loc[(df['Region'] == 'North') & (df['Date'].dt.month == 8) & (df['Date'].dt.year == 2023)]
@@ -43,7 +51,7 @@ west_aug_df =  df.loc[(df['Region'] == 'West') & (df['Date'].dt.month == 8) & (d
 # Create a function to collate the mean/average of the following weather data for 1 month 
 # (Humidity_high, Humidity_avg, Humidity_low, Mean Temp, Max Temp, Lowest Temp)
 
-def calAvg (filteredDf):
+def calAvg(filteredDf):
     
     avg_Hmd_h = 0
     avg_Hmd_a = 0
@@ -89,25 +97,29 @@ def calAvg (filteredDf):
 
 
 # create variables to store the dictionary, which contains the mean value of all weather data from June to Aug by region
-north_june_mean_weather_data = calAvg (north_june_df) 
-north_july_mean_weather_data = calAvg (north_july_df)
-north_aug_mean_weather_data = calAvg (north_aug_df)
+def calMeanWeatherData(data):
+    meanWeatherData = calAvg(data)
+    return meanWeatherData
 
-south_june_mean_weather_data = calAvg (south_june_df) 
-south_july_mean_weather_data = calAvg (south_july_df)
-south_aug_mean_weather_data = calAvg (south_aug_df)
+north_june_mean_weather_data = calAvg(north_june_df) 
+north_july_mean_weather_data = calAvg(north_july_df)
+north_aug_mean_weather_data = calAvg(north_aug_df)
 
-central_june_mean_weather_data = calAvg (central_june_df) 
-central_july_mean_weather_data = calAvg (central_july_df)
-central_aug_mean_weather_data = calAvg (central_aug_df)
+south_june_mean_weather_data = calAvg(south_june_df) 
+south_july_mean_weather_data = calAvg(south_july_df)
+south_aug_mean_weather_data = calAvg(south_aug_df)
 
-east_june_mean_weather_data = calAvg (east_june_df) 
-east_july_mean_weather_data = calAvg (east_july_df)
-east_aug_mean_weather_data = calAvg (east_aug_df)
+central_june_mean_weather_data = calAvg(central_june_df) 
+central_july_mean_weather_data = calAvg(central_july_df)
+central_aug_mean_weather_data = calAvg(central_aug_df)
 
-west_june_mean_weather_data = calAvg (west_june_df) 
-west_july_mean_weather_data = calAvg (west_july_df)
-west_aug_mean_weather_data = calAvg (west_aug_df)
+east_june_mean_weather_data = calAvg(east_june_df) 
+east_july_mean_weather_data = calAvg(east_july_df)
+east_aug_mean_weather_data = calAvg(east_aug_df)
+
+west_june_mean_weather_data = calAvg(west_june_df) 
+west_july_mean_weather_data = calAvg(west_july_df)
+west_aug_mean_weather_data = calAvg(west_aug_df)
 
 #print(type(june_mean_weather_data))
 #print (north_june_mean_weather_data)
@@ -117,13 +129,13 @@ west_aug_mean_weather_data = calAvg (west_aug_df)
 #calAvg (north_june_df)
 #print (calAvg (north_june_df))
 
-print (north_june_mean_weather_data)
+#print(calMeanWeatherData(northDataFilter('North', 6, 2023)))
 
 # plotting graph
 # 1. North Region
 # Plot june weather data (for basic reference)
-keys = north_june_mean_weather_data.keys()
-values = north_june_mean_weather_data.values()
+keys = calMeanWeatherData(northDataFilter('North', 6, 2023)).keys()
+values = calMeanWeatherData(northDataFilter('North', 6, 2023)).values()
 plt.title('Weather data for June in North Region')
 plt.bar (keys, values)
 #plt.show()

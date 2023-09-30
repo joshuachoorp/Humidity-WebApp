@@ -17,20 +17,18 @@
 <header class="display-2">Charts</header>
 <form action="/">
     <button type="submit" name=back value="back">Back</button>
-</form>
-<!--Generating Chart into backend server-->
-<!--input type="hidden" id="barName" name="graphName" value="barChartName" -->
-<button onclick="screenshot()">Screenshot</button>
+</form></br>
 
-<!--Download Chart to local user-->
-<!-- button type="submit" form="downloadDash">Download</button -->
-<form id="downloadDash" action="/dashboard/"></form>
+<!--Generate and Download Screenshot buttons-->
+<button onclick="screenshot()">Generate Screenshot</button>
+<button type="submit" form="downloadDash">Download Screenshot</button>
+<form id="downloadDash" action="/dashboard/dashboardName.png"></form></br></br>
+
 
 
 <body id="dashboard">
-    <!-- Create a canvas element for the chart -->
+    <!-- Create a canvas element for the bar chart -->
     <div style="float: left; height: 500px; width: 500px">
-        <h2>Bar Chart</h2>
         <canvas id="BarChart" width="450" height="300" style=" margin: auto"></canvas>
 
         <!--Generating Chart into backend server-->
@@ -38,7 +36,7 @@
         <button name="graphBase64" onclick="sendBar()">Generate PNG</button>
         
         <!--Download Chart to local user-->
-        <button type="submit" form="downloadBar">Download</button>
+        <button type="submit" name="graphBase64" form="downloadBar">Download</button>
         <form id="downloadBar" action="/dashboard/barChartName.png"></form>
         
             
@@ -97,7 +95,7 @@
     
     <script>
         //Using the data parsed from the controller side app.py chartLabel & chartValue
-        createBarChart({{ chartValue|tojson|safe }}, {{ chartLabel|tojson|safe }});
+        createBarChart({{ chartValue|tojson|safe }}, {{ chartLabel|tojson|safe }}, {{ chartTitle|tojson|safe }});
         createLineChart({{ lineValue|tojson|safe }}, {{ lineLabel|tojson|safe }});
     </script>
 </body>
