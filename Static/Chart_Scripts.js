@@ -98,9 +98,7 @@ function sendLine() {
 function screenshot(){
     html2canvas(
         document.getElementById('dashboard')).then(
-            function(canvas) {
-                document.body.appendChild(canvas);
-                
+            function(canvas) {                
                 // Convert image of dashboard into base64
                 var base64URL = canvas.toDataURL('image/png');
                 // var dashboard = 
