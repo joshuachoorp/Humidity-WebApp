@@ -22,16 +22,33 @@ def index():
 def plot():
     # Data for Bar Chart
     barTitle = 'Weather data for June in North Region'
-    label1 = list(PlotWeather.calMeanWeatherData(PlotWeather.northDataFilter('North', 6, 2023)).keys())
-    values1 = list(PlotWeather.calMeanWeatherData(PlotWeather.northDataFilter('North', 6, 2023)).values())
+    label1 = list(PlotWeather.calMeanWeatherData(PlotWeather.dataFilter('North', 6, 2023)).keys())
+    values1 = list(PlotWeather.calMeanWeatherData(PlotWeather.dataFilter('North', 6, 2023)).values())
     
     # Data for Line Graph
     label2 = [['Jan', 'Feb', 'Mar'], ['Apr', 'May']]
     values2 = [[65, 59, 80], [81, 56]]
 
+    # Data for North Region
+    titleNorth = ['Weather data for June in North Region',
+                  'Weather data for July in North Region',
+                  'Weather data for August in North Region']
+    
+    labelNorth = [list(PlotWeather.calMeanWeatherData(PlotWeather.dataFilter('North', 6, 2023)).keys()),
+                  list(PlotWeather.calMeanWeatherData(PlotWeather.dataFilter('North', 7, 2023)).keys()),
+                  list(PlotWeather.calMeanWeatherData(PlotWeather.dataFilter('North', 8, 2023)).keys())]
+    
+    valuesNorth = [list(PlotWeather.calMeanWeatherData(PlotWeather.dataFilter('North', 6, 2023)).values()),
+                   list(PlotWeather.calMeanWeatherData(PlotWeather.dataFilter('North', 7, 2023)).values()),
+                   list(PlotWeather.calMeanWeatherData(PlotWeather.dataFilter('North', 8, 2023)).values())]
+    print(list(PlotWeather.calMeanWeatherData(PlotWeather.dataFilter('North', 8, 2023)).values()))
+
     # Passing data to dashboard
     if request.method == 'POST' and request.form.get('plot') == 'dashboard':
-        return render_template('graphs.html', chartLabel=label1, chartValue=values1, chartTitle=barTitle, lineLabel = label2, lineValue = values2)
+        return render_template('graphs.html', 
+                               chartLabel=label1, chartValue=values1, chartTitle=barTitle, 
+                               lineLabel = label2, lineValue = values2,
+                               lineTitleNorth = titleNorth, lineLabelNorth = labelNorth, lineValueNorth = valuesNorth)
     
     elif request.method == 'GET':
         return redirect('/')

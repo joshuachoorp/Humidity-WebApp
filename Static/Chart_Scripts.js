@@ -1,17 +1,16 @@
 // charts.js
 
 
-
+// Test Function
 function testPrint(data, labels){
     for (let i = 0, text = "", text1 = ""; i < data.length; i++) {
         text += data[i] + "<br>";
         text1 += labels[i] + "<br>";
-        document.getElementById("demo").innerHTML = text;
-        document.getElementById("demo1").innerHTML = text1;
     }
 }
 
-function createTest(data, labels, canvasName) {
+// Generate Line Graphs
+function createLineChart(title, data, labels, canvasName) {
     for (let i = 0; i < data.length; i++) {
         var ctx = document.getElementById(canvasName[i]).getContext('2d');
         var myChart = new Chart(ctx, {
@@ -26,6 +25,25 @@ function createTest(data, labels, canvasName) {
                     tension: 0.1
                 }]
             },
+            options: {
+                plugins: {
+                    // Set title
+                    title: {
+                       display: true,
+                       text: title[i],
+                       align: 'center',
+                       font: {
+                          weight: 'bold',
+                          size: 20
+                       },
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
         });
     }
 }
@@ -66,26 +84,6 @@ function createBarChart(title, data, labels) {
     });
 }
 
-
-
-// CreateLineChart
-function createLineChart(data, labels) {
-    var ctx = document.getElementById('LineChart').getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Sample Increase In Humidity',
-                data: data,
-                fill : false,
-                borderColor: 'rgb(75, 192, 192)',
-                tension: 0.1
-            }]
-        },
-
-    });
-}
 
 
 

@@ -20,7 +20,7 @@ def readFile():
 df = readFile()
 
 # filter weather data by month and region
-def northDataFilter(region, month, year):
+def dataFilter(region, month, year):
     df = readFile()
     dataFilter_df = df.loc[(df['Region'] == region.capitalize()) & (df['Date'].dt.month == month) & (df['Date'].dt.year == year)]
     return dataFilter_df 
@@ -131,22 +131,25 @@ west_aug_mean_weather_data = calAvg(west_aug_df)
 
 #print(calMeanWeatherData(northDataFilter('North', 6, 2023)))
 
-# plotting graph
-# 1. North Region
-# Plot june weather data (for basic reference)
-keys = calMeanWeatherData(northDataFilter('North', 6, 2023)).keys()
-values = calMeanWeatherData(northDataFilter('North', 6, 2023)).values()
+# plotting graph for all regions
+# 1. North Region 
+# Plot june weather data (for basic reference) 
+#print("Combine bar and line graph")
+keys = calMeanWeatherData(dataFilter('North', 6, 2023)).keys()
+values = calMeanWeatherData(dataFilter('North', 6, 2023)).values()
 plt.title('Weather data for June in North Region')
 plt.bar (keys, values)
 #plt.show()
 
 # Plot july weather data (for basic reference)
+#print("Combine bar and line graph")
 #keys = north_july_mean_weather_data.keys()
 #values = north_july_mean_weather_data.values()
 #plt.bar (keys, values)
 #plt.show()
 
 # Plot aug weather data (for basic reference)
+#print("Combine bar and line graph")
 #keys = north_aug_mean_weather_data.keys()
 #values = north_aug_mean_weather_data.values()
 #plt.bar (keys, values)
@@ -155,18 +158,21 @@ plt.bar (keys, values)
 
 # 2. South Region
 # Plot june weather data (for basic reference)
+#print("Combine bar and line graph")
 #keys = south_june_mean_weather_data.keys()
 #values = south_june_mean_weather_data.values()
 #plt.bar (keys, values)
 #plt.show()
 
 # Plot july weather data (for basic reference)
+#print("Combine bar and line graph")
 #keys = south_july_mean_weather_data.keys()
 #values = south_july_mean_weather_data.values()
 #plt.bar (keys, values)
 #plt.show()
 
 # Plot aug weather data (for basic reference)
+#print("Combine bar and line graph")
 #keys = south_aug_mean_weather_data.keys()
 #values = south_aug_mean_weather_data.values()
 #plt.bar (keys, values)
@@ -175,18 +181,21 @@ plt.bar (keys, values)
 
 # 3. Central Region
 # Plot june weather data (for basic reference)
+#print("Combine bar and line graph")
 #keys = central_june_mean_weather_data.keys()
 #values = central_june_mean_weather_data.values()
 #plt.bar (keys, values)
 #plt.show()
 
 # Plot july weather data (for basic reference)
+#print("Combine bar and line graph")
 #keys = central_july_mean_weather_data.keys()
 #values = central_july_mean_weather_data.values()
 #plt.bar (keys, values)
 #plt.show()
 
 # Plot aug weather data (for basic reference)
+#print("Combine bar and line graph")
 #keys = central_aug_mean_weather_data.keys()
 #values = central_aug_mean_weather_data.values()
 #plt.bar (keys, values)
@@ -196,18 +205,21 @@ plt.bar (keys, values)
 
 # 4. East Region
 # Plot june weather data (for basic reference)
+#print("Combine bar and line graph")
 #keys = east_june_mean_weather_data.keys()
 #values = east_june_mean_weather_data.values()
 #plt.bar (keys, values)
 #plt.show()
 
 # Plot july weather data (for basic reference)
+#print("Combine bar and line graph")
 #keys = east_july_mean_weather_data.keys()
 #values = east_july_mean_weather_data.values()
 #plt.bar (keys, values)
 #plt.show()
 
 # Plot aug weather data (for basic reference)
+#print("Combine bar and line graph")
 #keys = east_aug_mean_weather_data.keys()
 #values = east_aug_mean_weather_data.values()
 #plt.bar (keys, values)
@@ -216,18 +228,21 @@ plt.bar (keys, values)
 
 # 5. West Region
 # Plot june weather data (for basic reference)
+#print("Combine bar and line graph")
 #keys = west_june_mean_weather_data.keys()
 #values = west_june_mean_weather_data.values()
 #plt.bar (keys, values)
 #plt.show()
 
 # Plot july weather data (for basic reference)
+#print("Combine bar and line graph")
 #keys = west_july_mean_weather_data.keys()
 #values = west_july_mean_weather_data.values()
 #plt.bar (keys, values)
 #plt.show()
 
 # Plot aug weather data (for basic reference)
+#print("Combine bar and line graph")
 #keys = west_aug_mean_weather_data.keys()
 #values = west_aug_mean_weather_data.values()
 #plt.bar (keys, values)
