@@ -26,8 +26,8 @@ def plot():
     values1 = list(PlotWeather.calMeanWeatherData(PlotWeather.northDataFilter('North', 6, 2023)).values())
     
     # Data for Line Graph
-    label2 = ['Jan', 'Feb', 'Mar', 'Apr', 'May']
-    values2 = [65, 59, 80, 81, 56, 55, 40]
+    label2 = [['Jan', 'Feb', 'Mar'], ['Apr', 'May']]
+    values2 = [[65, 59, 80], [81, 56]]
 
     # Passing data to dashboard
     if request.method == 'POST' and request.form.get('plot') == 'dashboard':

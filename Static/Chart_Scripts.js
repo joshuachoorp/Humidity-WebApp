@@ -1,7 +1,37 @@
 // charts.js
 
+
+
+function testPrint(data, labels){
+    for (let i = 0, text = "", text1 = ""; i < data.length; i++) {
+        text += data[i] + "<br>";
+        text1 += labels[i] + "<br>";
+        document.getElementById("demo").innerHTML = text;
+        document.getElementById("demo1").innerHTML = text1;
+    }
+}
+
+function createTest(data, labels, canvasName) {
+    for (let i = 0; i < data.length; i++) {
+        var ctx = document.getElementById(canvasName[i]).getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels[i],
+                datasets: [{
+                    label: 'Sample Increase In Humidity',
+                    data: data[i],
+                    fill : false,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }]
+            },
+        });
+    }
+}
+
 // CreateBarChart
-function createBarChart(data, labels, title) {
+function createBarChart(title, data, labels) {
     var ctx = document.getElementById('BarChart').getContext('2d');
     var myChart = new Chart(ctx, {
         type: 'bar',

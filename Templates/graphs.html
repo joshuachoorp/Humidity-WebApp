@@ -26,9 +26,10 @@
 
 
 
+
 <body id="dashboard">
     <!-- Create a canvas element for the bar chart -->
-    <div style="float: left; height: 500px; width: 500px">
+    <div style="height: 500px; width: 500px">
         <canvas id="BarChart" width="450" height="300" style=" margin: auto"></canvas>
 
         <!--Generating Chart into backend server-->
@@ -49,6 +50,12 @@
     </div>
     <div style="float: right; height: 500px; width: 500px">
         <h2>Line Chart</h2>
+        <p id="demo"></p>
+        <p id="demo1"></p>
+        <canvas id="chartTest" width="450" height="300" ></canvas>
+        <canvas id="chartTest1" width="450" height="300" ></canvas>
+
+
         <canvas id="LineChart" width="450" height="300" style=" margin: auto"></canvas>
 
         <!--Generating Chart into backend server-->
@@ -95,8 +102,13 @@
     
     <script>
         //Using the data parsed from the controller side app.py chartLabel & chartValue
-        createBarChart({{ chartValue|tojson|safe }}, {{ chartLabel|tojson|safe }}, {{ chartTitle|tojson|safe }});
+        createBarChart({{ chartTitle|tojson|safe }}, {{ chartValue|tojson|safe }}, {{ chartLabel|tojson|safe }});
         createLineChart({{ lineValue|tojson|safe }}, {{ lineLabel|tojson|safe }});
+        const cars = ["chartTest", "chartTest1"];
+        testPrint({{ lineValue|tojson|safe }}, {{ lineLabel|tojson|safe }})
+        createTest({{ lineValue|tojson|safe }}, {{ lineLabel|tojson|safe }}, cars)
+        
+        
     </script>
 </body>
 </html>
