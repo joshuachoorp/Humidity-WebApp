@@ -24,31 +24,32 @@ def plot():
     barTitle = 'Weather data for June in North Region'
     label1 = list(PlotWeather.calMeanWeatherData(PlotWeather.dataFilter('North', 6, 2023)).keys())
     values1 = list(PlotWeather.calMeanWeatherData(PlotWeather.dataFilter('North', 6, 2023)).values())
-    
-    # Data for Line Graph
-    label2 = [['Jan', 'Feb', 'Mar'], ['Apr', 'May']]
-    values2 = [[65, 59, 80], [81, 56]]
 
     # Data for North Region
-    titleNorth = ['Weather data for June in North Region',
-                  'Weather data for July in North Region',
-                  'Weather data for August in North Region']
+    northGroup = PlotWeather.dataGroup('North', 2023)
+
+    # Data for South Region
+    southGroup = PlotWeather.dataGroup('South', 2023)
+
+    # Data for Central Region
+    centralGroup = PlotWeather.dataGroup('Central', 2023)
+
+    # Data for East Region
+    eastGroup = PlotWeather.dataGroup('East', 2023)
+
+    # Data for West Region
+    westGroup = PlotWeather.dataGroup('West', 2023)
     
-    labelNorth = [list(PlotWeather.calMeanWeatherData(PlotWeather.dataFilter('North', 6, 2023)).keys()),
-                  list(PlotWeather.calMeanWeatherData(PlotWeather.dataFilter('North', 7, 2023)).keys()),
-                  list(PlotWeather.calMeanWeatherData(PlotWeather.dataFilter('North', 8, 2023)).keys())]
-    
-    valuesNorth = [list(PlotWeather.calMeanWeatherData(PlotWeather.dataFilter('North', 6, 2023)).values()),
-                   list(PlotWeather.calMeanWeatherData(PlotWeather.dataFilter('North', 7, 2023)).values()),
-                   list(PlotWeather.calMeanWeatherData(PlotWeather.dataFilter('North', 8, 2023)).values())]
-    print(list(PlotWeather.calMeanWeatherData(PlotWeather.dataFilter('North', 8, 2023)).values()))
 
     # Passing data to dashboard
     if request.method == 'POST' and request.form.get('plot') == 'dashboard':
         return render_template('graphs.html', 
-                               chartLabel=label1, chartValue=values1, chartTitle=barTitle, 
-                               lineLabel = label2, lineValue = values2,
-                               lineTitleNorth = titleNorth, lineLabelNorth = labelNorth, lineValueNorth = valuesNorth)
+                               chartLabel=label1, chartValue=values1, chartTitle=barTitle,
+                               lineTitleNorth = northGroup[0], lineLabelNorth = northGroup[1], lineValueNorth = northGroup[2], canvasNorth = northGroup[3],
+                               lineTitleSouth = southGroup[0], lineLabelSouth = southGroup[1], lineValueSouth = southGroup[2], canvasSouth = southGroup[3],
+                               lineTitleCentral = centralGroup[0], lineLabelCentral = centralGroup[1], lineValueCentral = centralGroup[2], canvasCentral = centralGroup[3],
+                               lineTitleEast = eastGroup[0], lineLabelEast = eastGroup[1], lineValueEast = eastGroup[2], canvasEast = eastGroup[3],
+                               lineTitleWest = westGroup[0], lineLabelWest = westGroup[1], lineValueWest = westGroup[2], canvasWest = westGroup[3],)
     
     elif request.method == 'GET':
         return redirect('/')

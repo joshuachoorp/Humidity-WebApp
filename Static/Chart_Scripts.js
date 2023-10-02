@@ -111,9 +111,7 @@ function sendBar() {
 
 
 // Send line graph canvas to backend
-function sendLine() {
-    var graphName = document.getElementById('lineName').value;
-    var graph = document.getElementById('LineChart');
+function sendLine(graphName, graph) {
     var graphDataURL = graph.toDataURL('image/png');
     //console.log(dataURL);
     //var base64 =  dataURL.replace(/^data:image\/(png|jpeg);base64,/, "");

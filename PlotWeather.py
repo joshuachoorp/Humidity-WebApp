@@ -25,6 +25,26 @@ def dataFilter(region, month, year):
     dataFilter_df = df.loc[(df['Region'] == region.capitalize()) & (df['Date'].dt.month == month) & (df['Date'].dt.year == year)]
     return dataFilter_df 
 
+
+def dataGroup(region, year):
+    titleNorth = ['Weather data for ' + region.capitalize() + ' in North Region',
+                  'Weather data for ' + region.capitalize() + ' in North Region',
+                  'Weather data for ' + region.capitalize() + ' in North Region']
+    
+    labelNorth = [list(calMeanWeatherData(dataFilter(region.capitalize(), 6, year)).keys()),
+                  list(calMeanWeatherData(dataFilter(region.capitalize(), 7, year)).keys()),
+                  list(calMeanWeatherData(dataFilter(region.capitalize(), 8, year)).keys())]
+    
+    valuesNorth = [list(calMeanWeatherData(dataFilter(region.capitalize(), 6, year)).values()),
+                   list(calMeanWeatherData(dataFilter(region.capitalize(), 7, year)).values()),
+                   list(calMeanWeatherData(dataFilter(region.capitalize(), 8, year)).values())]
+    
+    canvasName = [region.lower() + "June", region.lower() + "July", region.lower() + "Aug"]
+
+    group = [titleNorth, labelNorth, valuesNorth, canvasName]
+
+    return group
+
 north_june_df = df.loc[(df['Region'] == 'North') & (df['Date'].dt.month == 6) & (df['Date'].dt.year == 2023)] 
 north_july_df = df.loc[(df['Region'] == 'North') & (df['Date'].dt.month == 7) & (df['Date'].dt.year == 2023)]
 north_aug_df =  df.loc[(df['Region'] == 'North') & (df['Date'].dt.month == 8) & (df['Date'].dt.year == 2023)]
