@@ -3,7 +3,7 @@
 <head>
     <title>Dashboard</title>
     <script src="{{ url_for('static', filename='/Chart_Scripts.js') }}"></script>
-    <script src="{{ url_for('static', filename='/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='/script.js') }}" defer></script>
     <!-- Include Chart.js library -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -29,50 +29,32 @@
 
 
 <body id="dashboard">
-    <!-- Create a canvas element for the bar chart -->
-    <div style="height: 500px; width: 500px">
-        <canvas id="BarChart" width="450" height="300" style=" margin: auto"></canvas>
-
-        <!--Generating Chart into backend server-->
-        <input type="hidden" id="barName" name="graphName" value="barChartName">
-        <button name="graphBase64" onclick="sendBar()">Generate PNG</button>
-        
-        <!--Download Chart to local user-->
-        <button type="submit" name="graphBase64" form="downloadBar">Download</button>
-        <form id="downloadBar" action="/dashboard/barChartName.png"></form>
-        
-        <!--Bar Chart Ideas
-        <h3>Rainfall frequency - Show rain fall through the month/year</h3>
-        <h3>Rainfall - Show rain fall through the month/year</h3>
-        -->
-    </div>
-
     <!--Top Row-->
     <div style="float: left; height: 500px; width: 500px" >
         <!--North Region Line Charts-->
-        <div id="regionNorth" onclick="sendLine()">
+        <div id="regionNorth" onload="console.log('done')">
             <h2>North Region Weather Data</h2>
 
-            <canvas id="northJune" width="450" height="300" style=" margin: auto"></canvas>
+            <canvas id="chartNorthJune" width="450" height="300" style=" margin: auto"></canvas>
+
             <!--Generating Chart into backend server-->
             <input type="hidden" id="lineName" name="graphName" value="northJuneWeatherData">
-            <button onclick="sendLine()">Generate PNG</button>
             <!--Download Chart to local user-->
             <button type="submit" form="downloadLine" >Download</button>
             <form id="downloadLine" action="/dashboard/northJuneWeatherData.png"></form></br></br>
 
-            <canvas id="northJuly" width="450" height="300" style=" margin: auto"></canvas>
+            <canvas id="chartNorthJuly" width="450" height="300" style=" margin: auto"></canvas>
+
             <!--Generating Chart into backend server-->
             <input type="hidden" id="lineName" name="graphName" value="northJulyWeatherData">
-            <button onclick="sendLine()">Generate PNG</button>
             <!--Download Chart to local user-->
             <button type="submit" form="downloadLine" >Download</button>
             <form id="downloadLine" action="/dashboard/northJulyWeatherData.png"></form></br></br>
 
-            <canvas id="northAug" width="450" height="300" style=" margin: auto"></canvas>
+            <canvas id="chartNorthAug" width="450" height="300" style=" margin: auto"></canvas>
+
             <!--Generating Chart into backend server-->
             <input type="hidden" id="lineName" name="graphName" value="northAugWeatherData">
-            <button onclick="sendLine()">Generate PNG</button>
             <!--Download Chart to local user-->
             <button type="submit" form="downloadLine" >Download</button>
             <form id="downloadLine" action="/dashboard/northAugWeatherData.png"></form></br></br>
@@ -82,26 +64,28 @@
         <div id="regionSouth" >
             <h2>South Region Weather Data</h2>
 
-            <canvas id="southJune" width="450" height="300" style=" margin: auto"></canvas>
+            <canvas id="chartSouthJune" width="450" height="300" style=" margin: auto"></canvas>
+
             <!--Generating Chart into backend server-->
             <input type="hidden" id="lineName" name="graphName" value="southJuneWeatherData">
-            <button onclick="sendLine()">Generate PNG</button>
             <!--Download Chart to local user-->
             <button type="submit" form="downloadLine" >Download</button>
             <form id="downloadLine" action="/dashboard/southJuneWeatherData.png"></form></br></br>
 
-            <canvas id="southJuly" width="450" height="300" style=" margin: auto"></canvas>
+            
+            <canvas id="chartSouthJuly" width="450" height="300" style=" margin: auto"></canvas>
+
             <!--Generating Chart into backend server-->
             <input type="hidden" id="lineName" name="graphName" value="southJulyWeatherData">
-            <button onclick="sendLine()">Generate PNG</button>
             <!--Download Chart to local user-->
             <button type="submit" form="downloadLine" >Download</button>
             <form id="downloadLine" action="/dashboard/southJulyWeatherData.png"></form></br></br>
 
-            <canvas id="southAug" width="450" height="300" style=" margin: auto"></canvas>
+
+            <canvas id="chartSouthAug" width="450" height="300" style=" margin: auto"></canvas>
+
             <!--Generating Chart into backend server-->
             <input type="hidden" id="lineName" name="graphName" value="southAugWeatherData">
-            <button onclick="sendLine()">Generate PNG</button>
             <!--Download Chart to local user-->
             <button type="submit" form="downloadLine" >Download</button>
             <form id="downloadLine" action="/dashboard/southAugWeatherData.png"></form></br></br>
@@ -115,26 +99,27 @@
         <div id="regionCentral">
             <h2>Central Region Weather Data</h2>
 
-            <canvas id="centralJune" width="450" height="300" style=" margin: auto"></canvas>
+            <canvas id="chartCentralJune" width="450" height="300" style=" margin: auto"></canvas>
+
             <!--Generating Chart into backend server-->
             <input type="hidden" id="lineName" name="graphName" value="centralJuneWeatherData">
-            <button onclick="sendLine()">Generate PNG</button>
             <!--Download Chart to local user-->
             <button type="submit" form="downloadLine" >Download</button>
             <form id="downloadLine" action="/dashboard/centralJuneWeatherData.png"></form></br></br>
 
-            <canvas id="centralJuly" width="450" height="300" style=" margin: auto"></canvas>
+
+            <canvas id="chartCentralJuly" width="450" height="300" style=" margin: auto"></canvas>
+
             <!--Generating Chart into backend server-->
             <input type="hidden" id="lineName" name="graphName" value="centralJulyWeatherData">
-            <button onclick="sendLine()">Generate PNG</button>
             <!--Download Chart to local user-->
             <button type="submit" form="downloadLine" >Download</button>
             <form id="downloadLine" action="/dashboard/centralJulyWeatherData.png"></form></br></br>
 
-            <canvas id="centralAug" width="450" height="300" style=" margin: auto"></canvas>
+            <canvas id="chartCentralAug" width="450" height="300" style=" margin: auto"></canvas>
+
             <!--Generating Chart into backend server-->
             <input type="hidden" id="lineName" name="graphName" value="centralAugWeatherData">
-            <button onclick="sendLine()">Generate PNG</button>
             <!--Download Chart to local user-->
             <button type="submit" form="downloadLine" >Download</button>
             <form id="downloadLine" action="/dashboard/centralAugWeatherData.png"></form></br></br>
@@ -145,26 +130,28 @@
         <div id="regionEast">
             <h2>East Region Weather Data</h2>
 
-            <canvas id="eastJune" width="450" height="300" style=" margin: auto"></canvas>
+            <canvas id="chartEastJune" width="450" height="300" style=" margin: auto"></canvas>
+
             <!--Generating Chart into backend server-->
             <input type="hidden" id="lineName" name="graphName" value="eastJuneWeatherData">
-            <button onclick="sendLine()">Generate PNG</button>
             <!--Download Chart to local user-->
             <button type="submit" form="downloadLine" >Download</button>
             <form id="downloadLine" action="/dashboard/eastJuneWeatherData.png"></form></br></br>
 
-            <canvas id="eastJuly" width="450" height="300" style=" margin: auto"></canvas>
+
+            <canvas id="chartEastJuly" width="450" height="300" style=" margin: auto"></canvas>
+
             <!--Generating Chart into backend server-->
             <input type="hidden" id="lineName" name="graphName" value="eastJulyWeatherData">
-            <button onclick="sendLine()">Generate PNG</button>
             <!--Download Chart to local user-->
             <button type="submit" form="downloadLine" >Download</button>
             <form id="downloadLine" action="/dashboard/eastJulyWeatherData.png"></form></br></br>
 
-            <canvas id="eastAug" width="450" height="300" style=" margin: auto"></canvas>
+
+            <canvas id="chartEastAug" width="450" height="300" style=" margin: auto"></canvas>
+
             <!--Generating Chart into backend server-->
             <input type="hidden" id="lineName" name="graphName" value="eastAugWeatherData">
-            <button onclick="sendLine()">Generate PNG</button>
             <!--Download Chart to local user-->
             <button type="submit" form="downloadLine" >Download</button>
             <form id="downloadLine" action="/dashboard/eastAugWeatherData.png"></form></br></br>
@@ -175,26 +162,28 @@
         <div id="regionWest">
             <h2>West Region Weather Data</h2>
 
-            <canvas id="westJune" width="450" height="300" style=" margin: auto"></canvas>
+            <canvas id="chartWestJune" width="450" height="300" style=" margin: auto"></canvas>
+
             <!--Generating Chart into backend server-->
             <input type="hidden" id="lineName" name="graphName" value="westJuneWeatherData">
-            <button onclick="sendLine()">Generate PNG</button>
             <!--Download Chart to local user-->
             <button type="submit" form="downloadLine" >Download</button>
             <form id="downloadLine" action="/dashboard/westJuneWeatherData.png"></form></br></br>
 
-            <canvas id="westJuly" width="450" height="300" style=" margin: auto"></canvas>
+            
+            <canvas id="chartWestJuly" width="450" height="300" style=" margin: auto"></canvas>
+
             <!--Generating Chart into backend server-->
             <input type="hidden" id="lineName" name="graphName" value="westJulyWeatherData">
-            <button onclick="sendLine()">Generate PNG</button>
             <!--Download Chart to local user-->
             <button type="submit" form="downloadLine" >Download</button>
             <form id="downloadLine" action="/dashboard/westJulyWeatherData.png"></form></br></br>
 
-            <canvas id="westAug" width="450" height="300" style=" margin: auto"></canvas>
+
+            <canvas id="chartWestAug" width="450" height="300" style=" margin: auto"></canvas>
+            
             <!--Generating Chart into backend server-->
             <input type="hidden" id="lineName" name="graphName" value="westAugWeatherData">
-            <button onclick="sendLine()">Generate PNG</button>
             <!--Download Chart to local user-->
             <button type="submit" form="downloadLine" >Download</button>
             <form id="downloadLine" action="/dashboard/westAugWeatherData.png"></form></br></br>
@@ -203,8 +192,7 @@
 
     
     <script>
-        //Using the data parsed from the controller side app.py chartLabel & chartValue
-        createBarChart({{ chartTitle|tojson|safe }}, {{ chartValue|tojson|safe }}, {{ chartLabel|tojson|safe }});
+        //Using the data parsed from the controller side app.py to generate charts
 
         createLineChart({{ lineTitleNorth|tojson|safe }}, {{ lineValueNorth|tojson|safe }}, {{ lineLabelNorth|tojson|safe }}, {{ canvasNorth|tojson|safe }})
         createLineChart({{ lineTitleSouth|tojson|safe }}, {{ lineValueSouth|tojson|safe }}, {{ lineLabelSouth|tojson|safe }}, {{ canvasSouth|tojson|safe }})
@@ -214,32 +202,37 @@
         console.log("line")
 
     </script>
-    <script>
-        console.log("a")
-        //sendLine()
-        //setTimeout(sendLineTestScript(document.getElementById('lineName').value, document.getElementById('northJune')), 4000);
-        //setTimeout(sendLineScript(), 10000)
-        var graphName = "northJuneWeatherData";
-        //sendLineTestScript(document.getElementById('lineName').value, document.getElementById('northJune'))
-        function sendLineScript() {
-            var graphName = document.getElementById('lineName').value;
-            var graph = document.getElementById('northJune');
-            var graphDataURL = graph.toDataURL('image/png');
-            console.log(graphDataURL)
-            
-            $.ajax({
-                url: '/dashboard/download',
-                type: 'POST',
-                data: { 'graphBase64' : graphDataURL,
-                        'graphName' : graphName
-                },
-                error: function(error) {
-                    console.log(error)
-                }
-            });
-        }
-        
 
+
+    <script>
+        const element1 = document.querySelectorAll('[id^="chart"]');
+        const element2 = document.querySelectorAll('[id=lineName]');
+        const myTimeout = setTimeout(sendLineIN, 1500);
+        
+        function sendLineIN() {
+            for (let i = 0; i < element1.length; i++) {
+                var graphName = element2[i].value;
+                console.log(element2[i].value);
+                var graph = element1[i];
+                var graphDataURL = graph.toDataURL('image/png');
+                
+                $.ajax({
+                    url: '/dashboard/download',
+                    type: 'POST',
+                    data: { 'graphBase64' : graphDataURL,
+                            'graphName' : graphName
+                    },
+                    error: function(error) {
+                        console.log(error)
+                    },
+                    success: function() {
+                        console.log("okay")
+                    },                
+                });
+            }
+        }      
     </script>
+     
+     
 </body>
 </html>

@@ -29,13 +29,13 @@ function createLineChart(title, data, labels, canvasName) {
                 plugins: {
                     // Set title
                     title: {
-                       display: true,
-                       text: title[i],
-                       align: 'center',
-                       font: {
-                          weight: 'bold',
-                          size: 20
-                       },
+                        display: true,
+                        text: title[i],
+                        align: 'center',
+                        font: {
+                            weight: 'bold',
+                            size: 20
+                        },
                     }
                 },
                 scales: {
@@ -85,31 +85,6 @@ function createBarChart(title, data, labels) {
 }
 
 
-
-
-// Send bar graph canvas to backend
-function sendBar() {
-    var graphName = document.getElementById('barName').value;
-    var graph = document.getElementById('BarChart');
-    var graphDataURL = graph.toDataURL('image/png');
-    //console.log(dataURL);
-    //var base64 =  dataURL.replace(/^data:image\/(png|jpeg);base64,/, "");
-    //var base64 = getBase64Image(document.getElementById("BarChart")); 
-    console.log(graphDataURL)
-    
-    $.ajax({
-        url: '/dashboard/download',
-        type: 'POST',
-        data: { 'graphBase64' : graphDataURL,
-                'graphName' : graphName
-        },
-        error: function(error) {
-            console.log(error)
-        }
-    });
-}
-
-
 // Send line graph canvas to backend
 function sendLine() {
     var graphName = document.getElementById('lineName').value;
@@ -125,9 +100,67 @@ function sendLine() {
         },
         error: function(error) {
             console.log(error)
+        },
+        timeout: 10000
+        
+    });
+    console.log('done')
+}
+
+
+function createLineChartTest(title, data, labels, canvasName) {
+    for (let i = 0; i < data.length; i++) {
+        var ctx = document.getElementById(canvasName[i]).getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels[i],
+                datasets: [{
+                    label: 'Sample Increase In Humidity',
+                    data: data[i],
+                    fill : false,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                plugins: {
+                    // Set title
+                    title: {
+                       display: true,
+                       text: title[i],
+                       align: 'center',
+                       font: {
+                          weight: 'bold',
+                          size: 20
+                       },
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    };
+    var graphName = document.getElementById('lineName').value;
+    var graph = document.getElementById('northJune');
+    var graphDataURL = graph.toDataURL('image/png');
+    console.log(graphDataURL)
+    $.ajax({
+        url: '/dashboard/download',
+        type: 'POST',
+        timeout: 3000,
+        data: { 'graphBase64' : graphDataURL,
+                'graphName' : graphName
+        },
+        error: function(error) {
+            console.log(error)
         }
     });
 }
+
 
 
 function sendLineTest(graphName, graph) {
@@ -165,7 +198,6 @@ function screenshot(){
                         'graphName' : 'dashboardName'
                 },
                 });
-                console.log(data)
             });
 
 }

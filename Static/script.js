@@ -16,8 +16,11 @@ function sendLineScript() {
         },
         error: function(error) {
             console.log(error)
-        }
+        },
+        timeout: 10000
+        
     });
+    console.log('done')
 }
 
 

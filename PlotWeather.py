@@ -39,7 +39,7 @@ def dataGroup(region, year):
                    list(calMeanWeatherData(dataFilter(region.capitalize(), 7, year)).values()),
                    list(calMeanWeatherData(dataFilter(region.capitalize(), 8, year)).values())]
     
-    canvasName = [region.lower() + "June", region.lower() + "July", region.lower() + "Aug"]
+    canvasName = ["chart" + region.capitalize() + "June", "chart" + region.capitalize() + "July", "chart" + region.capitalize() + "Aug"]
 
     group = [titleNorth, labelNorth, valuesNorth, canvasName]
 
