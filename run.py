@@ -1,6 +1,7 @@
 import sys
 import subprocess
-from testRequirements import checkReq
+from Functions import checkReq
+
 
 
 

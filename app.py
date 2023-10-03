@@ -1,7 +1,7 @@
 from pathlib import Path
 import base64
 import os
-import PlotWeather
+from Functions import dataGroup
 
 from distutils.command import upload
 from flask import Flask, render_template, request, redirect, flash, send_file, send_from_directory, current_app, abort
@@ -20,31 +20,25 @@ def index():
 # Creating dashboard
 @app.route('/dashboard/', methods=['GET', 'POST'])
 def plot():
-    # Data for Bar Chart
-    barTitle = 'Weather data for June in North Region'
-    label1 = list(PlotWeather.calMeanWeatherData(PlotWeather.dataFilter('North', 6, 2023)).keys())
-    values1 = list(PlotWeather.calMeanWeatherData(PlotWeather.dataFilter('North', 6, 2023)).values())
-
     # Data for North Region
-    northGroup = PlotWeather.dataGroup('North', 2023)
+    northGroup = dataGroup('North', 2023)
 
     # Data for South Region
-    southGroup = PlotWeather.dataGroup('South', 2023)
+    southGroup = dataGroup('South', 2023)
 
     # Data for Central Region
-    centralGroup = PlotWeather.dataGroup('Central', 2023)
+    centralGroup = dataGroup('Central', 2023)
 
     # Data for East Region
-    eastGroup = PlotWeather.dataGroup('East', 2023)
+    eastGroup = dataGroup('East', 2023)
 
     # Data for West Region
-    westGroup = PlotWeather.dataGroup('West', 2023)
+    westGroup = dataGroup('West', 2023)
     
 
     # Passing data to dashboard
     if request.method == 'POST' and request.form.get('plot') == 'dashboard':
         return render_template('graphs.html', 
-                               chartLabel=label1, chartValue=values1, chartTitle=barTitle,
                                lineTitleNorth = northGroup[0], lineLabelNorth = northGroup[1], lineValueNorth = northGroup[2], canvasNorth = northGroup[3],
                                lineTitleSouth = southGroup[0], lineLabelSouth = southGroup[1], lineValueSouth = southGroup[2], canvasSouth = southGroup[3],
                                lineTitleCentral = centralGroup[0], lineLabelCentral = centralGroup[1], lineValueCentral = centralGroup[2], canvasCentral = centralGroup[3],
