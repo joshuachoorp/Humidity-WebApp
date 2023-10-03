@@ -3,6 +3,7 @@
 <head>
     <title>Dashboard</title>
     <script src="{{ url_for('static', filename='/Chart_Scripts.js') }}"></script>
+    <script src="{{ url_for('static', filename='/script.js') }}"></script>
     <!-- Include Chart.js library -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -47,15 +48,15 @@
     </div>
 
     <!--Top Row-->
-    <div style="float: left; height: 500px; width: 500px">
+    <div style="float: left; height: 500px; width: 500px" >
         <!--North Region Line Charts-->
-        <div id="regionNorth" >
+        <div id="regionNorth" onclick="sendLine()">
             <h2>North Region Weather Data</h2>
 
             <canvas id="northJune" width="450" height="300" style=" margin: auto"></canvas>
             <!--Generating Chart into backend server-->
             <input type="hidden" id="lineName" name="graphName" value="northJuneWeatherData">
-            <button name="graphBase64" onclick="sendLine()">Generate PNG</button>
+            <button onclick="sendLine()">Generate PNG</button>
             <!--Download Chart to local user-->
             <button type="submit" form="downloadLine" >Download</button>
             <form id="downloadLine" action="/dashboard/northJuneWeatherData.png"></form></br></br>
@@ -63,7 +64,7 @@
             <canvas id="northJuly" width="450" height="300" style=" margin: auto"></canvas>
             <!--Generating Chart into backend server-->
             <input type="hidden" id="lineName" name="graphName" value="northJulyWeatherData">
-            <button name="graphBase64" onclick="sendLine()">Generate PNG</button>
+            <button onclick="sendLine()">Generate PNG</button>
             <!--Download Chart to local user-->
             <button type="submit" form="downloadLine" >Download</button>
             <form id="downloadLine" action="/dashboard/northJulyWeatherData.png"></form></br></br>
@@ -71,7 +72,7 @@
             <canvas id="northAug" width="450" height="300" style=" margin: auto"></canvas>
             <!--Generating Chart into backend server-->
             <input type="hidden" id="lineName" name="graphName" value="northAugWeatherData">
-            <button name="graphBase64" onclick="sendLine()">Generate PNG</button>
+            <button onclick="sendLine()">Generate PNG</button>
             <!--Download Chart to local user-->
             <button type="submit" form="downloadLine" >Download</button>
             <form id="downloadLine" action="/dashboard/northAugWeatherData.png"></form></br></br>
@@ -84,7 +85,7 @@
             <canvas id="southJune" width="450" height="300" style=" margin: auto"></canvas>
             <!--Generating Chart into backend server-->
             <input type="hidden" id="lineName" name="graphName" value="southJuneWeatherData">
-            <button name="graphBase64" onclick="sendLine()">Generate PNG</button>
+            <button onclick="sendLine()">Generate PNG</button>
             <!--Download Chart to local user-->
             <button type="submit" form="downloadLine" >Download</button>
             <form id="downloadLine" action="/dashboard/southJuneWeatherData.png"></form></br></br>
@@ -92,7 +93,7 @@
             <canvas id="southJuly" width="450" height="300" style=" margin: auto"></canvas>
             <!--Generating Chart into backend server-->
             <input type="hidden" id="lineName" name="graphName" value="southJulyWeatherData">
-            <button name="graphBase64" onclick="sendLine()">Generate PNG</button>
+            <button onclick="sendLine()">Generate PNG</button>
             <!--Download Chart to local user-->
             <button type="submit" form="downloadLine" >Download</button>
             <form id="downloadLine" action="/dashboard/southJulyWeatherData.png"></form></br></br>
@@ -100,7 +101,7 @@
             <canvas id="southAug" width="450" height="300" style=" margin: auto"></canvas>
             <!--Generating Chart into backend server-->
             <input type="hidden" id="lineName" name="graphName" value="southAugWeatherData">
-            <button name="graphBase64" onclick="sendLine()">Generate PNG</button>
+            <button onclick="sendLine()">Generate PNG</button>
             <!--Download Chart to local user-->
             <button type="submit" form="downloadLine" >Download</button>
             <form id="downloadLine" action="/dashboard/southAugWeatherData.png"></form></br></br>
@@ -117,7 +118,7 @@
             <canvas id="centralJune" width="450" height="300" style=" margin: auto"></canvas>
             <!--Generating Chart into backend server-->
             <input type="hidden" id="lineName" name="graphName" value="centralJuneWeatherData">
-            <button name="graphBase64" onclick="sendLine()">Generate PNG</button>
+            <button onclick="sendLine()">Generate PNG</button>
             <!--Download Chart to local user-->
             <button type="submit" form="downloadLine" >Download</button>
             <form id="downloadLine" action="/dashboard/centralJuneWeatherData.png"></form></br></br>
@@ -125,7 +126,7 @@
             <canvas id="centralJuly" width="450" height="300" style=" margin: auto"></canvas>
             <!--Generating Chart into backend server-->
             <input type="hidden" id="lineName" name="graphName" value="centralJulyWeatherData">
-            <button name="graphBase64" onclick="sendLine()">Generate PNG</button>
+            <button onclick="sendLine()">Generate PNG</button>
             <!--Download Chart to local user-->
             <button type="submit" form="downloadLine" >Download</button>
             <form id="downloadLine" action="/dashboard/centralJulyWeatherData.png"></form></br></br>
@@ -133,7 +134,7 @@
             <canvas id="centralAug" width="450" height="300" style=" margin: auto"></canvas>
             <!--Generating Chart into backend server-->
             <input type="hidden" id="lineName" name="graphName" value="centralAugWeatherData">
-            <button name="graphBase64" onclick="sendLine()">Generate PNG</button>
+            <button onclick="sendLine()">Generate PNG</button>
             <!--Download Chart to local user-->
             <button type="submit" form="downloadLine" >Download</button>
             <form id="downloadLine" action="/dashboard/centralAugWeatherData.png"></form></br></br>
@@ -147,7 +148,7 @@
             <canvas id="eastJune" width="450" height="300" style=" margin: auto"></canvas>
             <!--Generating Chart into backend server-->
             <input type="hidden" id="lineName" name="graphName" value="eastJuneWeatherData">
-            <button name="graphBase64" onclick="sendLine()">Generate PNG</button>
+            <button onclick="sendLine()">Generate PNG</button>
             <!--Download Chart to local user-->
             <button type="submit" form="downloadLine" >Download</button>
             <form id="downloadLine" action="/dashboard/eastJuneWeatherData.png"></form></br></br>
@@ -155,7 +156,7 @@
             <canvas id="eastJuly" width="450" height="300" style=" margin: auto"></canvas>
             <!--Generating Chart into backend server-->
             <input type="hidden" id="lineName" name="graphName" value="eastJulyWeatherData">
-            <button name="graphBase64" onclick="sendLine()">Generate PNG</button>
+            <button onclick="sendLine()">Generate PNG</button>
             <!--Download Chart to local user-->
             <button type="submit" form="downloadLine" >Download</button>
             <form id="downloadLine" action="/dashboard/eastJulyWeatherData.png"></form></br></br>
@@ -163,7 +164,7 @@
             <canvas id="eastAug" width="450" height="300" style=" margin: auto"></canvas>
             <!--Generating Chart into backend server-->
             <input type="hidden" id="lineName" name="graphName" value="eastAugWeatherData">
-            <button name="graphBase64" onclick="sendLine()">Generate PNG</button>
+            <button onclick="sendLine()">Generate PNG</button>
             <!--Download Chart to local user-->
             <button type="submit" form="downloadLine" >Download</button>
             <form id="downloadLine" action="/dashboard/eastAugWeatherData.png"></form></br></br>
@@ -177,7 +178,7 @@
             <canvas id="westJune" width="450" height="300" style=" margin: auto"></canvas>
             <!--Generating Chart into backend server-->
             <input type="hidden" id="lineName" name="graphName" value="westJuneWeatherData">
-            <button name="graphBase64" onclick="sendLine()">Generate PNG</button>
+            <button onclick="sendLine()">Generate PNG</button>
             <!--Download Chart to local user-->
             <button type="submit" form="downloadLine" >Download</button>
             <form id="downloadLine" action="/dashboard/westJuneWeatherData.png"></form></br></br>
@@ -185,18 +186,18 @@
             <canvas id="westJuly" width="450" height="300" style=" margin: auto"></canvas>
             <!--Generating Chart into backend server-->
             <input type="hidden" id="lineName" name="graphName" value="westJulyWeatherData">
-            <button name="graphBase64" onclick="sendLine()">Generate PNG</button>
+            <button onclick="sendLine()">Generate PNG</button>
             <!--Download Chart to local user-->
             <button type="submit" form="downloadLine" >Download</button>
-            <form id="downloadLine" action="/dashboard/westJuneWeatherData.png"></form></br></br>
+            <form id="downloadLine" action="/dashboard/westJulyWeatherData.png"></form></br></br>
 
             <canvas id="westAug" width="450" height="300" style=" margin: auto"></canvas>
             <!--Generating Chart into backend server-->
             <input type="hidden" id="lineName" name="graphName" value="westAugWeatherData">
-            <button name="graphBase64" onclick="sendLine()">Generate PNG</button>
+            <button onclick="sendLine()">Generate PNG</button>
             <!--Download Chart to local user-->
             <button type="submit" form="downloadLine" >Download</button>
-            <form id="downloadLine" action="/dashboard/westJuneWeatherData.png"></form></br></br>
+            <form id="downloadLine" action="/dashboard/westAugWeatherData.png"></form></br></br>
         </div>
     </div>
 
@@ -210,8 +211,35 @@
         createLineChart({{ lineTitleCentral|tojson|safe }}, {{ lineValueCentral|tojson|safe }}, {{ lineLabelCentral|tojson|safe }}, {{ canvasCentral|tojson|safe }})
         createLineChart({{ lineTitleEast|tojson|safe }}, {{ lineValueEast|tojson|safe }}, {{ lineLabelEast|tojson|safe }}, {{ canvasEast|tojson|safe }})
         createLineChart({{ lineTitleWest|tojson|safe }}, {{ lineValueWest|tojson|safe }}, {{ lineLabelWest|tojson|safe }}, {{ canvasWest|tojson|safe }})
+        console.log("line")
+
+    </script>
+    <script>
+        console.log("a")
+        //sendLine()
+        //setTimeout(sendLineTestScript(document.getElementById('lineName').value, document.getElementById('northJune')), 4000);
+        //setTimeout(sendLineScript(), 10000)
+        var graphName = "northJuneWeatherData";
+        //sendLineTestScript(document.getElementById('lineName').value, document.getElementById('northJune'))
+        function sendLineScript() {
+            var graphName = document.getElementById('lineName').value;
+            var graph = document.getElementById('northJune');
+            var graphDataURL = graph.toDataURL('image/png');
+            console.log(graphDataURL)
+            
+            $.ajax({
+                url: '/dashboard/download',
+                type: 'POST',
+                data: { 'graphBase64' : graphDataURL,
+                        'graphName' : graphName
+                },
+                error: function(error) {
+                    console.log(error)
+                }
+            });
+        }
         
-        
+
     </script>
 </body>
 </html>

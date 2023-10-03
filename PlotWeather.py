@@ -27,9 +27,9 @@ def dataFilter(region, month, year):
 
 
 def dataGroup(region, year):
-    titleNorth = ['Weather data for ' + region.capitalize() + ' in North Region',
-                  'Weather data for ' + region.capitalize() + ' in North Region',
-                  'Weather data for ' + region.capitalize() + ' in North Region']
+    titleNorth = ['Weather data for ' + region.capitalize() + ' in June',
+                  'Weather data for ' + region.capitalize() + ' in July',
+                  'Weather data for ' + region.capitalize() + ' in August']
     
     labelNorth = [list(calMeanWeatherData(dataFilter(region.capitalize(), 6, year)).keys()),
                   list(calMeanWeatherData(dataFilter(region.capitalize(), 7, year)).keys()),

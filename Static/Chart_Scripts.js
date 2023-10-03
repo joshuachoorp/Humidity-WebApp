@@ -111,11 +111,10 @@ function sendBar() {
 
 
 // Send line graph canvas to backend
-function sendLine(graphName, graph) {
+function sendLine() {
+    var graphName = document.getElementById('lineName').value;
+    var graph = document.getElementById('northJune');
     var graphDataURL = graph.toDataURL('image/png');
-    //console.log(dataURL);
-    //var base64 =  dataURL.replace(/^data:image\/(png|jpeg);base64,/, "");
-    //var base64 = getBase64Image(document.getElementById("BarChart")); 
     console.log(graphDataURL)
     
     $.ajax({
@@ -129,6 +128,24 @@ function sendLine(graphName, graph) {
         }
     });
 }
+
+
+function sendLineTest(graphName, graph) {
+    var graphDataURL = graph.toDataURL('image/png');
+    console.log(graphDataURL)
+    
+    $.ajax({
+        url: '/dashboard/download',
+        type: 'POST',
+        data: { 'graphBase64' : graphDataURL,
+                'graphName' : graphName
+        },
+        error: function(error) {
+            console.log(error)
+        }
+    });
+}
+
 
 
 // Take screenshot of dashboard
