@@ -1,3 +1,7 @@
+"""
+Filter and Clean data
+"""
+
 # Plot Weather data
 
 import pandas as pd

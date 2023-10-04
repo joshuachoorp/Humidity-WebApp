@@ -130,25 +130,24 @@ def myfunc(x):
 # linear regression
 
 
-# to create a new array with new values on the y-axis, run each value of the x array through the function
-mymodel = list(map(myfunc, x))
+
 
 def scatterPlot():
+    # to create a new array with new values on the y-axis, run each value of the x array through the function
+    mymodel = list(map(myfunc, x))
     # draw the scatter plot
     plt.scatter(x, y)
     # draw the line of regression
     plt.plot(x, mymodel, color="red")
+
+    # label the x axis and y axis
+    plt.xlabel('Temperature')
+    plt.ylabel('Humidity')
+    plt.title("Linear Regression between Humidity and Temperature")
     return plt
 
-# label the x axis and y axis
-plt.xlabel('Temperature')
-plt.ylabel('Humidity')
-plt.title("Linear Regression between Humidity and Temperature")
-    
-
-
 def correlation():
-    # Visualise correlation
+# Visualise correlation
     columns = ['Mean Temperature (Â°C)', 'Humidity_Avg', 'Mean Wind Speed (km/h)']
     corr = df[columns].corr()
     fig, ax = plt.subplots(figsize=(10, 8))
@@ -163,7 +162,7 @@ sns.despine()
 # Get the columns you want to plot (excluding 'Date' and 'Region')
 columns_to_plot = df.drop(['Date', 'Region'], axis=1).columns
 
-def testGraph():
+def feature():
     for i, column in enumerate(columns_to_plot):
         for region in df['Region'].unique():
             region_data = df[df['Region'] == region]
@@ -175,8 +174,8 @@ def testGraph():
     plt.tight_layout()
     return plt
 
-# To show ADF Test results
 def adfResults():
+    # To show ADF Test results
     fig, ax = plt.subplots(nrows=3, ncols=1, figsize=(10, 8))
     visualize_adfuller_results(df['Humidity_Avg'].values, 'Humidity_Avg', ax[0])
     visualize_adfuller_results(df['Mean Temperature (Â°C)'].values, 'Mean Temperature (Â°C)', ax[1])
@@ -237,12 +236,8 @@ regions_to_predict = ['North', 'South', 'East', 'West', 'Central']
 fig, axs = plt.subplots(len(regions_to_predict), 1, figsize=(20, 12))
 
 def humidityPrediction():
-# Loop through regions and make predictions for each one
+    # Loop through regions and make predictions for each one
     for i, region in enumerate(regions_to_predict):
         prophet_for_region(region, axs[i])
-
     return plt
-
-#plt.show()
-#humidityPrediction().show()
 
