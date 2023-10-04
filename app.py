@@ -13,7 +13,7 @@ import flask
 import pandas as pd
 import numpy as np
 
-app = Flask(__name__)
+app = Flask(__name__,static_folder='Static')
 
 # Index Page
 @app.route('/')
@@ -178,6 +178,10 @@ def convertGraphToB64(plot):
     img.seek(0)
     plotB64 = base64.b64encode(img.getvalue()).decode('utf8')
     return plotB64
+
+@app.route("/Home")
+def Home():
+    return render_template("Dashboard.html")
 
 
 #if __name__ == '__main__':

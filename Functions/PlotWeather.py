@@ -53,20 +53,20 @@ north_june_df = df.loc[(df['Region'] == 'North') & (df['Date'].dt.month == 6) & 
 north_july_df = df.loc[(df['Region'] == 'North') & (df['Date'].dt.month == 7) & (df['Date'].dt.year == 2023)]
 north_aug_df =  df.loc[(df['Region'] == 'North') & (df['Date'].dt.month == 8) & (df['Date'].dt.year == 2023)]
 
-south_june_df = df.loc[(df['Region'] == 'South') & (df['Date'].dt.month == 6) & (df['Date'].dt.year == 2023)] 
-south_july_df = df.loc[(df['Region'] == 'South') & (df['Date'].dt.month == 7) & (df['Date'].dt.year == 2023)] 
+south_june_df = df.loc[(df['Region'] == 'South') & (df['Date'].dt.month == 6) & (df['Date'].dt.year == 2023)]
+south_july_df = df.loc[(df['Region'] == 'South') & (df['Date'].dt.month == 7) & (df['Date'].dt.year == 2023)]
 south_aug_df =  df.loc[(df['Region'] == 'South') & (df['Date'].dt.month == 8) & (df['Date'].dt.year == 2023)]
 
-central_june_df = df.loc[(df['Region'] == 'South') & (df['Date'].dt.month == 6) & (df['Date'].dt.year == 2023)] 
-central_july_df = df.loc[(df['Region'] == 'South') & (df['Date'].dt.month == 7) & (df['Date'].dt.year == 2023)] 
+central_june_df = df.loc[(df['Region'] == 'South') & (df['Date'].dt.month == 6) & (df['Date'].dt.year == 2023)]
+central_july_df = df.loc[(df['Region'] == 'South') & (df['Date'].dt.month == 7) & (df['Date'].dt.year == 2023)]
 central_aug_df =  df.loc[(df['Region'] == 'South') & (df['Date'].dt.month == 8) & (df['Date'].dt.year == 2023)]
 
-east_june_df = df.loc[(df['Region'] == 'East') & (df['Date'].dt.month == 6) & (df['Date'].dt.year == 2023)] 
-east_july_df = df.loc[(df['Region'] == 'East') & (df['Date'].dt.month == 7) & (df['Date'].dt.year == 2023)] 
+east_june_df = df.loc[(df['Region'] == 'East') & (df['Date'].dt.month == 6) & (df['Date'].dt.year == 2023)]
+east_july_df = df.loc[(df['Region'] == 'East') & (df['Date'].dt.month == 7) & (df['Date'].dt.year == 2023)]
 east_aug_df =  df.loc[(df['Region'] == 'East') & (df['Date'].dt.month == 8) & (df['Date'].dt.year == 2023)]
 
-west_june_df = df.loc[(df['Region'] == 'West') & (df['Date'].dt.month == 6) & (df['Date'].dt.year == 2023)] 
-west_july_df = df.loc[(df['Region'] == 'West') & (df['Date'].dt.month == 7) & (df['Date'].dt.year == 2023)] 
+west_june_df = df.loc[(df['Region'] == 'West') & (df['Date'].dt.month == 6) & (df['Date'].dt.year == 2023)]
+west_july_df = df.loc[(df['Region'] == 'West') & (df['Date'].dt.month == 7) & (df['Date'].dt.year == 2023)]
 west_aug_df =  df.loc[(df['Region'] == 'West') & (df['Date'].dt.month == 8) & (df['Date'].dt.year == 2023)]
 
 #print (north_june_df)
@@ -75,8 +75,8 @@ west_aug_df =  df.loc[(df['Region'] == 'West') & (df['Date'].dt.month == 8) & (d
 # Create a function to collate the mean/average of the following weather data for 1 month 
 # (Humidity_high, Humidity_avg, Humidity_low, Mean Temp, Max Temp, Lowest Temp)
 
-def calAvg(filteredDf):
-    
+def calAvg (filteredDf):
+
     avg_Hmd_h = 0
     avg_Hmd_a = 0
     avg_Hmd_l = 0
@@ -106,7 +106,7 @@ def calAvg(filteredDf):
     data = {
         'Humidity_High': avg_Hmd_h,
         'Humidity_Avg': avg_Hmd_a,
-        'Humidity_Low': avg_Hmd_l, 
+        'Humidity_Low': avg_Hmd_l,
         'Mean Temperature (Â°C)': avg_MeanTemp,
         'Maximum Temperature (Â°C)': avg_MaxTemp,
         'Lowest Temperature (Â°C)': avg_LowTemp
@@ -115,8 +115,8 @@ def calAvg(filteredDf):
     #return df
     return data
     #return avg_Hmd_h, avg_Hmd_a, avg_Hmd_l, avg_MeanTemp, avg_MaxTemp, avg_LowTemp   # Results are returned in tuple form
-     
-  
+
+
 
 
 
