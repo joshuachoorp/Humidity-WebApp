@@ -7,7 +7,7 @@ from flask import Flask, render_template, request, redirect, flash, send_file, s
 import flask
 import pandas as pd
 
-app = Flask(__name__)
+app = Flask(__name__,static_folder='Static')
 
 # Index Page
 @app.route('/')
@@ -119,6 +119,12 @@ def readCsv(csvFileName):
     data = pd.read_csv(csvFileName, encoding='unicode_escape')
 
     return data
+
+
+@app.route("/Home")
+def Home():
+    return render_template("Dashboard.html")
+
 
 #if __name__ == '__main__':
 #    checkReq()

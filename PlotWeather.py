@@ -9,7 +9,8 @@ import numpy as np
 
 # Read csv file into Pandas Dataframe
 # dayfirst= True, parse_dates= True,   index_col=0,
-df = pd.read_csv("compiledRegionData.csv", encoding="unicode-escape", usecols=[0,1,2,3,4,5,6,7])
+filepath = "Datasets/compiledRegionData.csv"
+df = pd.read_csv(filepath, encoding="unicode-escape", usecols=[0,1,2,3,4,5,6,7])
 #df = df.reset_index(inplace = True)
 #df = df.set_index('Date')
 pd.set_option('display.max_columns', None)
@@ -17,24 +18,24 @@ df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y')
 
 
 # filter weather data by month and region
-north_june_df = df.loc[(df['Region'] == 'North') & (df['Date'].dt.month == 6) & (df['Date'].dt.year == 2023)] 
+north_june_df = df.loc[(df['Region'] == 'North') & (df['Date'].dt.month == 6) & (df['Date'].dt.year == 2023)]
 north_july_df = df.loc[(df['Region'] == 'North') & (df['Date'].dt.month == 7) & (df['Date'].dt.year == 2023)]
 north_aug_df =  df.loc[(df['Region'] == 'North') & (df['Date'].dt.month == 8) & (df['Date'].dt.year == 2023)]
 
-south_june_df = df.loc[(df['Region'] == 'South') & (df['Date'].dt.month == 6) & (df['Date'].dt.year == 2023)] 
-south_july_df = df.loc[(df['Region'] == 'South') & (df['Date'].dt.month == 7) & (df['Date'].dt.year == 2023)] 
+south_june_df = df.loc[(df['Region'] == 'South') & (df['Date'].dt.month == 6) & (df['Date'].dt.year == 2023)]
+south_july_df = df.loc[(df['Region'] == 'South') & (df['Date'].dt.month == 7) & (df['Date'].dt.year == 2023)]
 south_aug_df =  df.loc[(df['Region'] == 'South') & (df['Date'].dt.month == 8) & (df['Date'].dt.year == 2023)]
 
-central_june_df = df.loc[(df['Region'] == 'South') & (df['Date'].dt.month == 6) & (df['Date'].dt.year == 2023)] 
-central_july_df = df.loc[(df['Region'] == 'South') & (df['Date'].dt.month == 7) & (df['Date'].dt.year == 2023)] 
+central_june_df = df.loc[(df['Region'] == 'South') & (df['Date'].dt.month == 6) & (df['Date'].dt.year == 2023)]
+central_july_df = df.loc[(df['Region'] == 'South') & (df['Date'].dt.month == 7) & (df['Date'].dt.year == 2023)]
 central_aug_df =  df.loc[(df['Region'] == 'South') & (df['Date'].dt.month == 8) & (df['Date'].dt.year == 2023)]
 
-east_june_df = df.loc[(df['Region'] == 'East') & (df['Date'].dt.month == 6) & (df['Date'].dt.year == 2023)] 
-east_july_df = df.loc[(df['Region'] == 'East') & (df['Date'].dt.month == 7) & (df['Date'].dt.year == 2023)] 
+east_june_df = df.loc[(df['Region'] == 'East') & (df['Date'].dt.month == 6) & (df['Date'].dt.year == 2023)]
+east_july_df = df.loc[(df['Region'] == 'East') & (df['Date'].dt.month == 7) & (df['Date'].dt.year == 2023)]
 east_aug_df =  df.loc[(df['Region'] == 'East') & (df['Date'].dt.month == 8) & (df['Date'].dt.year == 2023)]
 
-west_june_df = df.loc[(df['Region'] == 'West') & (df['Date'].dt.month == 6) & (df['Date'].dt.year == 2023)] 
-west_july_df = df.loc[(df['Region'] == 'West') & (df['Date'].dt.month == 7) & (df['Date'].dt.year == 2023)] 
+west_june_df = df.loc[(df['Region'] == 'West') & (df['Date'].dt.month == 6) & (df['Date'].dt.year == 2023)]
+west_july_df = df.loc[(df['Region'] == 'West') & (df['Date'].dt.month == 7) & (df['Date'].dt.year == 2023)]
 west_aug_df =  df.loc[(df['Region'] == 'West') & (df['Date'].dt.month == 8) & (df['Date'].dt.year == 2023)]
 
 #print (north_june_df)
@@ -44,7 +45,7 @@ west_aug_df =  df.loc[(df['Region'] == 'West') & (df['Date'].dt.month == 8) & (d
 # (Humidity_high, Humidity_avg, Humidity_low, Mean Temp, Max Temp, Lowest Temp)
 
 def calAvg (filteredDf):
-    
+
     avg_Hmd_h = 0
     avg_Hmd_a = 0
     avg_Hmd_l = 0
@@ -74,7 +75,7 @@ def calAvg (filteredDf):
     data = {
         'Humidity_High': avg_Hmd_h,
         'Humidity_Avg': avg_Hmd_a,
-        'Humidity_Low': avg_Hmd_l, 
+        'Humidity_Low': avg_Hmd_l,
         'Mean Temperature (Â°C)': avg_MeanTemp,
         'Maximum Temperature (Â°C)': avg_MaxTemp,
         'Lowest Temperature (Â°C)': avg_LowTemp
@@ -83,29 +84,29 @@ def calAvg (filteredDf):
     #return df
     return data
     #return avg_Hmd_h, avg_Hmd_a, avg_Hmd_l, avg_MeanTemp, avg_MaxTemp, avg_LowTemp   # Results are returned in tuple form
-     
-  
+
+
 
 
 
 # create variables to store the dictionary, which contains the mean value of all weather data from June to Aug by region
-north_june_mean_weather_data = calAvg (north_june_df) 
+north_june_mean_weather_data = calAvg (north_june_df)
 north_july_mean_weather_data = calAvg (north_july_df)
 north_aug_mean_weather_data = calAvg (north_aug_df)
 
-south_june_mean_weather_data = calAvg (south_june_df) 
+south_june_mean_weather_data = calAvg (south_june_df)
 south_july_mean_weather_data = calAvg (south_july_df)
 south_aug_mean_weather_data = calAvg (south_aug_df)
 
-central_june_mean_weather_data = calAvg (central_june_df) 
+central_june_mean_weather_data = calAvg (central_june_df)
 central_july_mean_weather_data = calAvg (central_july_df)
 central_aug_mean_weather_data = calAvg (central_aug_df)
 
-east_june_mean_weather_data = calAvg (east_june_df) 
+east_june_mean_weather_data = calAvg (east_june_df)
 east_july_mean_weather_data = calAvg (east_july_df)
 east_aug_mean_weather_data = calAvg (east_aug_df)
 
-west_june_mean_weather_data = calAvg (west_june_df) 
+west_june_mean_weather_data = calAvg (west_june_df)
 west_july_mean_weather_data = calAvg (west_july_df)
 west_aug_mean_weather_data = calAvg (west_aug_df)
 
