@@ -1,24 +1,55 @@
+"""
+Filter and Clean data
+"""
+
 # Plot Weather data
 
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sns
+#import seaborn as sns
 import datetime as datetime
 import numpy as np
 
 
-# Read csv file into Pandas Dataframe
-# dayfirst= True, parse_dates= True,   index_col=0,
-filepath = "Datasets/compiledRegionData.csv"
-df = pd.read_csv(filepath, encoding="unicode-escape", usecols=[0,1,2,3,4,5,6,7])
-#df = df.reset_index(inplace = True)
-#df = df.set_index('Date')
-pd.set_option('display.max_columns', None)
-df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y')
+def readFile():
+    # Read csv file into Pandas Dataframe
+    # dayfirst= True, parse_dates= True,   index_col=0,
+    df = pd.read_csv("Datasets/compiledRegionData.csv", encoding="unicode-escape", usecols=[0,1,2,3,4,5,6,7])
+    #df = df.reset_index(inplace = True)
+    #df = df.set_index('Date')
+    pd.set_option('display.max_columns', None)
+    df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y')
+    return df
 
+df = readFile()
 
 # filter weather data by month and region
-north_june_df = df.loc[(df['Region'] == 'North') & (df['Date'].dt.month == 6) & (df['Date'].dt.year == 2023)]
+def dataFilter(region, month, year):
+    df = readFile()
+    dataFilter_df = df.loc[(df['Region'] == region.capitalize()) & (df['Date'].dt.month == month) & (df['Date'].dt.year == year)]
+    return dataFilter_df 
+
+
+def dataGroup(region, year):
+    titleNorth = ['Weather data for ' + region.capitalize() + ' in June',
+                  'Weather data for ' + region.capitalize() + ' in July',
+                  'Weather data for ' + region.capitalize() + ' in August']
+    
+    labelNorth = [list(calMeanWeatherData(dataFilter(region.capitalize(), 6, year)).keys()),
+                  list(calMeanWeatherData(dataFilter(region.capitalize(), 7, year)).keys()),
+                  list(calMeanWeatherData(dataFilter(region.capitalize(), 8, year)).keys())]
+    
+    valuesNorth = [list(calMeanWeatherData(dataFilter(region.capitalize(), 6, year)).values()),
+                   list(calMeanWeatherData(dataFilter(region.capitalize(), 7, year)).values()),
+                   list(calMeanWeatherData(dataFilter(region.capitalize(), 8, year)).values())]
+    
+    canvasName = ["chart" + region.capitalize() + "June", "chart" + region.capitalize() + "July", "chart" + region.capitalize() + "Aug"]
+
+    group = [titleNorth, labelNorth, valuesNorth, canvasName]
+
+    return group
+
+north_june_df = df.loc[(df['Region'] == 'North') & (df['Date'].dt.month == 6) & (df['Date'].dt.year == 2023)] 
 north_july_df = df.loc[(df['Region'] == 'North') & (df['Date'].dt.month == 7) & (df['Date'].dt.year == 2023)]
 north_aug_df =  df.loc[(df['Region'] == 'North') & (df['Date'].dt.month == 8) & (df['Date'].dt.year == 2023)]
 
@@ -90,25 +121,29 @@ def calAvg (filteredDf):
 
 
 # create variables to store the dictionary, which contains the mean value of all weather data from June to Aug by region
-north_june_mean_weather_data = calAvg (north_june_df)
-north_july_mean_weather_data = calAvg (north_july_df)
-north_aug_mean_weather_data = calAvg (north_aug_df)
+def calMeanWeatherData(data):
+    meanWeatherData = calAvg(data)
+    return meanWeatherData
 
-south_june_mean_weather_data = calAvg (south_june_df)
-south_july_mean_weather_data = calAvg (south_july_df)
-south_aug_mean_weather_data = calAvg (south_aug_df)
+north_june_mean_weather_data = calAvg(north_june_df) 
+north_july_mean_weather_data = calAvg(north_july_df)
+north_aug_mean_weather_data = calAvg(north_aug_df)
 
-central_june_mean_weather_data = calAvg (central_june_df)
-central_july_mean_weather_data = calAvg (central_july_df)
-central_aug_mean_weather_data = calAvg (central_aug_df)
+south_june_mean_weather_data = calAvg(south_june_df) 
+south_july_mean_weather_data = calAvg(south_july_df)
+south_aug_mean_weather_data = calAvg(south_aug_df)
 
-east_june_mean_weather_data = calAvg (east_june_df)
-east_july_mean_weather_data = calAvg (east_july_df)
-east_aug_mean_weather_data = calAvg (east_aug_df)
+central_june_mean_weather_data = calAvg(central_june_df) 
+central_july_mean_weather_data = calAvg(central_july_df)
+central_aug_mean_weather_data = calAvg(central_aug_df)
 
-west_june_mean_weather_data = calAvg (west_june_df)
-west_july_mean_weather_data = calAvg (west_july_df)
-west_aug_mean_weather_data = calAvg (west_aug_df)
+east_june_mean_weather_data = calAvg(east_june_df) 
+east_july_mean_weather_data = calAvg(east_july_df)
+east_aug_mean_weather_data = calAvg(east_aug_df)
+
+west_june_mean_weather_data = calAvg(west_june_df) 
+west_july_mean_weather_data = calAvg(west_july_df)
+west_aug_mean_weather_data = calAvg(west_aug_df)
 
 #print(type(june_mean_weather_data))
 #print (north_june_mean_weather_data)
@@ -118,24 +153,27 @@ west_aug_mean_weather_data = calAvg (west_aug_df)
 #calAvg (north_june_df)
 #print (calAvg (north_june_df))
 
-print (north_june_mean_weather_data)
+#print(calMeanWeatherData(northDataFilter('North', 6, 2023)))
 
-# plotting graph
-# 1. North Region
-# Plot june weather data (for basic reference)
-keys = north_june_mean_weather_data.keys()
-values = north_june_mean_weather_data.values()
+# plotting graph for all regions
+# 1. North Region 
+# Plot june weather data (for basic reference) 
+#print("Combine bar and line graph")
+keys = calMeanWeatherData(dataFilter('North', 6, 2023)).keys()
+values = calMeanWeatherData(dataFilter('North', 6, 2023)).values()
 plt.title('Weather data for June in North Region')
 plt.bar (keys, values)
 #plt.show()
 
 # Plot july weather data (for basic reference)
+#print("Combine bar and line graph")
 #keys = north_july_mean_weather_data.keys()
 #values = north_july_mean_weather_data.values()
 #plt.bar (keys, values)
 #plt.show()
 
 # Plot aug weather data (for basic reference)
+#print("Combine bar and line graph")
 #keys = north_aug_mean_weather_data.keys()
 #values = north_aug_mean_weather_data.values()
 #plt.bar (keys, values)
@@ -144,18 +182,21 @@ plt.bar (keys, values)
 
 # 2. South Region
 # Plot june weather data (for basic reference)
+#print("Combine bar and line graph")
 #keys = south_june_mean_weather_data.keys()
 #values = south_june_mean_weather_data.values()
 #plt.bar (keys, values)
 #plt.show()
 
 # Plot july weather data (for basic reference)
+#print("Combine bar and line graph")
 #keys = south_july_mean_weather_data.keys()
 #values = south_july_mean_weather_data.values()
 #plt.bar (keys, values)
 #plt.show()
 
 # Plot aug weather data (for basic reference)
+#print("Combine bar and line graph")
 #keys = south_aug_mean_weather_data.keys()
 #values = south_aug_mean_weather_data.values()
 #plt.bar (keys, values)
@@ -164,18 +205,21 @@ plt.bar (keys, values)
 
 # 3. Central Region
 # Plot june weather data (for basic reference)
+#print("Combine bar and line graph")
 #keys = central_june_mean_weather_data.keys()
 #values = central_june_mean_weather_data.values()
 #plt.bar (keys, values)
 #plt.show()
 
 # Plot july weather data (for basic reference)
+#print("Combine bar and line graph")
 #keys = central_july_mean_weather_data.keys()
 #values = central_july_mean_weather_data.values()
 #plt.bar (keys, values)
 #plt.show()
 
 # Plot aug weather data (for basic reference)
+#print("Combine bar and line graph")
 #keys = central_aug_mean_weather_data.keys()
 #values = central_aug_mean_weather_data.values()
 #plt.bar (keys, values)
@@ -185,18 +229,21 @@ plt.bar (keys, values)
 
 # 4. East Region
 # Plot june weather data (for basic reference)
+#print("Combine bar and line graph")
 #keys = east_june_mean_weather_data.keys()
 #values = east_june_mean_weather_data.values()
 #plt.bar (keys, values)
 #plt.show()
 
 # Plot july weather data (for basic reference)
+#print("Combine bar and line graph")
 #keys = east_july_mean_weather_data.keys()
 #values = east_july_mean_weather_data.values()
 #plt.bar (keys, values)
 #plt.show()
 
 # Plot aug weather data (for basic reference)
+#print("Combine bar and line graph")
 #keys = east_aug_mean_weather_data.keys()
 #values = east_aug_mean_weather_data.values()
 #plt.bar (keys, values)
@@ -205,18 +252,21 @@ plt.bar (keys, values)
 
 # 5. West Region
 # Plot june weather data (for basic reference)
+#print("Combine bar and line graph")
 #keys = west_june_mean_weather_data.keys()
 #values = west_june_mean_weather_data.values()
 #plt.bar (keys, values)
 #plt.show()
 
 # Plot july weather data (for basic reference)
+#print("Combine bar and line graph")
 #keys = west_july_mean_weather_data.keys()
 #values = west_july_mean_weather_data.values()
 #plt.bar (keys, values)
 #plt.show()
 
 # Plot aug weather data (for basic reference)
+#print("Combine bar and line graph")
 #keys = west_aug_mean_weather_data.keys()
 #values = west_aug_mean_weather_data.values()
 #plt.bar (keys, values)

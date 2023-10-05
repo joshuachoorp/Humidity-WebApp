@@ -1,6 +1,11 @@
+"""
+Main file to run
+"""
+
 import sys
 import subprocess
-from testRequirements import checkReq
+from Functions import checkReq
+
 
 
 
@@ -15,13 +20,13 @@ if __name__ == '__main__':
         #Checks for required packages and installs them if not found
         #If module required not installed, will throw exception. 
         #If thrown exception, will install modules required based on requirements.txt
-        except ModuleNotFoundError:
+        except ModuleNotFoundError as e:
             checkReq()         
             continue
 
         except Exception as e:
-            checkReq()            
-            continue
+            print(e)           
+            break
         
         break
 

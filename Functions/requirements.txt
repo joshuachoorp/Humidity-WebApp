@@ -1,0 +1,12 @@
+Flask==2.3.3
+pandas
+numpy
+matplotlib
+selenium
+seaborn
+bs4
+requests
+pmdarima
+prophet
+mplcursors
+plotly
