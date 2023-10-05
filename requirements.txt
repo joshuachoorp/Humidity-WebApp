@@ -4,3 +4,4 @@ numpy~=1.21.6
 selenium
 bs4
 matplotlib==3.4.3
+pmdarima==1.8.2
