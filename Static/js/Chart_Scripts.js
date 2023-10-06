@@ -18,12 +18,22 @@ function createLineChart(title, data, labels, canvasName) {
             data: {
                 labels: labels[i],
                 datasets: [{
-                    label: 'Sample Increase In Humidity',
+                    label: 'Temperature',
                     data: data[i],
                     fill : false,
                     borderColor: 'rgb(75, 192, 192)',
-                    tension: 0.1
-                }]
+                    tension: 0.1,
+                    yAxisID: 'y',
+                }, 
+                {
+                    label: 'Humidity',
+                    data: data[i],
+                    fill : false,
+                    borderColor: 'rgb(192, 192, 192)',
+                    tension: 0.1,
+                    yAxisID: 'y1',
+                }
+            ]
             },
             options: {
                 plugins: {
@@ -40,8 +50,21 @@ function createLineChart(title, data, labels, canvasName) {
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
-                    }
+                        beginAtZero: true,
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                
+                        // grid line settings
+                        grid: {
+                          drawOnChartArea: false, // only want the grid lines for one axis to show up
+                        },
+                      },
                 }
             }
         });
