@@ -30,7 +30,7 @@ function createLineChart(title, data, labels, canvasName) {
                     // Set title
                     title: {
                         display: true,
-                        text: title[i],
+                        text: "",
                         align: 'center',
                         font: {
                             weight: 'bold',

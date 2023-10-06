@@ -1,25 +1,28 @@
 """
 Flask backend of Humidity-Webapp
 """
+from testRequirements import checkReq
+checkReq()
+
 from pathlib import Path
 import base64
 import os
 from io import BytesIO
-from Functions import dataGroup, linear_regression, correlation, overview_data, predictionHumidity
 
+from Functions import dataGroup, linear_regression, correlation, overview_data, predictionHumidity
 from distutils.command import upload
 from flask import Flask, render_template, request, redirect, flash, send_file, send_from_directory, current_app, abort
 import flask
 import pandas as pd
 import numpy as np
 
-app = Flask(__name__,static_folder='Static')
+
+
 if __name__ == '__main__':
     while True:
         # Checks for required packages and installs them if not found
         try:
             from app import app
-
             app.run(debug=True)
 
         # Checks for required packages and installs them if not found
@@ -35,6 +38,8 @@ if __name__ == '__main__':
             break
 
         break
+
+app = Flask(__name__,static_folder='Static')
 # Index Page
 @app.route('/')
 def index():
@@ -214,9 +219,26 @@ def convertGraphToB64(plot):
 
 @app.route("/Home")
 def Home():
-    return render_template("Dashboard.html")
+    northGroup = dataGroup('North', 2023)
+    # Data for South Region
+    southGroup = dataGroup('South', 2023)
+    # Data for Central Region
+    centralGroup = dataGroup('Central', 2023)
+    # Data for East Region
+    eastGroup = dataGroup('East', 2023)
+    # Data for West Region
+    westGroup = dataGroup('West', 2023)
+
+    return render_template('dashboard.html',
+                           lineTitleNorth=northGroup[0], lineLabelNorth=northGroup[1], lineValueNorth=northGroup[2],
+                           canvasNorth=northGroup[3],
+                           lineTitleSouth=southGroup[0], lineLabelSouth=southGroup[1], lineValueSouth=southGroup[2],
+                           canvasSouth=southGroup[3],
+                           lineTitleCentral=centralGroup[0], lineLabelCentral=centralGroup[1],
+                           lineValueCentral=centralGroup[2], canvasCentral=centralGroup[3],
+                           lineTitleEast=eastGroup[0], lineLabelEast=eastGroup[1], lineValueEast=eastGroup[2],
+                           canvasEast=eastGroup[3],
+                           lineTitleWest=westGroup[0], lineLabelWest=westGroup[1], lineValueWest=westGroup[2],
+                           canvasWest=westGroup[3], )
 
 
-#if __name__ == '__main__':
-#    checkReq()
-#    app.run(debug=True)

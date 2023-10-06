@@ -204,15 +204,15 @@
 
 
     <script>
-        const element1 = document.querySelectorAll('[id^="chart"]');
-        const element2 = document.querySelectorAll('[id=lineName]');
+        const canvasChart = document.querySelectorAll('[id^="chart"]');
+        const graphChartName = document.querySelectorAll('[id=lineName]');
         const myTimeout = setTimeout(sendLineIN, 1500);
         
         function sendLineIN() {
-            for (let i = 0; i < element1.length; i++) {
-                var graphName = element2[i].value;
-                console.log(element2[i].value);
-                var graph = element1[i];
+            for (let i = 0; i < canvasChart.length; i++) {
+                var graphName = graphChartName[i].value;
+                console.log(graphChartName[i].value);
+                var graph = canvasChart[i];
                 var graphDataURL = graph.toDataURL('image/png');
                 
                 $.ajax({
