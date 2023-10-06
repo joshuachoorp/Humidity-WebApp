@@ -240,16 +240,8 @@ def North():
     westGroup = dataGroup('West', 2023)
 
     return render_template('North.html',
-                           lineTitleNorth=northGroup[0], lineLabelNorth=northGroup[1], lineValueNorth=northGroup[2],
-                           canvasNorth=northGroup[3],
-                           lineTitleSouth=southGroup[0], lineLabelSouth=southGroup[1], lineValueSouth=southGroup[2],
-                           canvasSouth=southGroup[3],
-                           lineTitleCentral=centralGroup[0], lineLabelCentral=centralGroup[1],
-                           lineValueCentral=centralGroup[2], canvasCentral=centralGroup[3],
-                           lineTitleEast=eastGroup[0], lineLabelEast=eastGroup[1], lineValueEast=eastGroup[2],
-                           canvasEast=eastGroup[3],
-                           lineTitleWest=westGroup[0], lineLabelWest=westGroup[1], lineValueWest=westGroup[2],
-                           canvasWest=westGroup[3], )
+                           lineLabelNorth=northGroup[0], lineValueNorth=northGroup[1], canvasNorth=northGroup[2])
+
 @app.route("/South")
 def South():
     # Data for North Region
@@ -268,13 +260,4 @@ def South():
     westGroup = dataGroup('West', 2023)
 
     return render_template('South.html',
-                           lineTitleNorth=northGroup[0], lineLabelNorth=northGroup[1], lineValueNorth=northGroup[2],
-                           canvasNorth=northGroup[3],
-                           lineTitleSouth=southGroup[0], lineLabelSouth=southGroup[1], lineValueSouth=southGroup[2],
-                           canvasSouth=southGroup[3],
-                           lineTitleCentral=centralGroup[0], lineLabelCentral=centralGroup[1],
-                           lineValueCentral=centralGroup[2], canvasCentral=centralGroup[3],
-                           lineTitleEast=eastGroup[0], lineLabelEast=eastGroup[1], lineValueEast=eastGroup[2],
-                           canvasEast=eastGroup[3],
-                           lineTitleWest=westGroup[0], lineLabelWest=westGroup[1], lineValueWest=westGroup[2],
-                           canvasWest=westGroup[3], )
+                           lineLabelSouth=southGroup[0], lineValueSouth=southGroup[1], canvasSouth=southGroup[2])

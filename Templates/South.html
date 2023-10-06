@@ -17,35 +17,6 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='product.css') }}">
 
 
-    <script>
-        const element1 = document.querySelectorAll('[id^="chart"]');
-        const element2 = document.querySelectorAll('[id=lineName]');
-        const myTimeout = setTimeout(sendLineIN, 1500);
-
-        function sendLineIN() {
-            for (let i = 0; i < element1.length; i++) {
-                var graphName = element2[i].value;
-                console.log(element2[i].value);
-                var graph = element1[i];
-                var graphDataURL = graph.toDataURL('image/png');
-
-                $.ajax({
-                    url: '/dashboard/download',
-                    type: 'POST',
-                    data: { 'graphBase64' : graphDataURL,
-                            'graphName' : graphName
-                    },
-                    error: function(error) {
-                        console.log(error)
-                    },
-                    success: function() {
-                        console.log("okay")
-                    },
-                });
-            }
-        }
-    </script>
-
 </head>
 <header class="site-header sticky-top py-1">
 <!--NavBar-->
@@ -153,24 +124,20 @@
   <script>
     //Using the data parsed from the controller side app.py to generate charts
 
-    createLineChart({{ lineTitleNorth|tojson|safe }}, {{ lineValueNorth|tojson|safe }}, {{ lineLabelNorth|tojson|safe }}, {{ canvasNorth|tojson|safe }})
-    createLineChart({{ lineTitleSouth|tojson|safe }}, {{ lineValueSouth|tojson|safe }}, {{ lineLabelSouth|tojson|safe }}, {{ canvasSouth|tojson|safe }})
-    createLineChart({{ lineTitleCentral|tojson|safe }}, {{ lineValueCentral|tojson|safe }}, {{ lineLabelCentral|tojson|safe }}, {{ canvasCentral|tojson|safe }})
-    createLineChart({{ lineTitleEast|tojson|safe }}, {{ lineValueEast|tojson|safe }}, {{ lineLabelEast|tojson|safe }}, {{ canvasEast|tojson|safe }})
-    createLineChart({{ lineTitleWest|tojson|safe }}, {{ lineValueWest|tojson|safe }}, {{ lineLabelWest|tojson|safe }}, {{ canvasWest|tojson|safe }})
+    createLineChart({{ lineValueSouth|tojson|safe }}, {{ lineLabelSouth|tojson|safe }}, {{ canvasSouth|tojson|safe }})
     console.log("line")
 
   </script>
   <script>
-        const element1 = document.querySelectorAll('[id^="chart"]');
-        const element2 = document.querySelectorAll('[id=lineName]');
+        const canvasName = document.querySelectorAll('[id^="chart"]');
+        const lineName = document.querySelectorAll('[id=lineName]');
         const myTimeout = setTimeout(sendLineIN, 1500);
 
         function sendLineIN() {
-            for (let i = 0; i < element1.length; i++) {
-                var graphName = element2[i].value;
-                console.log(element2[i].value);
-                var graph = element1[i];
+            for (let i = 0; i < canvasName.length; i++) {
+                var graphName = lineName[i].value;
+                console.log(lineName[i].value);
+                var graph = canvasName[i];
                 var graphDataURL = graph.toDataURL('image/png');
 
                 $.ajax({

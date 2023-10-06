@@ -1,7 +1,13 @@
 // charts.js
 
 
-
+// Test Function
+function testPrint(data, labels){
+    for (let i = 0, text = "", text1 = ""; i < data.length; i++) {
+        text += data[i] + "<br>";
+        text1 += labels[i] + "<br>";
+    }
+}
 
 // Generate Line Graphs
 function createLineChart(data, labels, canvasName) {
@@ -33,9 +39,6 @@ function createLineChart(data, labels, canvasName) {
                 plugins: {
                     // Set title
                     title: {
-                        display: true,
-                        text: "",
-                        align: 'center',
                         font: {
                             weight: 'bold',
                             size: 20

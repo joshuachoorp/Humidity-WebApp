@@ -16,36 +16,6 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="{{ url_for('static', filename='product.css') }}">
 
-
-    <script>
-        const element1 = document.querySelectorAll('[id^="chart"]');
-        const element2 = document.querySelectorAll('[id=lineName]');
-        const myTimeout = setTimeout(sendLineIN, 1500);
-
-        function sendLineIN() {
-            for (let i = 0; i < element1.length; i++) {
-                var graphName = element2[i].value;
-                console.log(element2[i].value);
-                var graph = element1[i];
-                var graphDataURL = graph.toDataURL('image/png');
-
-                $.ajax({
-                    url: '/dashboard/download',
-                    type: 'POST',
-                    data: { 'graphBase64' : graphDataURL,
-                            'graphName' : graphName
-                    },
-                    error: function(error) {
-                        console.log(error)
-                    },
-                    success: function() {
-                        console.log("okay")
-                    },
-                });
-            }
-        }
-    </script>
-
 </head>
 <header class="site-header sticky-top py-1">
 <!--NavBar-->
@@ -99,6 +69,10 @@
     <div class="bg-dark me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden">
       <div class="my-3 py-3">
         <h2 class="display-5">North Region July Humidity Data</h2>
+        <table>
+          <tr>test1 </tr>
+          <tr>test1</tr>
+        </table>
         <p>Small description of graph if need be</p>
       </div>
       <!--Charting-->
@@ -154,23 +128,19 @@
     //Using the data parsed from the controller side app.py to generate charts
 
     createLineChart({{ lineValueNorth|tojson|safe }}, {{ lineLabelNorth|tojson|safe }}, {{ canvasNorth|tojson|safe }})
-    createLineChart({{ lineValueSouth|tojson|safe }}, {{ lineLabelSouth|tojson|safe }}, {{ canvasSouth|tojson|safe }})
-    createLineChart({{ lineValueCentral|tojson|safe }}, {{ lineLabelCentral|tojson|safe }}, {{ canvasCentral|tojson|safe }})
-    createLineChart({{ lineValueEast|tojson|safe }}, {{ lineLabelEast|tojson|safe }}, {{ canvasEast|tojson|safe }})
-    createLineChart({{ lineValueWest|tojson|safe }}, {{ lineLabelWest|tojson|safe }}, {{ canvasWest|tojson|safe }})
     console.log("line")
 
   </script>
   <script>
-        const element1 = document.querySelectorAll('[id^="chart"]');
-        const element2 = document.querySelectorAll('[id=lineName]');
+        const canvasName = document.querySelectorAll('[id^="chart"]');
+        const lineName = document.querySelectorAll('[id=lineName]');
         const myTimeout = setTimeout(sendLineIN, 1500);
 
         function sendLineIN() {
-            for (let i = 0; i < element1.length; i++) {
-                var graphName = element2[i].value;
-                console.log(element2[i].value);
-                var graph = element1[i];
+            for (let i = 0; i < canvasName.length; i++) {
+                var graphName = lineName[i].value;
+                console.log(lineName[i].value);
+                var graph = canvasName[i];
                 var graphDataURL = graph.toDataURL('image/png');
 
                 $.ajax({
