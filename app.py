@@ -5,7 +5,7 @@ from pathlib import Path
 import base64
 import os
 from io import BytesIO
-from Functions import dataGroup, humidityPrediction, adfResults, scatterPlot, correlation, feature
+from Functions import dataGroup, linear_regression, correlation, overview_data, predictionHumidity
 
 from distutils.command import upload
 from flask import Flask, render_template, request, redirect, flash, send_file, send_from_directory, current_app, abort
@@ -143,19 +143,32 @@ def predict():
         return redirect('/')
     
     elif request.method == 'POST':
-
-        prophetRegion = convertGraphToB64(humidityPrediction())
-        ADFTestResults = convertGraphToB64(adfResults())
-        scatterPlotGraph = convertGraphToB64(scatterPlot())
+        
+        prediction = convertGraphToB64(predictionHumidity())
         correlationGraph = convertGraphToB64(correlation())
-        testGraph1 = convertGraphToB64(feature())
+        overviewGraph = convertGraphToB64(overview_data())
 
         return render_template('prediction.html', 
-                               prediction=prophetRegion,
-                               adfTest=ADFTestResults,
-                               scatterPlotGraph=scatterPlotGraph,
+                               prediction=prediction,
                                correlationGraph=correlationGraph,
-                               feature=testGraph1)
+                               overview=overviewGraph)
+    
+    #Only allow access to this page through the main page
+    elif request.method == 'GET':
+        return redirect('/')
+    
+@app.route('/linear', methods=['GET', 'POST'])
+def linear():
+    #Back button to main page
+    if request.method == 'POST' and request.form.get('back') == 'back':
+        return redirect('/')
+    
+    elif request.method == 'POST':
+        
+        scatterPlot = convertGraphToB64(linear_regression())
+
+        return render_template('linear.html', 
+                               scatterPlotGraph=scatterPlot)
     
     #Only allow access to this page through the main page
     elif request.method == 'GET':
