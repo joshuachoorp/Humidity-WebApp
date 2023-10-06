@@ -18,7 +18,7 @@ function createLineChart(title, data, labels, canvasName) {
             data: {
                 labels: labels[i],
                 datasets: [{
-                    label: 'Sample Increase In Humidity',
+                    label: 'Increase In Humidity',
                     data: data[i],
                     fill : false,
                     borderColor: 'rgb(75, 192, 192)',
