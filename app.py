@@ -1,25 +1,28 @@
 """
 Flask backend of Humidity-Webapp
 """
+from testRequirements import checkReq
+checkReq()
+
 from pathlib import Path
 import base64
 import os
 from io import BytesIO
-from Functions import dataGroup, linear_regression, correlation, overview_data, predictionHumidity
 
+from Functions import dataGroup, linear_regression, correlation, overview_data, predictionHumidity
 from distutils.command import upload
 from flask import Flask, render_template, request, redirect, flash, send_file, send_from_directory, current_app, abort
 import flask
 import pandas as pd
 import numpy as np
 
-app = Flask(__name__,static_folder='Static')
+
+
 if __name__ == '__main__':
     while True:
         # Checks for required packages and installs them if not found
         try:
             from app import app
-
             app.run(debug=True)
 
         # Checks for required packages and installs them if not found
@@ -35,6 +38,8 @@ if __name__ == '__main__':
             break
 
         break
+
+app = Flask(__name__,static_folder='Static')
 # Index Page
 @app.route('/')
 def index():
@@ -216,7 +221,3 @@ def convertGraphToB64(plot):
 def Home():
     return render_template("Dashboard.html")
 
-
-#if __name__ == '__main__':
-#    checkReq()
-#    app.run(debug=True)
