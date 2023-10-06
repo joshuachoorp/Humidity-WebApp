@@ -9,6 +9,21 @@ function testPrint(data, labels){
     }
 }
 
+function printData(month, dataValue, dataLabel){
+    var myArray = dataValue
+    var value = myArray[month]
+    var nameLabel = dataLabel[month]
+    console.log(nameLabel)
+
+    for (var i=0; i < value.length; i++) {
+      document.write("<tr> " + nameLabel[i] + ": " + parseFloat(value[i].toFixed(2)) + " </tr>");
+      if (i == 2){
+        document.write("</br>");
+      }
+      console.log(nameLabel[i])
+    }
+}
+
 // Generate Line Graphs
 function createLineChart(data, labels, canvasName) {
     for (let i = 0; i < data.length; i++) {

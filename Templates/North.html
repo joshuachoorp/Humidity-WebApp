@@ -50,7 +50,11 @@
     <div class="bg-dark me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden">
       <div class="my-3 py-3">
         <h2 class="display-5">North Region June Humidity Data</h2>
-        <p>Small description of graph if need be</p>
+        <table>
+          <script>
+            printData(0, {{ lineValueNorth|tojson|safe }}, {{ lineLabelNorth|tojson|safe }})
+          </script>
+        </table>
       </div>
       <!--Charting 1-->
       <div class="bg-light shadow-sm mx-auto" style="width: 80%; height: 400px; border-radius: 20px 20px 0 0;">
@@ -69,11 +73,13 @@
     <div class="bg-dark me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden">
       <div class="my-3 py-3">
         <h2 class="display-5">North Region July Humidity Data</h2>
+
         <table>
-          <tr>test1 </tr>
-          <tr>test1</tr>
+          <script>
+            printData(1, {{ lineValueNorth|tojson|safe }}, {{ lineLabelNorth|tojson|safe }})
+          </script>
         </table>
-        <p>Small description of graph if need be</p>
+
       </div>
       <!--Charting-->
       <div class="bg-light shadow-sm mx-auto" style="width: 80%; height: 400px; border-radius: 20px 20px 0 0;">
@@ -95,8 +101,14 @@
     <div class="bg-dark me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden">
       <div class="my-3 py-3">
         <h2 class="display-5">North Region August Humidity Data</h2>
-        <p>Small description of graph if need be</p>
+        <table>
+          <script>
+            printData(2, {{ lineValueNorth|tojson|safe }}, {{ lineLabelNorth|tojson|safe }})
+          </script>
+        </table>
       </div>
+      
+      
       <!--Charting 1-->
       <div class="bg-light shadow-sm mx-auto" style="width: 80%; height: 400px; border-radius: 20px 20px 0 0;">
           <div id="regionNorth" onload="console.log('done')">
@@ -128,7 +140,7 @@
     //Using the data parsed from the controller side app.py to generate charts
 
     createLineChart({{ lineValueNorth|tojson|safe }}, {{ lineLabelNorth|tojson|safe }}, {{ canvasNorth|tojson|safe }})
-    console.log("line")
+    
 
   </script>
   <script>
@@ -139,7 +151,6 @@
         function sendLineIN() {
             for (let i = 0; i < canvasName.length; i++) {
                 var graphName = lineName[i].value;
-                console.log(lineName[i].value);
                 var graph = canvasName[i];
                 var graphDataURL = graph.toDataURL('image/png');
 
