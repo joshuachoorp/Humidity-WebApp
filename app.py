@@ -246,4 +246,31 @@ def Home():
                            lineTitleWest=westGroup[0], lineLabelWest=westGroup[1], lineValueWest=westGroup[2],
                            canvasWest=westGroup[3], )
 
+@app.route("/North")
+def North():
+    # Data for North Region
+    northGroup = dataGroup('North', 2023)
 
+    # Data for South Region
+    southGroup = dataGroup('South', 2023)
+
+    # Data for Central Region
+    centralGroup = dataGroup('Central', 2023)
+
+    # Data for East Region
+    eastGroup = dataGroup('East', 2023)
+
+    # Data for West Region
+    westGroup = dataGroup('West', 2023)
+
+    return render_template('North.html',
+                           lineTitleNorth=northGroup[0], lineLabelNorth=northGroup[1], lineValueNorth=northGroup[2],
+                           canvasNorth=northGroup[3],
+                           lineTitleSouth=southGroup[0], lineLabelSouth=southGroup[1], lineValueSouth=southGroup[2],
+                           canvasSouth=southGroup[3],
+                           lineTitleCentral=centralGroup[0], lineLabelCentral=centralGroup[1],
+                           lineValueCentral=centralGroup[2], canvasCentral=centralGroup[3],
+                           lineTitleEast=eastGroup[0], lineLabelEast=eastGroup[1], lineValueEast=eastGroup[2],
+                           canvasEast=eastGroup[3],
+                           lineTitleWest=westGroup[0], lineLabelWest=westGroup[1], lineValueWest=westGroup[2],
+                           canvasWest=westGroup[3], )
