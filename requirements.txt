@@ -10,7 +10,3 @@ pmdarima
 prophet
 mplcursors
 plotly
-matplotlib
-pmdarima
-seaborn
-prophet
