@@ -1,2 +1,2 @@
 from Functions.PlotWeather import dataGroup
-from Functions.test import humidityPrediction, adfResults, scatterPlot, correlation, feature
+from Functions.prediction import linear_regression, correlation, overview_data, predictionHumidity
