@@ -219,32 +219,8 @@ def convertGraphToB64(plot):
 
 @app.route("/Home")
 def Home():
-    # Data for North Region
-    northGroup = dataGroup('North', 2023)
 
-    # Data for South Region
-    southGroup = dataGroup('South', 2023)
-
-    # Data for Central Region
-    centralGroup = dataGroup('Central', 2023)
-
-    # Data for East Region
-    eastGroup = dataGroup('East', 2023)
-
-    # Data for West Region
-    westGroup = dataGroup('West', 2023)
-
-    return render_template('Dashboard.html',
-                           lineTitleNorth=northGroup[0], lineLabelNorth=northGroup[1], lineValueNorth=northGroup[2],
-                           canvasNorth=northGroup[3],
-                           lineTitleSouth=southGroup[0], lineLabelSouth=southGroup[1], lineValueSouth=southGroup[2],
-                           canvasSouth=southGroup[3],
-                           lineTitleCentral=centralGroup[0], lineLabelCentral=centralGroup[1],
-                           lineValueCentral=centralGroup[2], canvasCentral=centralGroup[3],
-                           lineTitleEast=eastGroup[0], lineLabelEast=eastGroup[1], lineValueEast=eastGroup[2],
-                           canvasEast=eastGroup[3],
-                           lineTitleWest=westGroup[0], lineLabelWest=westGroup[1], lineValueWest=westGroup[2],
-                           canvasWest=westGroup[3], )
+    return render_template('Dashboard.html')
 
 @app.route("/North")
 def North():
@@ -264,13 +240,8 @@ def North():
     westGroup = dataGroup('West', 2023)
 
     return render_template('North.html',
-                           lineTitleNorth=northGroup[0], lineLabelNorth=northGroup[1], lineValueNorth=northGroup[2],
-                           canvasNorth=northGroup[3],
-                           lineTitleSouth=southGroup[0], lineLabelSouth=southGroup[1], lineValueSouth=southGroup[2],
-                           canvasSouth=southGroup[3],
-                           lineTitleCentral=centralGroup[0], lineLabelCentral=centralGroup[1],
-                           lineValueCentral=centralGroup[2], canvasCentral=centralGroup[3],
-                           lineTitleEast=eastGroup[0], lineLabelEast=eastGroup[1], lineValueEast=eastGroup[2],
-                           canvasEast=eastGroup[3],
-                           lineTitleWest=westGroup[0], lineLabelWest=westGroup[1], lineValueWest=westGroup[2],
-                           canvasWest=westGroup[3], )
+                           lineLabelNorth=northGroup[0], lineValueNorth=northGroup[1], canvasNorth=northGroup[2],
+                           lineLabelSouth=southGroup[0], lineValueSouth=southGroup[1], canvasSouth=southGroup[2],
+                           lineLabelCentral=centralGroup[0], lineValueCentral=centralGroup[1], canvasCentral=centralGroup[2],
+                           lineLabelEast=eastGroup[0], lineValueEast=eastGroup[1], canvasEast=eastGroup[2],
+                           lineLabelWest=westGroup[0], lineValueWest=westGroup[1], canvasWest=westGroup[2] )

@@ -153,11 +153,11 @@
   <script>
     //Using the data parsed from the controller side app.py to generate charts
 
-    createLineChart({{ lineTitleNorth|tojson|safe }}, {{ lineValueNorth|tojson|safe }}, {{ lineLabelNorth|tojson|safe }}, {{ canvasNorth|tojson|safe }})
-    createLineChart({{ lineTitleSouth|tojson|safe }}, {{ lineValueSouth|tojson|safe }}, {{ lineLabelSouth|tojson|safe }}, {{ canvasSouth|tojson|safe }})
-    createLineChart({{ lineTitleCentral|tojson|safe }}, {{ lineValueCentral|tojson|safe }}, {{ lineLabelCentral|tojson|safe }}, {{ canvasCentral|tojson|safe }})
-    createLineChart({{ lineTitleEast|tojson|safe }}, {{ lineValueEast|tojson|safe }}, {{ lineLabelEast|tojson|safe }}, {{ canvasEast|tojson|safe }})
-    createLineChart({{ lineTitleWest|tojson|safe }}, {{ lineValueWest|tojson|safe }}, {{ lineLabelWest|tojson|safe }}, {{ canvasWest|tojson|safe }})
+    createLineChart({{ lineValueNorth|tojson|safe }}, {{ lineLabelNorth|tojson|safe }}, {{ canvasNorth|tojson|safe }})
+    createLineChart({{ lineValueSouth|tojson|safe }}, {{ lineLabelSouth|tojson|safe }}, {{ canvasSouth|tojson|safe }})
+    createLineChart({{ lineValueCentral|tojson|safe }}, {{ lineLabelCentral|tojson|safe }}, {{ canvasCentral|tojson|safe }})
+    createLineChart({{ lineValueEast|tojson|safe }}, {{ lineLabelEast|tojson|safe }}, {{ canvasEast|tojson|safe }})
+    createLineChart({{ lineValueWest|tojson|safe }}, {{ lineLabelWest|tojson|safe }}, {{ canvasWest|tojson|safe }})
     console.log("line")
 
   </script>
