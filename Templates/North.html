@@ -50,9 +50,9 @@
     <div class="bg-dark me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden">
       <div class="my-3 py-3">
         <h2 class="display-5">North Region June Humidity Data</h2>
-        <table>
+        <table class="text-white">
           <script>
-            printData(0, {{ lineValueNorth|tojson|safe }}, {{ lineLabelNorth|tojson|safe }})
+            printData(0, {{ northDisplayValue|tojson|safe }}, {{ northDisplayLabel|tojson|safe }})
           </script>
         </table>
       </div>
@@ -74,9 +74,9 @@
       <div class="my-3 py-3">
         <h2 class="display-5">North Region July Humidity Data</h2>
 
-        <table>
+        <table class="text-white">
           <script>
-            printData(1, {{ lineValueNorth|tojson|safe }}, {{ lineLabelNorth|tojson|safe }})
+            printData(1, {{ northDisplayValue|tojson|safe }}, {{ northDisplayLabel|tojson|safe }})
           </script>
         </table>
 
@@ -101,9 +101,9 @@
     <div class="bg-dark me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden">
       <div class="my-3 py-3">
         <h2 class="display-5">North Region August Humidity Data</h2>
-        <table>
+        <table class="text-white">
           <script>
-            printData(2, {{ lineValueNorth|tojson|safe }}, {{ lineLabelNorth|tojson|safe }})
+            printData(2, {{ northDisplayValue|tojson|safe }}, {{ northDisplayLabel|tojson|safe }})
           </script>
         </table>
       </div>
@@ -139,7 +139,7 @@
   <script>
     //Using the data parsed from the controller side app.py to generate charts
 
-    createLineChart({{ lineValueNorth|tojson|safe }}, {{ lineLabelNorth|tojson|safe }}, {{ canvasNorth|tojson|safe }})
+    createLineChart({{ lineLabelNorth|tojson|safe }}, {{ lineValueNorthHumi|tojson|safe }}, {{ lineValueNorthTemp|tojson|safe }}, {{ canvasNorth|tojson|safe }})
     
 
   </script>

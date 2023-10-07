@@ -4,6 +4,7 @@ Filter and Clean data
 
 # Plot Weather data
 
+import os
 import pandas as pd
 import matplotlib.pyplot as plt
 #import seaborn as sns
@@ -11,23 +12,67 @@ import datetime as datetime
 import numpy as np
 
 
-def readFile():
+def readFile(file = (os.getcwd() + "/Datasets/compiledRegionData.csv")):
+#def readFile(file = ("compiledRegionData.csv")):
     # Read csv file into Pandas Dataframe
     # dayfirst= True, parse_dates= True,   index_col=0,
-    df = pd.read_csv("Datasets/compiledRegionData.csv", encoding="unicode-escape", usecols=[0,1,2,3,4,5,6,7])
+    df = pd.read_csv(file, encoding="unicode-escape", usecols=[0,1,2,3,4,5,6,7])
+    #df = pd.read_csv("Datasets/compiledRegionData.csv", encoding="unicode-escape", usecols=[0,1,2,3,4,5,6,7])
     #df = df.reset_index(inplace = True)
     #df = df.set_index('Date')
     pd.set_option('display.max_columns', None)
     df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y')
     return df
 
-df = readFile()
+
+def dataforGraph(region, month, year, index):
+    df = readFile()
+    
+    dataFilter_df = df.loc[(df['Region'] == region.capitalize()) & (df['Date'].dt.month == month) & (df['Date'].dt.year == year)]
+    df['Date'] = df['Date'].dt.strftime('%d')
+    dataforGraph_df = dataFilter_df[ [index] ].to_dict()
+    #dataforGraph_Dict = convertToDict(dataforGraph_df)
+    return (dataforGraph_df[index].values())
+
+def convertToDict(array):
+    return dict(array)
+
+def dataPlot(region, year):
+    label = [list(dataforGraph(region, 6, year, "Date")),
+             list(dataforGraph(region, 7, year, "Date")),
+             list(dataforGraph(region, 8, year, "Date"))]
+    
+    valuesHumi = [list(dataforGraph(region, 6, year, "Humidity_Avg")),
+                  list(dataforGraph(region, 7, year, "Humidity_Avg")),
+                  list(dataforGraph(region, 8, year, "Humidity_Avg"))]
+    
+    valuesTemp = [list(dataforGraph(region, 6, year, "Mean Temperature (Â°C)")),
+                  list(dataforGraph(region, 7, year, "Mean Temperature (Â°C)")),
+                  list(dataforGraph(region, 8, year, "Mean Temperature (Â°C)"))]
+    
+    canvasName = ["chart" + region.capitalize() + "June", "chart" + region.capitalize() + "July", "chart" + region.capitalize() + "Aug"]
+
+    dataPlot = [label, valuesHumi, valuesTemp, canvasName]
+
+    return dataPlot
+
+
+#print(dataforGraph("North", 6, 2023, "Date"))
+#print(dataPlot("North", 2023))
+
+
 
 # filter weather data by month and region
 def dataFilter(region, month, year):
     df = readFile()
     dataFilter_df = df.loc[(df['Region'] == region.capitalize()) & (df['Date'].dt.month == month) & (df['Date'].dt.year == year)]
     return dataFilter_df 
+
+
+# create variables to store the dictionary, which contains the mean value of all weather data from June to Aug by region
+def calMeanWeatherData(data):
+    meanWeatherData = calAvg(data)
+    return meanWeatherData
 
 
 def dataGroup(region, year):
@@ -39,13 +84,20 @@ def dataGroup(region, year):
     valuesNorth = [list(calMeanWeatherData(dataFilter(region.capitalize(), 6, year)).values()),
                    list(calMeanWeatherData(dataFilter(region.capitalize(), 7, year)).values()),
                    list(calMeanWeatherData(dataFilter(region.capitalize(), 8, year)).values())]
-    
-    canvasName = ["chart" + region.capitalize() + "June", "chart" + region.capitalize() + "July", "chart" + region.capitalize() + "Aug"]
 
-    group = [labelNorth, valuesNorth, canvasName]
+    dataDisplay = [labelNorth, valuesNorth]
 
-    return group
+    return dataDisplay
 
+
+
+#test = dataforGraph()
+#print(dataforGraph("North", 6, 2023).values)
+#print(dataFilter("North", 6, 2023))
+
+
+
+df = readFile()
 north_june_df = df.loc[(df['Region'] == 'North') & (df['Date'].dt.month == 6) & (df['Date'].dt.year == 2023)] 
 north_july_df = df.loc[(df['Region'] == 'North') & (df['Date'].dt.month == 7) & (df['Date'].dt.year == 2023)]
 north_aug_df =  df.loc[(df['Region'] == 'North') & (df['Date'].dt.month == 8) & (df['Date'].dt.year == 2023)]
@@ -68,6 +120,43 @@ west_aug_df =  df.loc[(df['Region'] == 'West') & (df['Date'].dt.month == 8) & (d
 
 #print (north_june_df)
 
+# Create function to filter the above Df and return Date, Humiditiy_Avg and Mean Temperature, which will be used for displaying on graph
+# This functions comes before the calculation of weather data?
+# take in arg: a df 
+
+
+
+'''Display a graph showing Humidity_Avg and Mean Temperature in 1 month (June) for 1 region (North)'''
+#filtered_north_june_df = dataforGraph(north_june_df)
+#print (filtered_north_june_df)
+
+#Plotting graph w 2 Y axes. first y-axes: Mean Temperature, second y-axes:: Humidity_Avg
+#fig, ax1 = plt.subplots()
+#ax1.plot(filtered_north_june_df['Date'], filtered_north_june_df['Mean Temperature (Â°C)'], color = "blue")
+#ax1.set_xlabel('Dates in June', fontsize=14)
+#ax1.set_ylabel("Mean Temperature (Â°C)", fontsize=14)
+#ax1.set_title('Mean Temperature vs Humidity_Avg in North Region during June', fontsize=16)
+
+#ax2 = ax1.twinx()
+#ax2.plot (filtered_north_june_df['Date'], filtered_north_june_df["Humidity_Avg"], color = "orange")
+#ax2.set_ylabel("Humidity_Avg", fontsize=14)
+#plt.show()
+
+
+def plotGraph(df):
+    figure, ax1 = plt.subplots()
+    ax1.plot(df['Date'], df['Mean Temperature (Â°C)'], color = "blue")
+    ax1.set_xlabel('Dates', fontsize=14)
+    ax1.set_ylabel("Mean Temperature (Â°C)", fontsize=14)
+    ax1.set_title('Mean Temperature vs Humidity_Avg in North Region during July', fontsize=16)
+
+    ax2 = ax1.twinx()
+    ax2.plot (df['Date'], df["Humidity_Avg"], color = "orange")
+    ax2.set_ylabel("Humidity_Avg", fontsize=14)
+    plt
+
+filtered_north_july_df = north_july_df
+plotGraph(filtered_north_july_df)
 
 # Create a function to collate the mean/average of the following weather data for 1 month 
 # (Humidity_high, Humidity_avg, Humidity_low, Mean Temp, Max Temp, Lowest Temp)
@@ -117,11 +206,6 @@ def calAvg (filteredDf):
 
 
 
-# create variables to store the dictionary, which contains the mean value of all weather data from June to Aug by region
-def calMeanWeatherData(data):
-    meanWeatherData = calAvg(data)
-    return meanWeatherData
-
 north_june_mean_weather_data = calAvg(north_june_df) 
 north_july_mean_weather_data = calAvg(north_july_df)
 north_aug_mean_weather_data = calAvg(north_aug_df)
@@ -152,14 +236,14 @@ west_aug_mean_weather_data = calAvg(west_aug_df)
 
 #print(calMeanWeatherData(northDataFilter('North', 6, 2023)))
 
-# plotting graph for all regions
+# plotting graph for all regions --------------------------------------------------------------------------------------------------
 # 1. North Region 
 # Plot june weather data (for basic reference) 
 #print("Combine bar and line graph")
-keys = calMeanWeatherData(dataFilter('North', 6, 2023)).keys()
-values = calMeanWeatherData(dataFilter('North', 6, 2023)).values()
-plt.title('Weather data for June in North Region')
-plt.bar (keys, values)
+#keys = calMeanWeatherData(dataFilter('North', 6, 2023)).keys()
+#values = calMeanWeatherData(dataFilter('North', 6, 2023)).values()
+#plt.title('Weather data for June in North Region')
+#plt.bar (keys, values)
 #plt.show()
 
 # Plot july weather data (for basic reference)
