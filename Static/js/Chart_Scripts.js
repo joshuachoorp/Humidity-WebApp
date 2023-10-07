@@ -9,8 +9,23 @@ function testPrint(data, labels){
     }
 }
 
+function printData(month, dataValue, dataLabel){
+    var myArray = dataValue
+    var value = myArray[month]
+    var nameLabel = dataLabel[month]
+    console.log(nameLabel)
+
+    for (var i=0; i < value.length; i++) {
+      document.write("<tr> " + nameLabel[i] + ": " + parseFloat(value[i].toFixed(2)) + " </tr>");
+      if (i == 2){
+        document.write("</br>");
+      }
+      console.log(nameLabel[i])
+    }
+}
+
 // Generate Line Graphs
-function createLineChart(title, data, labels, canvasName) {
+function createLineChart(data, labels, canvasName) {
     for (let i = 0; i < data.length; i++) {
         var ctx = document.getElementById(canvasName[i]).getContext('2d');
         var myChart = new Chart(ctx, {
@@ -18,20 +33,27 @@ function createLineChart(title, data, labels, canvasName) {
             data: {
                 labels: labels[i],
                 datasets: [{
-                    label: 'Increase In Humidity',
+                    label: 'Temperature',
                     data: data[i],
                     fill : false,
                     borderColor: 'rgb(75, 192, 192)',
-                    tension: 0.1
-                }]
+                    tension: 0.1,
+                    yAxisID: 'y',
+                }, 
+                {
+                    label: 'Humidity',
+                    data: data[i],
+                    fill : false,
+                    borderColor: 'rgb(192, 192, 192)',
+                    tension: 0.1,
+                    yAxisID: 'y1',
+                }
+            ]
             },
             options: {
                 plugins: {
                     // Set title
                     title: {
-                        display: true,
-                        text: "",
-                        align: 'center',
                         font: {
                             weight: 'bold',
                             size: 20
@@ -40,48 +62,25 @@ function createLineChart(title, data, labels, canvasName) {
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
-                    }
+                        beginAtZero: true,
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                
+                        // grid line settings
+                        grid: {
+                          drawOnChartArea: false, // only want the grid lines for one axis to show up
+                        },
+                      },
                 }
             }
         });
     }
-}
-
-// CreateBarChart
-function createBarChart(title, data, labels) {
-    var ctx = document.getElementById('BarChart').getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Frequency',
-                data: data,
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            plugins: {
-                title: {
-                   display: true,
-                   text: title,
-                   align: 'center',
-                   font: {
-                      weight: 'bold',
-                      size: 20
-                   },
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
 }
 
 
@@ -106,79 +105,6 @@ function sendLine() {
     });
     console.log('done')
 }
-
-
-function createLineChartTest(title, data, labels, canvasName) {
-    for (let i = 0; i < data.length; i++) {
-        var ctx = document.getElementById(canvasName[i]).getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels[i],
-                datasets: [{
-                    label: 'Sample Increase In Humidity',
-                    data: data[i],
-                    fill : false,
-                    borderColor: 'rgb(75, 192, 192)',
-                    tension: 0.1
-                }]
-            },
-            options: {
-                plugins: {
-                    // Set title
-                    title: {
-                       display: true,
-                       text: title[i],
-                       align: 'center',
-                       font: {
-                          weight: 'bold',
-                          size: 20
-                       },
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    };
-    var graphName = document.getElementById('lineName').value;
-    var graph = document.getElementById('northJune');
-    var graphDataURL = graph.toDataURL('image/png');
-    console.log(graphDataURL)
-    $.ajax({
-        url: '/dashboard/download',
-        type: 'POST',
-        timeout: 3000,
-        data: { 'graphBase64' : graphDataURL,
-                'graphName' : graphName
-        },
-        error: function(error) {
-            console.log(error)
-        }
-    });
-}
-
-
-
-function sendLineTest(graphName, graph) {
-    var graphDataURL = graph.toDataURL('image/png');
-    console.log(graphDataURL)
-    
-    $.ajax({
-        url: '/dashboard/download',
-        type: 'POST',
-        data: { 'graphBase64' : graphDataURL,
-                'graphName' : graphName
-        },
-        error: function(error) {
-            console.log(error)
-        }
-    });
-}
-
 
 
 // Take screenshot of dashboard
