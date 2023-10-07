@@ -9,17 +9,26 @@ function testPrint(data, labels){
     }
 }
 
-function printData(month, dataValue, dataLabel){
+function printDataHumi(month, dataValue, dataLabel){
     var myArray = dataValue
     var value = myArray[month]
     var nameLabel = dataLabel[month]
     //console.log(nameLabel)
 
-    for (var i=0; i < value.length; i++) {
-      document.write("<td> " + nameLabel[i] + ": " + parseFloat(value[i].toFixed(2)) + " </td>");
-      if (i == 2){
-        document.write("</br>");
-      }
+    for (var i=0; i < (value.length-3); i++) {
+      document.write("<td> " + nameLabel[i] + ": " + parseFloat(value[i].toFixed(2)) + " &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td>");
+      //console.log(nameLabel[i])
+    }
+}
+
+function printDataTemp(month, dataValue, dataLabel){
+    var myArray = dataValue
+    var value = myArray[month]
+    var nameLabel = dataLabel[month]
+    //console.log(nameLabel)
+
+    for (var i=3; i < value.length; i++) {
+      document.write("<td> " + nameLabel[i] + ": " + parseFloat(value[i].toFixed(2)) + "</td>");
       //console.log(nameLabel[i])
     }
 }
@@ -69,6 +78,7 @@ function createLineChart(labels, dataHumi, dataTemp, canvasName) {
                         position: 'left',
                     },
                     y1: {
+                        beginAtZero: true,
                         type: 'linear',
                         display: true,
                         position: 'right',

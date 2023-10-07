@@ -10,7 +10,7 @@ import base64
 import os
 from io import BytesIO
 
-from Functions import dataGroup, dataPlot, linear_regression, correlation, overview_data, predictionHumidity
+from Functions import dataGroup, dataPlot, canvasName, linear_regression, correlation, overview_data, predictionHumidity
 from distutils.command import upload
 from flask import Flask, render_template, request, redirect, flash, send_file, send_from_directory, current_app, abort
 import flask
@@ -210,21 +210,26 @@ def Home():
 @app.route("/North")
 def North():
     # Data for North Region
-    northGroup = dataGroup('North', 2023)
-    northPlot = dataPlot('North', 2023)
+    northGroup = dataGroup('North')
+    northPlot = dataPlot('North')
+    northCanvasName = canvasName('North')
 
     return render_template('North.html',
                            northDisplayLabel = northGroup[0], northDisplayValue = northGroup[1],
-                           lineLabelNorth=northPlot[0], lineValueNorthHumi=northPlot[1], lineValueNorthTemp=northPlot[2], canvasNorth=northPlot[3])
+                           lineLabelNorth=northPlot[0], lineValueNorthHumi=northPlot[1], lineValueNorthTemp=northPlot[2], 
+                           canvasNorth=northCanvasName)
 
 @app.route("/South")
 def South():
 
     # Data for South Region
-    southGroup = dataGroup('South', 2023)
+    southGroup = dataGroup('South')
+    southPlot = dataPlot('South')
 
     return render_template('South.html',
-                           lineLabelSouth=southGroup[0], lineValueSouth=southGroup[1], canvasSouth=southGroup[2])
+                           southDisplayLabel = southGroup[0], southDisplayValue = southGroup[1],
+                           lineLabelSouth=southPlot[0], lineValueSouthHumi=southPlot[1], lineValueSouthTemp=southPlot[2], 
+                           canvasSouth=southPlot[3])
 
 
 # Export dataset as csv

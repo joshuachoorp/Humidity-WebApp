@@ -12,6 +12,7 @@ import datetime as datetime
 import numpy as np
 
 
+# Function to read csv file
 def readFile(file = (os.getcwd() + "/Datasets/compiledRegionData.csv")):
 #def readFile(file = ("compiledRegionData.csv")):
     # Read csv file into Pandas Dataframe
@@ -24,42 +25,57 @@ def readFile(file = (os.getcwd() + "/Datasets/compiledRegionData.csv")):
     df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y')
     return df
 
+df = readFile()
 
+# Function to filter through data and return a dictionary 
 def dataforGraph(region, month, year, index):
     df = readFile()
-    
     dataFilter_df = df.loc[(df['Region'] == region.capitalize()) & (df['Date'].dt.month == month) & (df['Date'].dt.year == year)]
-    df['Date'] = df['Date'].dt.strftime('%d')
     dataforGraph_df = dataFilter_df[ [index] ].to_dict()
     #dataforGraph_Dict = convertToDict(dataforGraph_df)
     return (dataforGraph_df[index].values())
 
-def convertToDict(array):
-    return dict(array)
 
-def dataPlot(region, year):
-    label = [list(dataforGraph(region, 6, year, "Date")),
-             list(dataforGraph(region, 7, year, "Date")),
-             list(dataforGraph(region, 8, year, "Date"))]
-    
-    valuesHumi = [list(dataforGraph(region, 6, year, "Humidity_Avg")),
-                  list(dataforGraph(region, 7, year, "Humidity_Avg")),
-                  list(dataforGraph(region, 8, year, "Humidity_Avg"))]
-    
-    valuesTemp = [list(dataforGraph(region, 6, year, "Mean Temperature (Â°C)")),
-                  list(dataforGraph(region, 7, year, "Mean Temperature (Â°C)")),
-                  list(dataforGraph(region, 8, year, "Mean Temperature (Â°C)"))]
-    
-    canvasName = ["chart" + region.capitalize() + "June", "chart" + region.capitalize() + "July", "chart" + region.capitalize() + "Aug"]
+# Function to fetch data required for plotting all graphs
+def dataPlot(region):
+    # Look for unique months in dataset
+    uniqueMonth = df['Date'].dt.strftime("%m").unique().tolist()
 
-    dataPlot = [label, valuesHumi, valuesTemp, canvasName]
+    # Look for unique months in dataset
+    uniqueYear = df['Date'].dt.strftime("%Y").unique().tolist()
+    print(uniqueYear[0])
+    
+    label = []
+    valuesHumi = []
+    valuesTemp = []
+
+    # For loop to go through each year
+    for i in range(len(uniqueYear)):
+        # For loop to go through each month and get values for each specific month
+        for j in range(len(uniqueMonth)):
+            # Try and except to catch any errors on no matches for months and years
+            try:
+                label_df = df.loc[(df['Date'].dt.month == int(uniqueMonth[j]))]
+                labelDates = label_df['Date'].dt.strftime("%d").unique().tolist()
+                label.append(labelDates)
+                valuesHumi.append(list(dataforGraph(region, int(uniqueMonth[j]), int(uniqueYear[i]), "Humidity_Avg")))
+                valuesTemp.append(list(dataforGraph(region, int(uniqueMonth[j]), int(uniqueYear[i]), "Mean Temperature (Â°C)")))
+            except Exception as e:
+                print(e)
+                pass
+    
+
+    dataPlot = [label, valuesHumi, valuesTemp]
 
     return dataPlot
 
 
-#print(dataforGraph("North", 6, 2023, "Date"))
-#print(dataPlot("North", 2023))
-
+# Function to create canvas names based on each unique month and year 
+def canvasName(region):
+    uniqueMonth = df['Date'].dt.strftime("%m-%y").unique().tolist()
+    for i in range(len(uniqueMonth)):
+        uniqueMonth[i] = "chart_" + region + "_" + uniqueMonth[i]
+    return uniqueMonth
 
 
 # filter weather data by month and region
@@ -75,29 +91,38 @@ def calMeanWeatherData(data):
     return meanWeatherData
 
 
-def dataGroup(region, year):
-    
-    labelNorth = [list(calMeanWeatherData(dataFilter(region.capitalize(), 6, year)).keys()),
-                  list(calMeanWeatherData(dataFilter(region.capitalize(), 7, year)).keys()),
-                  list(calMeanWeatherData(dataFilter(region.capitalize(), 8, year)).keys())]
-    
-    valuesNorth = [list(calMeanWeatherData(dataFilter(region.capitalize(), 6, year)).values()),
-                   list(calMeanWeatherData(dataFilter(region.capitalize(), 7, year)).values()),
-                   list(calMeanWeatherData(dataFilter(region.capitalize(), 8, year)).values())]
+# Function to get Highest, Mean and Lowest data for each month
+def dataGroup(region):
+    # Look for unique months in dataset
+    uniqueMonth = df['Date'].dt.strftime("%m").unique().tolist()
 
-    dataDisplay = [labelNorth, valuesNorth]
+    # Look for unique months in dataset
+    uniqueYear = df['Date'].dt.strftime("%Y").unique().tolist()
+
+    labelDisplay = []
+    valuesDisplay = []
+
+    # For loop to go through each year
+    for i in range(len(uniqueYear)):
+        # For loop to go through each month and get values for each specific month
+        for j in range(len(uniqueMonth)):
+            # Try and except to catch any errors on no matches for months and years
+            try:
+                print(uniqueMonth[i])
+                labelDisplay.append(list(calMeanWeatherData(dataFilter(region.capitalize(), int(uniqueMonth[j]), int(uniqueYear[i]))).keys()))
+                valuesDisplay.append(list(calMeanWeatherData(dataFilter(region.capitalize(), int(uniqueMonth[j]), int(uniqueYear[i]))).values()))
+            except Exception as e:
+                print(e)
+                pass
+
+    dataDisplay = [labelDisplay, valuesDisplay]
 
     return dataDisplay
 
 
 
-#test = dataforGraph()
-#print(dataforGraph("North", 6, 2023).values)
-#print(dataFilter("North", 6, 2023))
 
 
-
-df = readFile()
 north_june_df = df.loc[(df['Region'] == 'North') & (df['Date'].dt.month == 6) & (df['Date'].dt.year == 2023)] 
 north_july_df = df.loc[(df['Region'] == 'North') & (df['Date'].dt.month == 7) & (df['Date'].dt.year == 2023)]
 north_aug_df =  df.loc[(df['Region'] == 'North') & (df['Date'].dt.month == 8) & (df['Date'].dt.year == 2023)]
@@ -226,137 +251,3 @@ west_june_mean_weather_data = calAvg(west_june_df)
 west_july_mean_weather_data = calAvg(west_july_df)
 west_aug_mean_weather_data = calAvg(west_aug_df)
 
-#print(type(june_mean_weather_data))
-#print (north_june_mean_weather_data)
-#print (north_july_mean_weather_data)
-#print (north_aug_mean_weather_data)
-
-#calAvg (north_june_df)
-#print (calAvg (north_june_df))
-
-#print(calMeanWeatherData(northDataFilter('North', 6, 2023)))
-
-# plotting graph for all regions --------------------------------------------------------------------------------------------------
-# 1. North Region 
-# Plot june weather data (for basic reference) 
-#print("Combine bar and line graph")
-#keys = calMeanWeatherData(dataFilter('North', 6, 2023)).keys()
-#values = calMeanWeatherData(dataFilter('North', 6, 2023)).values()
-#plt.title('Weather data for June in North Region')
-#plt.bar (keys, values)
-#plt.show()
-
-# Plot july weather data (for basic reference)
-#print("Combine bar and line graph")
-#keys = north_july_mean_weather_data.keys()
-#values = north_july_mean_weather_data.values()
-#plt.bar (keys, values)
-#plt.show()
-
-# Plot aug weather data (for basic reference)
-#print("Combine bar and line graph")
-#keys = north_aug_mean_weather_data.keys()
-#values = north_aug_mean_weather_data.values()
-#plt.bar (keys, values)
-#plt.show()
-
-
-# 2. South Region
-# Plot june weather data (for basic reference)
-#print("Combine bar and line graph")
-#keys = south_june_mean_weather_data.keys()
-#values = south_june_mean_weather_data.values()
-#plt.bar (keys, values)
-#plt.show()
-
-# Plot july weather data (for basic reference)
-#print("Combine bar and line graph")
-#keys = south_july_mean_weather_data.keys()
-#values = south_july_mean_weather_data.values()
-#plt.bar (keys, values)
-#plt.show()
-
-# Plot aug weather data (for basic reference)
-#print("Combine bar and line graph")
-#keys = south_aug_mean_weather_data.keys()
-#values = south_aug_mean_weather_data.values()
-#plt.bar (keys, values)
-#plt.show()
-
-
-# 3. Central Region
-# Plot june weather data (for basic reference)
-#print("Combine bar and line graph")
-#keys = central_june_mean_weather_data.keys()
-#values = central_june_mean_weather_data.values()
-#plt.bar (keys, values)
-#plt.show()
-
-# Plot july weather data (for basic reference)
-#print("Combine bar and line graph")
-#keys = central_july_mean_weather_data.keys()
-#values = central_july_mean_weather_data.values()
-#plt.bar (keys, values)
-#plt.show()
-
-# Plot aug weather data (for basic reference)
-#print("Combine bar and line graph")
-#keys = central_aug_mean_weather_data.keys()
-#values = central_aug_mean_weather_data.values()
-#plt.bar (keys, values)
-#plt.show()
-
-
-
-# 4. East Region
-# Plot june weather data (for basic reference)
-#print("Combine bar and line graph")
-#keys = east_june_mean_weather_data.keys()
-#values = east_june_mean_weather_data.values()
-#plt.bar (keys, values)
-#plt.show()
-
-# Plot july weather data (for basic reference)
-#print("Combine bar and line graph")
-#keys = east_july_mean_weather_data.keys()
-#values = east_july_mean_weather_data.values()
-#plt.bar (keys, values)
-#plt.show()
-
-# Plot aug weather data (for basic reference)
-#print("Combine bar and line graph")
-#keys = east_aug_mean_weather_data.keys()
-#values = east_aug_mean_weather_data.values()
-#plt.bar (keys, values)
-#plt.show()
-
-
-# 5. West Region
-# Plot june weather data (for basic reference)
-#print("Combine bar and line graph")
-#keys = west_june_mean_weather_data.keys()
-#values = west_june_mean_weather_data.values()
-#plt.bar (keys, values)
-#plt.show()
-
-# Plot july weather data (for basic reference)
-#print("Combine bar and line graph")
-#keys = west_july_mean_weather_data.keys()
-#values = west_july_mean_weather_data.values()
-#plt.bar (keys, values)
-#plt.show()
-
-# Plot aug weather data (for basic reference)
-#print("Combine bar and line graph")
-#keys = west_aug_mean_weather_data.keys()
-#values = west_aug_mean_weather_data.values()
-#plt.bar (keys, values)
-#plt.show()
-
-
-# plot june weather data using seaborn
-# figure 
-
-# convert Dataframe to Dictionary
-#dict_df = df.to_dict()
-#print (dict_df)
