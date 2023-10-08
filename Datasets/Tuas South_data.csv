@@ -1,4 +1,4 @@
-Date,Mean Temperature (°C),Maximum Temperature (°C),Maximum Temperature (°C),Mean Wind Speed (km/h),Max Wind Speed (km/h)
+Date,Mean Temperature (°C),Maximum Temperature (°C),Lowest Temperature (°C),Mean Wind Speed (km/h),Max Wind Speed (km/h)
 1 Jul,28.1,31.0,25.1,10.1,55.7
 2 Jul,29.5,31.7,28.0,5.4,22.6
 3 Jul,28.8,32.2,26.9,3.9,23.0

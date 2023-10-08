@@ -1,6 +1,7 @@
 """
 Flask backend of Humidity-Webapp
 """
+#Check for required libraries in the system
 from testRequirements import checkReq
 checkReq()
 
@@ -9,9 +10,9 @@ import base64
 import os
 from io import BytesIO
 
-from Functions import dataGroup, linear_regression, correlation, overview_data, predictionHumidity
+from Functions import dataGroup, dataPlot, canvasName, linear_regression, correlation, overview_data, predictionHumidity
 from distutils.command import upload
-from flask import Flask, render_template, request, redirect, flash, send_file, send_from_directory, current_app, abort
+from flask import Flask, jsonify, render_template, request, redirect, flash, send_file, send_from_directory, current_app, abort
 import flask
 import pandas as pd
 import numpy as np
@@ -51,29 +52,30 @@ def index():
 @app.route('/dashboard/', methods=['GET', 'POST'])
 def plot():
     # Data for North Region
-    northGroup = dataGroup('North', 2023)
+    #northGroup = dataGroup('North', 2023)
 
     # Data for South Region
-    southGroup = dataGroup('South', 2023)
+    #southGroup = dataGroup('South', 2023)
 
     # Data for Central Region
-    centralGroup = dataGroup('Central', 2023)
+    #centralGroup = dataGroup('Central', 2023)
 
     # Data for East Region
-    eastGroup = dataGroup('East', 2023)
+    #eastGroup = dataGroup('East', 2023)
 
     # Data for West Region
-    westGroup = dataGroup('West', 2023)
+    #westGroup = dataGroup('West', 2023)
     
 
     # Passing data to dashboard
     if request.method == 'POST' and request.form.get('plot') == 'dashboard':
-        return render_template('graphs.html', 
-                               lineTitleNorth = northGroup[0], lineLabelNorth = northGroup[1], lineValueNorth = northGroup[2], canvasNorth = northGroup[3],
-                               lineTitleSouth = southGroup[0], lineLabelSouth = southGroup[1], lineValueSouth = southGroup[2], canvasSouth = southGroup[3],
-                               lineTitleCentral = centralGroup[0], lineLabelCentral = centralGroup[1], lineValueCentral = centralGroup[2], canvasCentral = centralGroup[3],
-                               lineTitleEast = eastGroup[0], lineLabelEast = eastGroup[1], lineValueEast = eastGroup[2], canvasEast = eastGroup[3],
-                               lineTitleWest = westGroup[0], lineLabelWest = westGroup[1], lineValueWest = westGroup[2], canvasWest = westGroup[3],)
+        pass
+        #return render_template('graphs.html', 
+        #                       lineTitleNorth = northGroup[0], lineLabelNorth = northGroup[1], lineValueNorth = northGroup[2], canvasNorth = northGroup[3],
+        #                       lineTitleSouth = southGroup[0], lineLabelSouth = southGroup[1], lineValueSouth = southGroup[2], canvasSouth = southGroup[3],
+        #                       lineTitleCentral = centralGroup[0], lineLabelCentral = centralGroup[1], lineValueCentral = centralGroup[2], canvasCentral = centralGroup[3],
+        #                       lineTitleEast = eastGroup[0], lineLabelEast = eastGroup[1], lineValueEast = eastGroup[2], canvasEast = eastGroup[3],
+        #                       lineTitleWest = westGroup[0], lineLabelWest = westGroup[1], lineValueWest = westGroup[2], canvasWest = westGroup[3],)
     
     # Prevents access to dashboard through URL; Only can access through index page's button
     elif request.method == 'GET':
@@ -182,23 +184,6 @@ def predict():
     elif request.method == 'GET':
         return redirect('/')
     
-@app.route('/linear', methods=['GET', 'POST'])
-def linear():
-    #Back button to main page
-    if request.method == 'POST' and request.form.get('back') == 'back':
-        return redirect('/')
-    
-    elif request.method == 'POST':
-        
-        scatterPlot = convertGraphToB64(linear_regression())
-
-        return render_template('linear.html', 
-                               scatterPlotGraph=scatterPlot)
-    
-    #Only allow access to this page through the main page
-    elif request.method == 'GET':
-        return redirect('/')
-    
     
     
 
@@ -225,39 +210,91 @@ def Home():
 @app.route("/North")
 def North():
     # Data for North Region
-    northGroup = dataGroup('North', 2023)
-
-    # Data for South Region
-    southGroup = dataGroup('South', 2023)
-
-    # Data for Central Region
-    centralGroup = dataGroup('Central', 2023)
-
-    # Data for East Region
-    eastGroup = dataGroup('East', 2023)
-
-    # Data for West Region
-    westGroup = dataGroup('West', 2023)
+    northGroup = dataGroup('North')
+    northPlot = dataPlot('North')
+    northCanvasName = canvasName('North')
 
     return render_template('North.html',
-                           lineLabelNorth=northGroup[0], lineValueNorth=northGroup[1], canvasNorth=northGroup[2])
+                           northDisplayLabel = northGroup[0], northDisplayValue = northGroup[1],
+                           lineLabelNorth=northPlot[0], lineValueNorthHumi=northPlot[1], lineValueNorthTemp=northPlot[2], 
+                           canvasNorth=northCanvasName)
 
 @app.route("/South")
 def South():
-    # Data for North Region
-    northGroup = dataGroup('North', 2023)
 
     # Data for South Region
-    southGroup = dataGroup('South', 2023)
-
-    # Data for Central Region
-    centralGroup = dataGroup('Central', 2023)
-
-    # Data for East Region
-    eastGroup = dataGroup('East', 2023)
-
-    # Data for West Region
-    westGroup = dataGroup('West', 2023)
+    southGroup = dataGroup('South')
+    southPlot = dataPlot('South')
 
     return render_template('South.html',
-                           lineLabelSouth=southGroup[0], lineValueSouth=southGroup[1], canvasSouth=southGroup[2])
+                           southDisplayLabel = southGroup[0], southDisplayValue = southGroup[1],
+                           lineLabelSouth=southPlot[0], lineValueSouthHumi=southPlot[1], lineValueSouthTemp=southPlot[2], 
+                           canvasSouth=southPlot[3])
+
+
+# Export dataset as csv
+# Allow users to download csv file we used
+@app.route("/ExportFile")
+def exportFile():
+
+    filepath = os.getcwd() + "\Datasets\compiledRegionData.csv"
+
+    return send_file(filepath, as_attachment=True)
+
+
+# Import file
+# Allow users to import a csv file
+@app.route("/ImportFile")
+def importFile():
+
+    filepath = os.getcwd() + "\Datasets\compiledRegionData.csv"
+
+    return send_file(filepath, as_attachment=True)
+
+
+@app.route('/process-csv', methods=['POST'])
+def process_csv():
+
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    csv_file_path = os.path.join(base_dir, 'Datasets', 'test.csv')
+    try:
+        # Get the uploaded file from the request
+        file = request.files['file']
+        selectRegion = request.form.get('region')
+        # Validate the file extension 
+        if file.filename.endswith(('.csv')):
+            # Read the Excel file into a DataFrame
+            try:
+                df = pd.read_csv(file, encoding="unicode-escape")
+                region_data = [selectRegion] * len(df)
+                df.insert(4, 'Region', region_data)
+            except UnicodeDecodeError as e:
+                # Handle encoding issues
+                return jsonify({'error': 'Encoding error: ' + str(e)})
+            #Ensure that the path the always correct 
+            if os.path.exists(csv_file_path):
+                existing_df = pd.read_csv(csv_file_path)
+            else:
+            # Handle the case where the file does not exist
+                return jsonify({'error': 'File does not exist'})             
+            append_next = True  # Flag to indicate whether to append the next row
+            new_rows = []
+
+            for _, row in df.iterrows():
+                if row.isnull().all() and append_next:
+                    append_next = False
+                elif not row.isnull().all() and append_next:
+                    new_rows.append(row)
+                    append_next = False
+                elif not row.isnull().all() and not append_next:
+                    new_rows.append(row)
+
+            combined_df = pd.concat([existing_df, pd.DataFrame(new_rows)], ignore_index=True)
+            combined_df.to_csv(csv_file_path,  mode='w', index=False)  # Overwrite the file
+            app.logger.info(combined_df)
+            # You can also return a response to the client if needed
+            return jsonify({'message': 'Data processed and saved successfully'})
+        else:
+            return jsonify({'error': 'Invalid file format'})
+    except Exception as e:
+        return jsonify({'error': str(e)})
