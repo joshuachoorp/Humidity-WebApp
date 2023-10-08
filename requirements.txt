@@ -10,3 +10,4 @@ pmdarima
 prophet
 mplcursors
 plotly
+Functions
