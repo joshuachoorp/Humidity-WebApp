@@ -193,7 +193,7 @@ def dataCreateDiv(region):
 
 #data = dataCreateDiv("North")
 #print(data[0])
-
+#print(data)
 
 
 
