@@ -6,9 +6,9 @@ import os
 import pandas as pd
 # Data visualization
 import pmdarima as pm
-#import matplotlib
+import matplotlib
 import matplotlib.pyplot as plt
-#matplotlib.use('Agg')
+matplotlib.use('Agg')
 import seaborn as sns
 import math
 from sklearn.metrics import mean_absolute_error, mean_squared_error
@@ -26,6 +26,21 @@ from sklearn.preprocessing import LabelEncoder
 import mplcursors
 from sklearn.linear_model import LinearRegression
 
+# Read the combined data from the CSV file
+#df = pd.read_csv(os.getcwd() + "/Datasets/compiledRegionData.csv", encoding="unicode-escape")
+df = pd.read_csv("combinedRegionData.csv", encoding="unicode-escape")
+df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y')
+df.drop(columns=['Humidity_High', 'Humidity_Low', 'Maximum Temperature (°C)',
+                 'Lowest Temperature (°C)', 'Max Wind Speed (km/h)'], axis=1, inplace=True)
+
+# Replace "-" with NaN in specific columns
+columns_with_nan = ['Humidity_Avg', 'Mean Temperature (°C)', 'Mean Wind Speed (km/h)']
+df[columns_with_nan] = df[columns_with_nan].replace('-', np.nan)
+
+# Drop rows containing NaN values in the specified columns
+df.dropna(subset=columns_with_nan, inplace=True)
+
+
 def correlation():
     # Visualise correlation
     columns = ['Humidity_Avg', 'Mean Temperature (°C)', 'Mean Wind Speed (km/h)']
@@ -36,7 +51,7 @@ def correlation():
     heatmap.set_ylabel('Humidity')
     plt.title("Correlation between mean Humidity, Temperature and Wind Speed")
     return plt
-    
+
 def linear_regression():
     df['Mean Temperature (°C)'] = pd.to_numeric(df['Mean Temperature (°C)'], errors='coerce')
     df['Humidity_Avg'] = pd.to_numeric(df['Humidity_Avg'], errors='coerce')
@@ -170,45 +185,26 @@ def prophet_for_region(region_name, axs, train_size):
     axs.set_ylabel(ylabel='Humidity', fontsize=10)
     mplcursors.cursor([train_plot, ground_truth_plot, forecast_plot])
     plt.tight_layout()
-    return plt
-
-
-# Read the combined data from the CSV file
-df = pd.read_csv(os.getcwd() + "/Datasets/combinedRegionData.csv", encoding="unicode-escape")
-#df = pd.read_csv("combinedRegionData.csv", encoding="unicode-escape")
-df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y')
-df.drop(columns=['Humidity_High', 'Humidity_Low', 'Maximum Temperature (°C)',
-                 'Lowest Temperature (°C)', 'Max Wind Speed (km/h)'], axis=1, inplace=True)
-
-# Replace "-" with NaN in specific columns
-columns_with_nan = ['Humidity_Avg', 'Mean Temperature (°C)', 'Mean Wind Speed (km/h)']
-df[columns_with_nan] = df[columns_with_nan].replace('-', np.nan)
-
-# Drop rows containing NaN values in the specified columns
-df.dropna(subset=columns_with_nan, inplace=True)
-
-
-#linear_regression().show()
-#correlation().show()
-#overview_data().show()
-#display_adf().show()
 
 
 
+
+
+
+
+df['Humidity_Avg'] = pd.to_numeric(df['Humidity_Avg'], errors='coerce')
+df['Mean Wind Speed (km/h)'] = pd.to_numeric(df['Mean Wind Speed (km/h)'], errors='coerce')
+df['First_Difference_Humidity'] = df['Humidity_Avg'].diff().dropna()  # Remove NaN resulting from differencing
+df['Second_Difference_Wind'] = df['Mean Wind Speed (km/h)'].diff().dropna()  # Remove NaN resulting from differencing
+
+
+# Perform the ADF test on the differenced time series
+fig, ax = plt.subplots(nrows=2, ncols=1, figsize=(10, 8))
+visualize_adfuller_results(df['First_Difference_Humidity'].dropna(), 'First_Difference_Humidity', ax[0])
+visualize_adfuller_results(df['Second_Difference_Wind'].dropna(), 'Second_Difference_Wind', ax[1])
+plt.tight_layout()
 
 def predictionHumidity():
-    df['Humidity_Avg'] = pd.to_numeric(df['Humidity_Avg'], errors='coerce')
-    df['Mean Wind Speed (km/h)'] = pd.to_numeric(df['Mean Wind Speed (km/h)'], errors='coerce')
-    df['First_Difference_Humidity'] = df['Humidity_Avg'].diff().dropna()  # Remove NaN resulting from differencing
-    df['Second_Difference_Wind'] = df['Mean Wind Speed (km/h)'].diff().dropna()  # Remove NaN resulting from differencing
-
-
-    # Perform the ADF test on the differenced time series
-    fig, ax = plt.subplots(nrows=2, ncols=1, figsize=(10, 8))
-    visualize_adfuller_results(df['First_Difference_Humidity'].dropna(), 'First_Difference_Humidity', ax[0])
-    visualize_adfuller_results(df['Second_Difference_Wind'].dropna(), 'Second_Difference_Wind', ax[1])
-    plt.tight_layout()
-
     # Split the data into train and test sets
     train_size = int(0.50 * len(df))
     # Define the regions you want to predict
@@ -218,8 +214,13 @@ def predictionHumidity():
     # Loop through regions and make predictions for each one
     for i, region in enumerate(regions_to_predict):
         predictionGraphs = prophet_for_region(region, axs[i], train_size)
-
+    predictionGraphs.show()
     return predictionGraphs
 
+#linear_regression(df)
+#correlation(df)
+#overview_data(df)
+#display_adf(df)
 #predictionHumidity().show()
-#plt.show()
+correlation().show()
+plt.show()
