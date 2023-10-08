@@ -177,14 +177,14 @@ def predict():
         
         #linearGraph = convertGraphToB64(linear_regression())
         predictionGraph = convertGraphToB64(predictionHumidity())
+        #correlationGraph = convertGraphToB64(correlation())
         correlationGraph = convertGraphToB64(correlation())
         overviewGraph = convertGraphToB64(overview_data())
 
         return render_template('prediction.html', 
                                correlationGraph=correlationGraph,
-                               prediction=predictionGraph
-                               )
-                               #overview=overviewGraph)
+                               prediction=predictionGraph,
+                               overview=overviewGraph)
     
     #Only allow access to this page through the main page
     elif request.method == 'GET':
@@ -206,8 +206,7 @@ def convertGraphToB64(plot):
     plot.savefig(img, format='png', bbox_inches='tight')
     img.seek(0)
     #plotB64 = base64.b64encode(img.getvalue()).decode('utf8')
-    plotB64 = base64.b64encode(img.getvalue())
-    return plotB64
+    return base64.b64encode(img.getvalue()).decode('utf8')
 
 
 @app.route("/Home")
@@ -220,7 +219,8 @@ def North():
    # northGroup = dataGroup()
    # northPlot = dataPlot()
     #northCanvasName = canvasName('North')
-    item = test.dataCreateDiv()
+    #item = test.dataCreateDiv()
+    item = ""
     return render_template('NorthTest.html', item=item)
 
 @app.route("/South")

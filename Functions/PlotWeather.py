@@ -13,8 +13,8 @@ import numpy as np
 
 
 # Function to read csv file
-#def readFile(file = (os.getcwd() + "/Datasets/compiledRegionData.csv")):
-def readFile(file = "Functions/compiledRegionData.csv"):
+def readFile(file = (os.getcwd() + "/Datasets/compiledRegionData.csv")):
+#def readFile(file = "Functions/compiledRegionData.csv"):
     # Read csv file into Pandas Dataframe
     # dayfirst= True, parse_dates= True,   index_col=0,
     df = pd.read_csv(file, encoding="unicode-escape", usecols=[0,1,2,3,4,5,6,7])
