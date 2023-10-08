@@ -6,7 +6,9 @@ import datetime as datetime
 import numpy as np
 
 
-def readFile(file = ("compiledRegionData.csv")):
+# Function to read csv file
+#def readFile(file = (os.getcwd() + "/Datasets/compiledRegionData.csv")):
+def readFile(file = ("Functions/compiledRegionData.csv")):
     # Read csv file into Pandas Dataframe
     # dayfirst= True, parse_dates= True,   index_col=0,
     df = pd.read_csv(file, encoding="unicode-escape", usecols=[0,1,2,3,4,5,6,7])
@@ -17,32 +19,93 @@ def readFile(file = ("compiledRegionData.csv")):
     df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y')
     return df
 
-
 df = readFile()
-def canvasName(region):
-    uniqueMonth = df['Date'].dt.strftime("%m-%y").unique().tolist()
-    for i in range(len(uniqueMonth)):
-        uniqueMonth[i] = "chart_" + region + "_" + uniqueMonth[i]
-    return uniqueMonth
 
-uniqueDate = df['Date'].dt.strftime("%d-%m").unique().tolist()
-#print(canvasName("North"))
-
-
-
+# Function to filter through data and return a dictionary 
 def dataforGraph(region, month, year, index):
     df = readFile()
-    
     dataFilter_df = df.loc[(df['Region'] == region.capitalize()) & (df['Date'].dt.month == month) & (df['Date'].dt.year == year)]
-    df['Date'] = df['Date'].dt.strftime('%d')
     dataforGraph_df = dataFilter_df[ [index] ].to_dict()
     #dataforGraph_Dict = convertToDict(dataforGraph_df)
     return (dataforGraph_df[index].values())
 
-def dataPlot(region):
-    # Look for unique months in dataset
-    unique = df['Date'].dt.strftime("%m%y").unique().tolist()
 
+# Function to fetch data required for plotting all graphs
+def dataPlot():
+    # Look for unique months in dataset
+    uniqueMonth = df['Date'].dt.strftime("%m").unique().tolist()
+
+    # Look for unique months in dataset
+    uniqueYear = df['Date'].dt.strftime("%Y").unique().tolist()
+    print(uniqueYear[0])
+
+    uniqueRegion = df['Region'].unique().tolist()
+    
+    items = []
+    elementsAccess = []
+    label = []
+    valuesHumi = []
+    valuesTemp = []
+    for k in range(len(uniqueRegion)):
+        # For loop to go through each year
+        for i in range(len(uniqueYear)):
+            # For loop to go through each month and get values for each specific month
+            for j in range(len(uniqueMonth)):
+                # Try and except to catch any errors on no matches for months and years
+                try:
+                    label_df = df.loc[(df['Date'].dt.month == int(uniqueMonth[j]))]
+                    labelDates = label_df['Date'].dt.strftime("%d").unique().tolist()
+                    label.append(labelDates)
+                    valuesHumi.append(list(dataforGraph(uniqueRegion[k], int(uniqueMonth[j]), int(uniqueYear[i]), "Humidity_Avg")))
+                    valuesTemp.append(list(dataforGraph(uniqueRegion[k], int(uniqueMonth[j]), int(uniqueYear[i]), "Mean Temperature (Â°C)")))
+
+                    elementsAccess.append(uniqueRegion[k])
+                    elementsAccess.append()
+
+                except Exception as e:
+                    print(e)
+                    pass
+    
+
+    dataPlot = [label, valuesHumi, valuesTemp]
+
+    return dataPlot
+
+#print(canvasName())
+
+uniqueMonthYear = df['Date'].dt.strftime("%m-%Y").unique().tolist()
+uniqueRegion = df['Region'].unique().tolist()
+
+items = []
+
+for i in range(len(uniqueMonthYear)):
+    elementsAccess = []
+    elementsAccess.append(uniqueMonthYear[i])
+    elementsAccess.append(uniqueRegion[i])
+    items.append(elementsAccess)
+
+#print(items)
+
+#print(uniqueRegion)
+#print(dataPlot("uniqueRegion"))
+
+
+
+def canvasItems():
+    uniqueRegion = df['Region'].unique().tolist()
+    uniqueMonth = df['Date'].dt.strftime("%m-%y").unique().tolist()
+    items = []
+    for j in range(len(uniqueMonth)):
+        for i in range(len(uniqueRegion)):
+            canvasItems = []
+            canvasNameAppend = "chart_" + uniqueRegion[i] + "_" + uniqueMonth[j]
+            canvasItems.append(canvasNameAppend)
+            items.append(canvasItems)
+            
+    return items
+
+
+def dataPlotTest(region):
     # Look for unique months in dataset
     uniqueMonth = df['Date'].dt.strftime("%m").unique().tolist()
 
@@ -54,13 +117,21 @@ def dataPlot(region):
     valuesHumi = []
     valuesTemp = []
 
-    # For loop to go through each month and get values for each specific month
-    for i in range(len(unique)):
-        label_df = df.loc[(df['Date'].dt.month == int(uniqueMonth[i]))]
-        labelDates = label_df['Date'].dt.strftime("%d").unique().tolist()
-        label.append(labelDates)
-        valuesHumi.append(list(dataforGraph(region, int(uniqueMonth[i]), int(uniqueYear[0]), "Humidity_Avg")))
-        valuesTemp.append(list(dataforGraph(region, int(uniqueMonth[i]), int(uniqueYear[0]), "Mean Temperature (Â°C)")))
+    # For loop to go through each year
+    for i in range(len(uniqueYear)):
+        # For loop to go through each month and get values for each specific month
+        for j in range(len(uniqueMonth)):
+            # Try and except to catch any errors on no matches for months and years
+            try:
+                label_df = df.loc[(df['Date'].dt.month == int(uniqueMonth[j]))]
+                labelDates = label_df['Date'].dt.strftime("%d").unique().tolist()
+                label.append(labelDates)
+                valuesHumi.append(list(dataforGraph(region, int(uniqueMonth[j]), int(uniqueYear[i]), "Humidity_Avg")))
+                valuesTemp.append(list(dataforGraph(region, int(uniqueMonth[j]), int(uniqueYear[i]), "Mean Temperature (Â°C)")))
+            except Exception as e:
+                print(e)
+                pass
+    
 
     dataPlot = [label, valuesHumi, valuesTemp]
 
@@ -68,137 +139,25 @@ def dataPlot(region):
 
 
 
-#print(dataPlot("North"))
-test1 = df.loc[(df['Date'].dt.month == 7)]
-test = test1['Date'].dt.strftime("%d").unique().tolist()
-#print(test)
+def dataCreateDiv():
+    cItem = canvasItems()
+    dataPlotItem = dataPlot()
+    testItems = []
+    for i in range(len(cItem)):
+        test = []
+        test.append(cItem[i])
+        test.append(dataPlotItem[0][i])
+        test.append(dataPlotItem[1][i])
+        test.append(dataPlotItem[2][i])
+        testItems.append(test)
+    return testItems
 
-label = []
-uniqueDate1 = df['Date'].dt.strftime("%m%y").unique().tolist()
-for i in range(len(uniqueDate1)):
-    test1 = df.loc[(df['Date'].dt.month == int(uniqueDate1[i]))]
-    test = test1['Date'].dt.strftime("%d").unique().tolist()
-    #print(test)
-    label.append(test)
-
-uniqueYear = df['Date'].dt.strftime("%m").unique().tolist()
-#print(uniqueYear)
-
-#print(dataPlot("North", 2023))
+print(len(dataCreateDiv()))
 
 
 
+array = []
+array1 = [1, 2, 3]
 
 
 
-
-
-
-
-
-
-
-def calAvg (filteredDf):
-
-    avg_Hmd_h = 0
-    avg_Hmd_a = 0
-    avg_Hmd_l = 0
-
-    avg_MeanTemp = 0
-    avg_MaxTemp = 0
-    avg_LowTemp = 0
-    data = {}
-    # Columns that need to get the mean, Humidity_h, Humidity_a, humidity_l, MeanTemp, MaxTemp, LowTemp
-    # iterate through each column in the filtered df
-    # if x == column name, proceed to calculate mean
-    for x in filteredDf:
-        if (x == "Humidity_High"):
-            avg_Hmd_h = filteredDf[x].mean()
-        elif (x == "Humidity_Avg"):
-            avg_Hmd_a = filteredDf[x].mean()
-        elif (x == 'Humidity_Low'):
-            avg_Hmd_l = filteredDf[x].mean()
-        elif (x == 'Mean Temperature (Â°C)'):
-            avg_MeanTemp = filteredDf[x].mean()
-        elif (x == 'Maximum Temperature (Â°C)'):
-            avg_MaxTemp = filteredDf[x].mean()
-        elif (x == "Lowest Temperature (Â°C)"):
-            avg_LowTemp = filteredDf[x].mean()
-
-    # Convert results and store it into Dictionary  
-    data = {
-        'Humidity_High': avg_Hmd_h,
-        'Humidity_Avg': avg_Hmd_a,
-        'Humidity_Low': avg_Hmd_l,
-        'Mean Temperature (Â°C)': avg_MeanTemp,
-        'Maximum Temperature (Â°C)': avg_MaxTemp,
-        'Lowest Temperature (Â°C)': avg_LowTemp
-    }
-    #df = pd.DataFrame(data)
-    #return df
-    return data
-
-# filter weather data by month and region
-def dataFilter(region, month, year):
-    df = readFile()
-    dataFilter_df = df.loc[(df['Region'] == region.capitalize()) & (df['Date'].dt.month == month) & (df['Date'].dt.year == year)]
-    return dataFilter_df 
-
-
-# create variables to store the dictionary, which contains the mean value of all weather data from June to Aug by region
-def calMeanWeatherData(data):
-    meanWeatherData = calAvg(data)
-    return meanWeatherData
-
-
-def dataGroup1(region):
-
-    # Look for unique months in dataset
-    uniqueMonth = df['Date'].dt.strftime("%m").unique().tolist()
-
-    # Look for unique months in dataset
-    uniqueYear = df['Date'].dt.strftime("%Y").unique().tolist()
-    print(uniqueMonth)
-
-    labelDisplay = []
-    valuesDisplay = []
-
-    for i in range(len(uniqueMonth)):
-        print(uniqueMonth[i])
-        labelDisplay.append(list(calMeanWeatherData(dataFilter(region.capitalize(), int(uniqueMonth[i]), int(uniqueYear[0]))).keys()))
-        valuesDisplay.append(list(calMeanWeatherData(dataFilter(region.capitalize(), int(uniqueMonth[i]), int(uniqueYear[0]))).values()))
-
-    dataDisplay = [labelDisplay, valuesDisplay]
-
-    return dataDisplay
-
-
-
-def dataGroup(region, year=2023):
-    # Look for unique months in dataset
-    unique = df['Date'].dt.strftime("%m%y").unique().tolist()
-
-    # Look for unique months in dataset
-    uniqueMonth = df['Date'].dt.month.unique()
-
-    # Look for unique months in dataset
-    uniqueYear = df['Date'].dt.is_leap_year.unique()
-
-    labelDisplay = []
-    valuesDisplay = []
-    
-    label = [list(calMeanWeatherData(dataFilter(region.capitalize(), int(uniqueMonth[0]), int(uniqueYear[0]))).keys()),
-                  list(calMeanWeatherData(dataFilter(region.capitalize(), int(uniqueMonth[1]), int(uniqueYear[0]))).keys()),
-                  list(calMeanWeatherData(dataFilter(region.capitalize(), int(uniqueMonth[2]), int(uniqueYear[0]))).keys())]
-    
-    valuesNorth = [list(calMeanWeatherData(dataFilter(region.capitalize(), int(uniqueMonth[0]), int(uniqueYear[0]))).values()),
-                   list(calMeanWeatherData(dataFilter(region.capitalize(), 7, year)).values()),
-                   list(calMeanWeatherData(dataFilter(region.capitalize(), 8, year)).values())]
-
-    dataDisplay = [label, valuesNorth]
-
-    return dataDisplay
-
-
-uniqueYear1 = df['Date'].dt.year.unique()
-print(type(uniqueYear1[0]))

@@ -9,8 +9,7 @@ from pathlib import Path
 import base64
 import os
 from io import BytesIO
-
-from Functions import dataGroup, dataPlot, canvasName, linear_regression, correlation, overview_data, predictionHumidity
+from Functions import dataGroup, dataPlot, canvasName, linear_regression, correlation, overview_data, predictionHumidity, test
 from distutils.command import upload
 from flask import Flask, render_template, request, redirect, flash, send_file, send_from_directory, current_app, abort
 import flask
@@ -65,22 +64,22 @@ def plot():
 
     # Data for West Region
     #westGroup = dataGroup('West', 2023)
-    
+
 
     # Passing data to dashboard
     if request.method == 'POST' and request.form.get('plot') == 'dashboard':
         pass
-        #return render_template('graphs.html', 
+        #return render_template('graphs.html',
         #                       lineTitleNorth = northGroup[0], lineLabelNorth = northGroup[1], lineValueNorth = northGroup[2], canvasNorth = northGroup[3],
         #                       lineTitleSouth = southGroup[0], lineLabelSouth = southGroup[1], lineValueSouth = southGroup[2], canvasSouth = southGroup[3],
         #                       lineTitleCentral = centralGroup[0], lineLabelCentral = centralGroup[1], lineValueCentral = centralGroup[2], canvasCentral = centralGroup[3],
         #                       lineTitleEast = eastGroup[0], lineLabelEast = eastGroup[1], lineValueEast = eastGroup[2], canvasEast = eastGroup[3],
         #                       lineTitleWest = westGroup[0], lineLabelWest = westGroup[1], lineValueWest = westGroup[2], canvasWest = westGroup[3],)
-    
+
     # Prevents access to dashboard through URL; Only can access through index page's button
     elif request.method == 'GET':
         return redirect('/')
-    
+
     else:
         return 'Not a valid request method for this route'
 
@@ -103,12 +102,12 @@ def downloadBackEnd():
     chartName = barChartName + ".png"
 
     return redirect('/dashboard/' + chartName)
-    
+
 
 # Allow users to download image of chart 
 @app.route('/dashboard/<filename>', methods=['GET'])
 def downloadFile(filename):
-    
+
     # Locate the current working directory and go to Downloads folder
     filepath = os.getcwd() + "\Downloads\\"
 
@@ -116,7 +115,7 @@ def downloadFile(filename):
     try:
         # Download image of graph to local user
         return send_file(filepath + filename, as_attachment=True)
-    
+
     # FileNotFoundError
     except FileNotFoundError:
         return abort(404)
@@ -129,37 +128,37 @@ def table():
     # Check for if file is uploaded
     if request.method == 'POST' and request.files['fileName'].filename == '':
         return redirect('/')
-    
+
     elif request.method == 'POST':
         uploadFile = request.files['fileName']
-        
+
         # Creating table for csv files 
         if uploadFile.filename.lower().endswith(('.csv')):
             data = readCsv(uploadFile)
             return render_template('table.html', tables=[data.to_html()], titles=[''])
-        
+
         # Creating table for json files
         elif uploadFile.filename.lower().endswith(('.json')):
             return render_template('table.html')
-        
+
         # Creating table for txt files
         elif uploadFile.filename.lower().endswith(('.txt')):
             return render_template('table.html')
-        
+
         else:
             return redirect('/')
-        
+
     # Back button to main page
     if request.method == 'POST' and request.form.get('back') == 'back':
         return redirect('/')
-    
+
     # Only allow access to this page through the main page
     elif request.method == 'GET':
         return redirect('/')
-    
+
     else:
         return 'Not a valid request method for this route'
-    
+
 
 # Prediction Page
 # Shows contents of csv file
@@ -168,24 +167,24 @@ def predict():
     #Back button to main page
     if request.method == 'POST' and request.form.get('back') == 'back':
         return redirect('/')
-    
+
     elif request.method == 'POST':
-        
+
         prediction = convertGraphToB64(predictionHumidity())
         correlationGraph = convertGraphToB64(correlation())
         overviewGraph = convertGraphToB64(overview_data())
 
-        return render_template('prediction.html', 
+        return render_template('prediction.html',
                                prediction=prediction,
                                correlationGraph=correlationGraph,
                                overview=overviewGraph)
-    
+
     #Only allow access to this page through the main page
     elif request.method == 'GET':
         return redirect('/')
-    
-    
-    
+
+
+
 
 # Function to read csv file
 def readCsv(csvFileName):
@@ -204,20 +203,16 @@ def convertGraphToB64(plot):
 
 @app.route("/Home")
 def Home():
-
     return render_template('Dashboard.html')
 
 @app.route("/North")
 def North():
     # Data for North Region
-    northGroup = dataGroup('North')
-    northPlot = dataPlot('North')
-    northCanvasName = canvasName('North')
-
-    return render_template('North.html',
-                           northDisplayLabel = northGroup[0], northDisplayValue = northGroup[1],
-                           lineLabelNorth=northPlot[0], lineValueNorthHumi=northPlot[1], lineValueNorthTemp=northPlot[2], 
-                           canvasNorth=northCanvasName)
+   # northGroup = dataGroup()
+   # northPlot = dataPlot()
+    #northCanvasName = canvasName('North')
+    item = test.dataCreateDiv()
+    return render_template('NorthTest.html', item=item)
 
 @app.route("/South")
 def South():
@@ -228,7 +223,7 @@ def South():
 
     return render_template('South.html',
                            southDisplayLabel = southGroup[0], southDisplayValue = southGroup[1],
-                           lineLabelSouth=southPlot[0], lineValueSouthHumi=southPlot[1], lineValueSouthTemp=southPlot[2], 
+                           lineLabelSouth=southPlot[0], lineValueSouthHumi=southPlot[1], lineValueSouthTemp=southPlot[2],
                            canvasSouth=southPlot[3])
 
 
