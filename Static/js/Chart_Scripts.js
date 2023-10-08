@@ -9,24 +9,34 @@ function testPrint(data, labels){
     }
 }
 
-function printData(month, dataValue, dataLabel){
+function printDataHumi(month, dataValue, dataLabel){
     var myArray = dataValue
     var value = myArray[month]
     var nameLabel = dataLabel[month]
-    console.log(nameLabel)
+    //console.log(nameLabel)
 
-    for (var i=0; i < value.length; i++) {
-      document.write("<tr> " + nameLabel[i] + ": " + parseFloat(value[i].toFixed(2)) + " </tr>");
-      if (i == 2){
-        document.write("</br>");
-      }
-      console.log(nameLabel[i])
+    for (var i=0; i < (value.length-3); i++) {
+      document.write("<td> " + nameLabel[i] + ": " + parseFloat(value[i].toFixed(2)) + " &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td>");
+      //console.log(nameLabel[i])
+    }
+}
+
+function printDataTemp(month, dataValue, dataLabel){
+    var myArray = dataValue
+    var value = myArray[month]
+    var nameLabel = dataLabel[month]
+    //console.log(nameLabel)
+
+    for (var i=3; i < value.length; i++) {
+      document.write("<td> " + nameLabel[i] + ": " + parseFloat(value[i].toFixed(2)) + "</td>");
+      //console.log(nameLabel[i])
     }
 }
 
 // Generate Line Graphs
-function createLineChart(data, labels, canvasName) {
-    for (let i = 0; i < data.length; i++) {
+function createLineChart(labels, dataHumi, dataTemp, canvasName) {
+    for (let i = 0; i < canvasName.length; i++) {
+        console.log(labels[i])
         var ctx = document.getElementById(canvasName[i]).getContext('2d');
         var myChart = new Chart(ctx, {
             type: 'line',
@@ -34,7 +44,7 @@ function createLineChart(data, labels, canvasName) {
                 labels: labels[i],
                 datasets: [{
                     label: 'Temperature',
-                    data: data[i],
+                    data: dataTemp[i],
                     fill : false,
                     borderColor: 'rgb(75, 192, 192)',
                     tension: 0.1,
@@ -42,7 +52,7 @@ function createLineChart(data, labels, canvasName) {
                 }, 
                 {
                     label: 'Humidity',
-                    data: data[i],
+                    data: dataHumi[i],
                     fill : false,
                     borderColor: 'rgb(192, 192, 192)',
                     tension: 0.1,
@@ -68,6 +78,7 @@ function createLineChart(data, labels, canvasName) {
                         position: 'left',
                     },
                     y1: {
+                        beginAtZero: true,
                         type: 'linear',
                         display: true,
                         position: 'right',
