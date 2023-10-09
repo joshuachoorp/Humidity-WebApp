@@ -6,9 +6,9 @@ import os
 import pandas as pd
 # Data visualization
 import pmdarima as pm
-#import matplotlib
+import matplotlib
 import matplotlib.pyplot as plt
-#matplotlib.use('Agg')
+matplotlib.use('Agg')
 import seaborn as sns
 import math
 from sklearn.metrics import mean_absolute_error, mean_squared_error
