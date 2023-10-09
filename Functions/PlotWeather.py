@@ -14,7 +14,7 @@ import numpy as np
 
 # Function to read csv file
 def readFile(file = (os.getcwd() + "/Datasets/compiledRegionData.csv")):
-#def readFile(file = "Functions/compiledRegionData.csv"):
+#def readFile(file = "compiledRegionData.csv"):
     # Read csv file into Pandas Dataframe
     # dayfirst= True, parse_dates= True,   index_col=0,
     df = pd.read_csv(file, encoding="unicode-escape", usecols=[0,1,2,3,4,5,6,7])
@@ -144,19 +144,21 @@ def dataGroup(region):
 
     labelDisplay = []
     valuesDisplay = []
+    monthDisplay = []
     # For loop to go through each year
     for i in range(len(uniqueYear)):
         # For loop to go through each month and get values for each specific month
         for j in range(len(uniqueMonth)):
             # Try and except to catch any errors on no matches for months and years
             try:
+                monthDisplay.append(uniqueMonth[j])
                 labelDisplay.append(list(calMeanWeatherData(dataFilter(region, int(uniqueMonth[j]), int(uniqueYear[i]))).keys()))
                 valuesDisplay.append(list(calMeanWeatherData(dataFilter(region, int(uniqueMonth[j]), int(uniqueYear[i]))).values()))
             except Exception as e:
                 #print(e)
                 pass
 
-    dataDisplay = [labelDisplay, valuesDisplay]
+    dataDisplay = [monthDisplay, labelDisplay, valuesDisplay]
 
     return dataDisplay
 
@@ -187,6 +189,7 @@ def dataCreateDiv(region):
         divElements.append(dataPlotItem[2][i])
         divElements.append(dataGroupItem[0][i])
         divElements.append(dataGroupItem[1][i])
+        divElements.append(dataGroupItem[2][i])
         div.append(divElements)
 
     return div

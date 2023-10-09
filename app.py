@@ -24,7 +24,9 @@ if __name__ == '__main__':
         # Checks for required packages and installs them if not found
         try:
             from app import app
-            app.run(debug=True)
+            #app.run(debug=True)
+            from werkzeug.serving import run_simple
+            run_simple('127.0.0.1', 5000, app)
 
         # Checks for required packages and installs them if not found
         # If module required not installed, will throw exception.
@@ -175,16 +177,16 @@ def predict():
         #overview_data().show()
         #predictionHumidity().show()
         
-        #linearGraph = convertGraphToB64(linear_regression())
+        linearGraph = convertGraphToB64(linear_regression())
         predictionGraph = convertGraphToB64(predictionHumidity())
-        #correlationGraph = convertGraphToB64(correlation())
         correlationGraph = convertGraphToB64(correlation())
-        overviewGraph = convertGraphToB64(overview_data())
+        #overviewGraph = convertGraphToB64(overview_data())
 
         return render_template('prediction.html', 
                                correlationGraph=correlationGraph,
                                prediction=predictionGraph,
-                               overview=overviewGraph)
+                               #overview=overviewGraph,
+                               linear = linearGraph)
     
     #Only allow access to this page through the main page
     elif request.method == 'GET':
