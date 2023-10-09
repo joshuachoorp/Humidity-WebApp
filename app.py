@@ -9,7 +9,8 @@ from pathlib import Path
 import base64
 import os
 from io import BytesIO
-from Functions import PlotWeather
+
+#from Functions import PlotWeather
 from Functions import dataGroup, dataPlot, canvasName, dataCreateDiv
 from Functions import linear_regression, correlation, overview_data, predictionHumidity
 from flask import Flask, render_template, request, redirect, flash, send_file, send_from_directory, current_app, abort
@@ -24,7 +25,9 @@ if __name__ == '__main__':
         # Checks for required packages and installs them if not found
         try:
             from app import app
-            app.run(debug=True)
+            #app.run(debug=True)
+            from werkzeug.serving import run_simple
+            run_simple('127.0.0.1', 5000, app)
 
         # Checks for required packages and installs them if not found
         # If module required not installed, will throw exception.
@@ -45,6 +48,8 @@ if __name__ == '__main__':
 
 app = Flask(__name__,static_folder='Static')
 app.jinja_env.filters['month_name'] = month_name_filter
+app.jinja_env.auto_reload = True
+app.config['TEMPLATES_AUTO_RELOAD'] = True
 # Index Page
 @app.route('/')
 def index():
@@ -179,16 +184,16 @@ def predict():
         #overview_data().show()
         #predictionHumidity().show()
         
-        #linearGraph = convertGraphToB64(linear_regression())
+        linearGraph = convertGraphToB64(linear_regression())
         predictionGraph = convertGraphToB64(predictionHumidity())
-        #correlationGraph = convertGraphToB64(correlation())
         correlationGraph = convertGraphToB64(correlation())
-        overviewGraph = convertGraphToB64(overview_data())
+        #overviewGraph = convertGraphToB64(overview_data())
 
         return render_template('prediction.html', 
                                correlationGraph=correlationGraph,
                                prediction=predictionGraph,
-                               overview=overviewGraph)
+                               #overview=overviewGraph,
+                               linear = linearGraph)
     
     #Only allow access to this page through the main page
     elif request.method == 'GET':
@@ -219,24 +224,28 @@ def Home():
 
 @app.route("/North")
 def North():
-    # Data for North Region
-    # northGroup = dataGroup()
-    # northPlot = dataPlot()
-    #northCanvasName = canvasName('North')
-    chartObj = PlotWeather.dataCreateDiv("North")
-    return render_template('North.html', chartObj=chartObj)
+    chartObj = dataCreateDiv("North")
+    return render_template('North.html', createDiv=chartObj)
 
 @app.route("/South")
 def South():
+    chartObj = dataCreateDiv("South")
+    return render_template('South.html', createDiv=chartObj)
 
-    # Data for South Region
-    southGroup = dataGroup('South')
-    southPlot = dataPlot('South')
+@app.route("/East")
+def East():
+    chartObj = dataCreateDiv("East")
+    return render_template('East.html', createDiv=chartObj)
 
-    return render_template('South.html',
-                           southDisplayLabel = southGroup[0], southDisplayValue = southGroup[1],
-                           lineLabelSouth=southPlot[0], lineValueSouthHumi=southPlot[1], lineValueSouthTemp=southPlot[2],
-                           canvasSouth=southPlot[3])
+@app.route("/West")
+def West():
+    chartObj = dataCreateDiv("West")
+    return render_template('West.html', createDiv=chartObj)
+
+@app.route("/Central")
+def Central():
+    chartObj = dataCreateDiv("Central")
+    return render_template('Central.html', createDiv=chartObj)
 
 
 # Export dataset as csv
@@ -257,3 +266,11 @@ def importFile():
     filepath = os.getcwd() + "\Datasets\compiledRegionData.csv"
 
     return send_file(filepath, as_attachment=True)
+
+
+
+@app.route("/testPage")
+def testPage():
+    chartObj = dataCreateDiv("North")
+    return render_template('testPage.html',
+                           createDiv=chartObj)
