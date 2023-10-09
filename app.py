@@ -256,6 +256,7 @@ def importFile():
 def process_csv():
 
     base_dir = os.path.dirname(os.path.abspath(__file__))
+    #once confirm the header test.csv will change to the compileddata.csv
     csv_file_path = os.path.join(base_dir, 'Datasets', 'test.csv')
     try:
         # Get the uploaded file from the request

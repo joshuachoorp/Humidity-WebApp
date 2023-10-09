@@ -56,7 +56,7 @@ async function readAndValidateCSV(file,region) {
             const headersFromBOnwards = firstRow.slice(dataStartIndex);
             console.log('First row from Excel:', headersFromBOnwards);
 
-            // Define the expected column headers
+            // Define the expected column headers change if required 
             const expectedHeaders = [
                 'Mean Temperature (°C)',
                 'Maximum Temperature (°C)',
