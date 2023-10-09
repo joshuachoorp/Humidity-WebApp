@@ -9,8 +9,9 @@ from pathlib import Path
 import base64
 import os
 from io import BytesIO
-from Functions import dataGroup, dataPlot, canvasName, linear_regression, correlation, overview_data, predictionHumidity, test
-from distutils.command import upload
+
+from Functions import dataGroup, dataPlot, canvasName, dataCreateDiv
+from Functions import linear_regression, correlation, overview_data, predictionHumidity
 from flask import Flask, render_template, request, redirect, flash, send_file, send_from_directory, current_app, abort
 import flask
 import pandas as pd
@@ -169,16 +170,22 @@ def predict():
         return redirect('/')
 
     elif request.method == 'POST':
-
-        prediction = convertGraphToB64(predictionHumidity())
+        #linear_regression().show()
+        #correlation().show()
+        #overview_data().show()
+        #predictionHumidity().show()
+        
+        #linearGraph = convertGraphToB64(linear_regression())
+        predictionGraph = convertGraphToB64(predictionHumidity())
+        #correlationGraph = convertGraphToB64(correlation())
         correlationGraph = convertGraphToB64(correlation())
         overviewGraph = convertGraphToB64(overview_data())
 
-        return render_template('prediction.html',
-                               prediction=prediction,
+        return render_template('prediction.html', 
                                correlationGraph=correlationGraph,
+                               prediction=predictionGraph,
                                overview=overviewGraph)
-
+    
     #Only allow access to this page through the main page
     elif request.method == 'GET':
         return redirect('/')
@@ -196,10 +203,11 @@ def readCsv(csvFileName):
 #Function to convert matplotlib graphs to base64 to be sent to html page
 def convertGraphToB64(plot):
     img = BytesIO()
-    plot.savefig(img, format='png')
+    plot.savefig(img, format='png', bbox_inches='tight')
     img.seek(0)
-    plotB64 = base64.b64encode(img.getvalue()).decode('utf8')
-    return plotB64
+    #plotB64 = base64.b64encode(img.getvalue()).decode('utf8')
+    return base64.b64encode(img.getvalue()).decode('utf8')
+
 
 @app.route("/Home")
 def Home():
@@ -211,7 +219,8 @@ def North():
    # northGroup = dataGroup()
    # northPlot = dataPlot()
     #northCanvasName = canvasName('North')
-    item = test.dataCreateDiv()
+    #item = test.dataCreateDiv()
+    item = ""
     return render_template('NorthTest.html', item=item)
 
 @app.route("/South")
