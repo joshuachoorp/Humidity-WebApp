@@ -58,6 +58,9 @@ async function readAndValidateCSV(file,region) {
 
             // Define the expected column headers change if required 
             const expectedHeaders = [
+                'Humidity_High',
+                'Humidity_Avg',
+                'Humidity_Low',
                 'Mean Temperature (°C)',
                 'Maximum Temperature (°C)',
                 'Lowest Temperature (°C)',
