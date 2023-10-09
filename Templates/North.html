@@ -52,6 +52,55 @@
             <div class="my-3 py-3">
             <h2 class="display-5">North Region {{ x[0][0][13:14] | int | month_name }} 20{{x[0][0][15:17]}} Humidity Data</h2>
 
+        <!--Charting 1-->
+          <div class="bg-light shadow-sm mx-auto" style="width: 80%; height: 580px; border-radius: 20px 20px 0 0;">
+              <div id="regionNorth" onload="console.log('done')">
+                  <canvas id="chart_North_06-23" style="height:100vh; width:80vw"></canvas>
+                  <!--Generating Chart into backend server-->
+                  <input type="hidden" id="lineName" name="graphName" value="northJuneWeatherData">
+                  <!--Download Chart to local user-->
+                  <button type="submit" form="downloadLine" >Download</button>
+                  <form id="downloadLine" action="/dashboard/northJuneWeatherData.png"></form></br></br>
+              </div>
+          </div>
+        </div>
+        </div>
+        <script>
+        //Using the data parsed from the controller side app.py to generate charts
+        createLineChart({{ chartObj[0] }}, {{  chartObj[1]   }}, {{  chartObj[2]   }}, {{  chartObj[3]   }})
+        </script>
+        <script>
+            const canvasName = document.querySelectorAll('[id^="chart"]');
+            const lineName = document.querySelectorAll('[id=lineName]');
+            const myTimeout = setTimeout(sendLineIN, 1500);
+
+            function sendLineIN() {
+                for (let i = 0; i < canvasName.length; i++) {
+                    var graphName = lineName[i].value;
+                    var graph = canvasName[i];
+                    var graphDataURL = graph.toDataURL('image/png');
+
+                    $.ajax({
+                        url: '/dashboard/download',
+                        type: 'POST',
+                        data: { 'graphBase64' : graphDataURL,
+                                'graphName' : graphName
+                        },
+                        error: function(error) {
+                            console.log(error)
+                        },
+                        success: function() {
+                            console.log("okay")
+                        },
+                    });
+                }
+            }
+        </script>
+
+        </div>
+
+
+
     {%endfor%}
 </main>
 
