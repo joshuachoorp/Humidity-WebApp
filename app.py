@@ -42,7 +42,8 @@ if __name__ == '__main__':
 
 # Register the custom filter function
 
-
+app.jinja_env.auto_reload = True
+app.config['TEMPLATES_AUTO_RELOAD'] = True
 app = Flask(__name__,static_folder='Static')
 app.jinja_env.filters['month_name'] = month_name_filter
 # Index Page
@@ -60,32 +61,9 @@ def index():
 # Creating dashboard
 @app.route('/dashboard/', methods=['GET', 'POST'])
 def plot():
-    # Data for North Region
-    #northGroup = dataGroup('North', 2023)
-
-    # Data for South Region
-    #southGroup = dataGroup('South', 2023)
-
-    # Data for Central Region
-    #centralGroup = dataGroup('Central', 2023)
-
-    # Data for East Region
-    #eastGroup = dataGroup('East', 2023)
-
-    # Data for West Region
-    #westGroup = dataGroup('West', 2023)
-
-
     # Passing data to dashboard
     if request.method == 'POST' and request.form.get('plot') == 'dashboard':
         pass
-        #return render_template('graphs.html',
-        #                       lineTitleNorth = northGroup[0], lineLabelNorth = northGroup[1], lineValueNorth = northGroup[2], canvasNorth = northGroup[3],
-        #                       lineTitleSouth = southGroup[0], lineLabelSouth = southGroup[1], lineValueSouth = southGroup[2], canvasSouth = southGroup[3],
-        #                       lineTitleCentral = centralGroup[0], lineLabelCentral = centralGroup[1], lineValueCentral = centralGroup[2], canvasCentral = centralGroup[3],
-        #                       lineTitleEast = eastGroup[0], lineLabelEast = eastGroup[1], lineValueEast = eastGroup[2], canvasEast = eastGroup[3],
-        #                       lineTitleWest = westGroup[0], lineLabelWest = westGroup[1], lineValueWest = westGroup[2], canvasWest = westGroup[3],)
-
     # Prevents access to dashboard through URL; Only can access through index page's button
     elif request.method == 'GET':
         return redirect('/')
@@ -179,14 +157,7 @@ def predict():
         return redirect('/')
 
     elif request.method == 'POST':
-        #linear_regression().show()
-        #correlation().show()
-        #overview_data().show()
-        #predictionHumidity().show()
-        
-        #linearGraph = convertGraphToB64(linear_regression())
         predictionGraph = convertGraphToB64(predictionHumidity())
-        #correlationGraph = convertGraphToB64(correlation())
         correlationGraph = convertGraphToB64(correlation())
         overviewGraph = convertGraphToB64(overview_data())
 
@@ -194,8 +165,7 @@ def predict():
                                correlationGraph=correlationGraph,
                                prediction=predictionGraph,
                                overview=overviewGraph)
-    
-    #Only allow access to this page through the main page
+
     elif request.method == 'GET':
         return redirect('/')
 
