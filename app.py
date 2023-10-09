@@ -20,7 +20,7 @@ from Functions import linear_regression, correlation, overview_data, predictionH
 # Imports from 
 from Functions.Filters import month_name_filter
 
-from flask import Flask, render_template, request, redirect, flash, send_file, send_from_directory, current_app, abort
+from flask import Flask, jsonify, render_template, request, redirect, flash, send_file, send_from_directory, current_app, abort
 import flask
 import pandas as pd
 import numpy as np
@@ -264,3 +264,53 @@ def importFile():
     filepath = os.getcwd() + "\Datasets\compiledRegionData.csv"
 
     return send_file(filepath, as_attachment=True)
+
+
+@app.route('/process-csv', methods=['POST'])
+def process_csv():
+
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    #once confirm the header test.csv will change to the compileddata.csv
+    csv_file_path = os.path.join(base_dir, 'Datasets', 'compiledRegionData.csv')
+    try:
+        # Get the uploaded file from the request
+        file = request.files['file']
+        selectRegion = request.form.get('region')
+        # Validate the file extension 
+        if file.filename.endswith(('.csv')):
+            # Read the Excel file into a DataFrame
+            try:
+                df = pd.read_csv(file, encoding="unicode-escape")
+                region_data = [selectRegion] * len(df)
+                df.insert(4, 'Region', region_data)
+            except UnicodeDecodeError as e:
+                # Handle encoding issues
+                return jsonify({'error': 'Encoding error: ' + str(e)})
+            #Ensure that the path the always correct 
+            if os.path.exists(csv_file_path):
+                existing_df = pd.read_csv(csv_file_path)
+            else:
+            # Handle the case where the file does not exist
+                return jsonify({'error': 'File does not exist'})             
+            append_next = True  # Flag to indicate whether to append the next row
+            new_rows = []
+
+            for _, row in df.iterrows():
+                if row.isnull().all() and append_next:
+                    append_next = False
+                elif not row.isnull().all() and append_next:
+                    new_rows.append(row)
+                    append_next = False
+                elif not row.isnull().all() and not append_next:
+                    new_rows.append(row)
+
+            combined_df = pd.concat([existing_df, pd.DataFrame(new_rows)], ignore_index=True)
+            combined_df.to_csv(csv_file_path,  mode='w', index=False)  # Overwrite the file
+            app.logger.info(combined_df)
+            # You can also return a response to the client if needed
+            return jsonify({'message': 'Data processed and saved successfully'})
+        else:
+            return jsonify({'error': 'Invalid file format'})
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
