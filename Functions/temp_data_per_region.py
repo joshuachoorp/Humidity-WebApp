@@ -10,9 +10,9 @@ headers = {
     "Referer": "http://www.weather.gov.sg/climate-historical-daily",
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36",
 }
-
-dwPath = "../Datasets" #Define download path
-header = ["Date","Mean Temperature (°C)", "Maximum Temperature (°C)", "Maximum Temperature (°C)","Mean Wind Speed (km/h)", "Max Wind Speed (km/h)"]
+base_dir = os.path.dirname(os.path.abspath(__file__))
+dwPath = os.path.join(base_dir,'..', 'Datasets')
+header = ["Date","Mean Temperature (°C)", "Maximum Temperature (°C)", "Lowest Temperature (°C)","Mean Wind Speed (km/h)", "Max Wind Speed (km/h)"]
 cityName = ['Changi', 'Ang Mo Kio', 'Sembawang','Admiralty', 'Tengah', 'Jurong (West)', 'Tuas South', 'Sentosa Island', 'Newton', 'East Coast Parkway']
 mth = ['July','June','August' ]
 year = 2023
