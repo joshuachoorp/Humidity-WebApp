@@ -4,14 +4,22 @@ Flask backend of Humidity-Webapp
 #Check for required libraries in the system
 from testRequirements import checkReq
 checkReq()
-from Functions.Filters import month_name_filter
+
+
 from pathlib import Path
 import base64
 import os
 from io import BytesIO
 
+# Imports from PlotWeather file
 from Functions import dataGroup, dataPlot, canvasName, dataCreateDiv
+
+# Imports from Prediction file
 from Functions import linear_regression, correlation, overview_data, predictionHumidity
+
+# Imports from 
+from Functions.Filters import month_name_filter
+
 from flask import Flask, render_template, request, redirect, flash, send_file, send_from_directory, current_app, abort
 import flask
 import pandas as pd
@@ -41,13 +49,12 @@ if __name__ == '__main__':
         break
 
 # Register the custom filter function
-
-app.jinja_env.auto_reload = True
-app.config['TEMPLATES_AUTO_RELOAD'] = True
 app = Flask(__name__,static_folder='Static')
 app.jinja_env.filters['month_name'] = month_name_filter
-# Index Page
+app.jinja_env.auto_reload = True
+app.config['TEMPLATES_AUTO_RELOAD'] = True
 
+# Index Page
 @app.route("/")
 def Home():
     return render_template('Dashboard.html')
@@ -153,21 +160,20 @@ def table():
 @app.route('/prediction', methods=['GET', 'POST'])
 def predict():
     #Back button to main page
-    if request.method == 'POST' and request.form.get('back') == 'back':
+    if request.form.get('back') == 'back':
         return redirect('/')
 
-    elif request.method == 'POST':
-        predictionGraph = convertGraphToB64(predictionHumidity())
-        correlationGraph = convertGraphToB64(correlation())
-        overviewGraph = convertGraphToB64(overview_data())
+    predictionGraph = convertGraphToB64(predictionHumidity())
+    correlationGraph = convertGraphToB64(correlation())
+    overviewGraph = convertGraphToB64(overview_data())
+    linearGraph = convertGraphToB64(linear_regression())
 
-        return render_template('prediction.html', 
-                               correlationGraph=correlationGraph,
-                               prediction=predictionGraph,
-                               overview=overviewGraph)
+    return render_template('prediction.html', 
+                           prediction=predictionGraph,
+                           correlationGraph=correlationGraph,
+                           overview=overviewGraph,
+                           linear=linearGraph)
 
-    elif request.method == 'GET':
-        return redirect('/')
 
 
 
@@ -184,31 +190,59 @@ def convertGraphToB64(plot):
     img = BytesIO()
     plot.savefig(img, format='png', bbox_inches='tight')
     img.seek(0)
-    #plotB64 = base64.b64encode(img.getvalue()).decode('utf8')
-    return base64.b64encode(img.getvalue()).decode('utf8')
+    plotB64 = base64.b64encode(img.getvalue()).decode('utf8')
+    return plotB64
 
 
 
+
+
+# North Region Page
+# Show graphs and data related to North region
 @app.route("/North")
 def North():
     # Data for North Region
-    # northGroup = dataGroup()
-    # northPlot = dataPlot()
-    #northCanvasName = canvasName('North')
     chartObj = dataCreateDiv("North")
-    return render_template('North.html', chartObj=chartObj)
+    return render_template('North.html', createDiv=chartObj)
 
+
+# South Region Page
+# Show graphs and data related to South region
 @app.route("/South")
 def South():
-
     # Data for South Region
-    southGroup = dataGroup('South')
-    southPlot = dataPlot('South')
+    chartObj = dataCreateDiv("South")
+    return render_template('South.html', createDiv=chartObj)
 
-    return render_template('South.html',
-                           southDisplayLabel = southGroup[0], southDisplayValue = southGroup[1],
-                           lineLabelSouth=southPlot[0], lineValueSouthHumi=southPlot[1], lineValueSouthTemp=southPlot[2],
-                           canvasSouth=southPlot[3])
+
+# Central Region Page
+# Show graphs and data related to Central region
+@app.route("/Central")
+def Central():
+    # Data for Central Region
+    chartObj = dataCreateDiv("Central")
+    return render_template('Central.html', createDiv=chartObj)
+
+
+# East Region Page
+# Show graphs and data related to East region
+@app.route("/East")
+def East():
+    # Data for East Region
+    chartObj = dataCreateDiv("East")
+    return render_template('East.html', createDiv=chartObj)
+
+
+# West Region Page
+# Show graphs and data related to West region
+@app.route("/West")
+def West():
+    # Data for West Region
+    chartObj = dataCreateDiv("West")
+
+    return render_template('West.html', createDiv=chartObj)
+
+
 
 
 # Export dataset as csv
@@ -219,6 +253,7 @@ def exportFile():
     filepath = os.getcwd() + "\Datasets\compiledRegionData.csv"
 
     return send_file(filepath, as_attachment=True)
+
 
 
 # Import file
