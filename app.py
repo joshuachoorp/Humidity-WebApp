@@ -9,7 +9,7 @@ from pathlib import Path
 import base64
 import os
 from io import BytesIO
-from Functions import PlotWeather
+
 from Functions import dataGroup, dataPlot, canvasName, dataCreateDiv
 from Functions import linear_regression, correlation, overview_data, predictionHumidity
 from flask import Flask, render_template, request, redirect, flash, send_file, send_from_directory, current_app, abort
@@ -223,7 +223,7 @@ def North():
     # northGroup = dataGroup()
     # northPlot = dataPlot()
     #northCanvasName = canvasName('North')
-    chartObj = PlotWeather.dataCreateDiv("North")
+    chartObj = dataCreateDiv("North")
     return render_template('North.html', chartObj=chartObj)
 
 @app.route("/South")
