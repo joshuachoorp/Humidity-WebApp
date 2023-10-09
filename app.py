@@ -168,7 +168,7 @@ def predict():
     overviewGraph = convertGraphToB64(overview_data())
     linearGraph = convertGraphToB64(linear_regression())
 
-    return render_template('prediction.html', 
+    return render_template('Prediction.html',
                            prediction=predictionGraph,
                            correlationGraph=correlationGraph,
                            overview=overviewGraph,
