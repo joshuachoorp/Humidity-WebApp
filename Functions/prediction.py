@@ -50,6 +50,9 @@ def linear_regression():
     # Make predictions using the trained model
     y_pred = model.predict(x)
 
+    # Set figure size
+    fig, ax = plt.subplots(figsize=(10, 8))
+
     # Visualize the linear regression line and the actual data points
     plt.scatter(x, y, label='Actual Data', color='blue')
     plt.plot(x, y_pred, label='Linear Regression Line', color='red')
@@ -76,7 +79,7 @@ def overview_data():
 
     # Plotting each of the time series
     fig, ax = plt.subplots(nrows=3, ncols=1, figsize=(10, 8))
-    sns.despine()
+    #sns.despine()
     # Get the columns you want to plot (excluding 'Date' and 'Region')
     columns_to_plot = df.drop(['Date', 'Region'], axis=1).columns
 
@@ -93,6 +96,7 @@ def overview_data():
             ax[i].set_yticks([10,20,30,40,50,60,70,80,90,100])
     plt.tight_layout()
     return plt
+
 
 def visualize_adfuller_results(series, title, ax):
     result = adfuller(series)
