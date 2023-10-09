@@ -46,7 +46,12 @@ if __name__ == '__main__':
 app = Flask(__name__,static_folder='Static')
 app.jinja_env.filters['month_name'] = month_name_filter
 # Index Page
-@app.route('/')
+
+@app.route("/")
+def Home():
+    return render_template('Dashboard.html')
+
+@app.route('/index')
 def index():
 
     return render_template('index.html')
@@ -213,9 +218,6 @@ def convertGraphToB64(plot):
     return base64.b64encode(img.getvalue()).decode('utf8')
 
 
-@app.route("/Home")
-def Home():
-    return render_template('Dashboard.html')
 
 @app.route("/North")
 def North():
