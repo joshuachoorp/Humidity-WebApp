@@ -193,25 +193,3 @@ def dataCreateDiv(region):
         div.append(divElements)
 
     return div
-
-#data = dataCreateDiv("North")
-#print(data[0])
-#print(data)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
