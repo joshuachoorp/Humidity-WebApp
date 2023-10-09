@@ -51,10 +51,14 @@ app.jinja_env.filters['month_name'] = month_name_filter
 app.jinja_env.auto_reload = True
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 # Index Page
-@app.route('/')
+@app.route('/index')
 def index():
 
     return render_template('index.html')
+
+@app.route("/")
+def Home():
+    return render_template('Dashboard.html')
 
 
 # Creating dashboard
@@ -218,9 +222,6 @@ def convertGraphToB64(plot):
     return base64.b64encode(img.getvalue()).decode('utf8')
 
 
-@app.route("/Home")
-def Home():
-    return render_template('Dashboard.html')
 
 @app.route("/North")
 def North():
