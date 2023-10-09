@@ -9,7 +9,8 @@ from pathlib import Path
 import base64
 import os
 from io import BytesIO
-from Functions import PlotWeather
+
+#from Functions import PlotWeather
 from Functions import dataGroup, dataPlot, canvasName, dataCreateDiv
 from Functions import linear_regression, correlation, overview_data, predictionHumidity
 from flask import Flask, render_template, request, redirect, flash, send_file, send_from_directory, current_app, abort
@@ -225,8 +226,9 @@ def North():
     # northGroup = dataGroup()
     # northPlot = dataPlot()
     #northCanvasName = canvasName('North')
-    chartObj = PlotWeather.dataCreateDiv("North")
-    return render_template('North.html', chartObj=chartObj)
+    chartObj = dataCreateDiv("North")
+    return render_template('North.html',
+                           createDiv=chartObj)
 
 @app.route("/South")
 def South():
@@ -259,3 +261,15 @@ def importFile():
     filepath = os.getcwd() + "\Datasets\compiledRegionData.csv"
 
     return send_file(filepath, as_attachment=True)
+
+
+
+@app.route("/testPage")
+def testPage():
+    # Data for North Region
+    # northGroup = dataGroup()
+    # northPlot = dataPlot()
+    #northCanvasName = canvasName('North')
+    chartObj = dataCreateDiv("North")
+    return render_template('testPage.html',
+                           createDiv=chartObj)

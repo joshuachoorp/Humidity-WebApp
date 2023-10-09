@@ -44,15 +44,78 @@
           <h1 class="display-2 fw-normal text-white">North Region Humidity Analysis</h1>
       </div>
     </div>
+    <!-- For loop logic of jinja template -->
+    {%for i in createDiv%}
+    <div class="d-md-flex flex-md-equal w-100 my-md-3 ps-md-3">
+      <div class="bg-dark me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden">
+          <div class="my-3 py-3">
+            <h2 class="display-5">South Region {{ i[0][0][13:14] | int | month_name }} Humidity Data</h2>
+            <table class="text-white">
+              <script>
+                printDataHumi( {{i[6]|tojson|safe}} , {{i[5]|tojson|safe}} )
+              </script>
+            </table>
+          </br>
+            <table class="text-white">
+              <script>
+                printDataTemp( {{i[6]|tojson|safe}} , {{i[5]|tojson|safe}} )
+              </script>
+            </table>
+          </br>
+          </div>
+          <!--Charting-->
+          <div class="bg-light shadow-sm mx-auto" style="width: 80%; height: 400px; border-radius: 20px 20px 0 0;">
+            <div id="regionSouth" onload="console.log('done')">
+                <canvas id="{{ i[0][0] }}" style="height:10vh; width:20vw"></canvas>
+                <!--Generating Chart into backend server-->
+                <input type="hidden" id="lineName" name="graphName" value="{{ i[0][0] }}">
+                <!--Download Chart to local user-->
+                <button type="submit" form="downloadLine" >Download</button>
+                <form id="downloadLine" action="/dashboard/{{ i[0][0] }}.png"></form></br></br>
+            </div>
+        </div>
+        </div>
+    </div>
 
-    <!-- Loop -->
-    {% for x in chartObj %}
-        <div class="d-md-flex flex-md-equal w-100 my-md-3 ps-md-3">
-        <div class="bg-dark me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden">
-            <div class="my-3 py-3">
-            <h2 class="display-5">North Region {{ x[0][0][13:14] | int | month_name }} 20{{x[0][0][15:17]}} Humidity Data</h2>
+    <script>
+      //Using the data parsed from the controller side app.py to generate charts
+  
+      createLineChart({{ i[1]|tojson|safe }}, {{ i[2]|tojson|safe }}, {{ i[3]|tojson|safe }}, {{ i[0][0]|tojson|safe }})
+      console.log("line")
+  
+    </script>
+    {%endfor%} 
+    
+    <script>
+      const canvasName = document.querySelectorAll('[id^="chart"]');
+      const lineName = document.querySelectorAll('[id=lineName]');
+      const myTimeout = setTimeout(sendLineIN, 1500);
 
-    {%endfor%}
+      function sendLineIN() {
+          for (let i = 0; i < canvasName.length; i++) {
+              var graphName = lineName[i].value;
+              console.log(lineName[i].value);
+              var graph = canvasName[i];
+              var graphDataURL = graph.toDataURL('image/png');
+
+              $.ajax({
+                  url: '/dashboard/download',
+                  type: 'POST',
+                  data: { 'graphBase64' : graphDataURL,
+                          'graphName' : graphName
+                  },
+                  error: function(error) {
+                      console.log(error)
+                  },
+                  success: function() {
+                      console.log("okay")
+                  },
+              });
+          }
+      }
+  </script>
+    
+    
 </main>
 
 <!--Footer-->
