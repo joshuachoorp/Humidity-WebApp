@@ -90,7 +90,7 @@ def overview_data():
 
     # Drop rows containing NaN values in the specified columns
     df.dropna(subset=columns_with_nan, inplace=True)
-    
+
     # Plotting each of the time series
     fig, ax = plt.subplots(nrows=3, ncols=1, figsize=(10, 8))
     # Get the columns you want to plot (excluding 'Date' and 'Region')

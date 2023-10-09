@@ -1,6 +1,6 @@
 from io import BytesIO
 import base64
-from prediction import linear_regression, correlation, overview_data, predictionHumidity
+from predictionV2 import linear_regression, correlation, overview_data, predictionHumidity
 
 
 
@@ -9,8 +9,8 @@ from prediction import linear_regression, correlation, overview_data, prediction
 
 #linear_regression().show()
 #correlation().show()
-#overview_data().show()
-predictionHumidity().show()
+overview_data().show()
+#predictionHumidity().show()
 
 def convertGraphToB64(plot):
     img = BytesIO()
@@ -21,5 +21,5 @@ def convertGraphToB64(plot):
 
 
 
-print(convertGraphToB64(linear_regression()))
+print(convertGraphToB64(overview_data()))
 
