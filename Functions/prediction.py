@@ -6,9 +6,9 @@ import os
 import pandas as pd
 # Data visualization
 import pmdarima as pm
-#import matplotlib
+import matplotlib
 import matplotlib.pyplot as plt
-#matplotlib.use('Agg')
+matplotlib.use('Agg')
 import seaborn as sns
 import math
 from sklearn.metrics import mean_absolute_error, mean_squared_error
@@ -60,6 +60,20 @@ def linear_regression():
     return plt
 
 def overview_data():
+    # Read the combined data from the CSV file
+    df = pd.read_csv(os.getcwd() + "/Datasets/combinedRegionData.csv", encoding="unicode-escape")
+    #df = pd.read_csv("combinedRegionData.csv", encoding="unicode-escape")
+    df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y')
+    df.drop(columns=['Humidity_High', 'Humidity_Low', 'Maximum Temperature (°C)',
+                    'Lowest Temperature (°C)', 'Max Wind Speed (km/h)'], axis=1, inplace=True)
+
+    # Replace "-" with NaN in specific columns
+    columns_with_nan = ['Humidity_Avg', 'Mean Temperature (°C)', 'Mean Wind Speed (km/h)']
+    df[columns_with_nan] = df[columns_with_nan].replace('-', np.nan)
+
+    # Drop rows containing NaN values in the specified columns
+    df.dropna(subset=columns_with_nan, inplace=True)
+
     # Plotting each of the time series
     fig, ax = plt.subplots(nrows=3, ncols=1, figsize=(10, 8))
     sns.despine()
