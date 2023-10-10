@@ -51,7 +51,7 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 # Index Page
 @app.route("/")
 def Home():
-    return render_template('Dashboard.html')
+    return render_template('index.html')
 
 
 # Exports chart to backend Downloads folder
