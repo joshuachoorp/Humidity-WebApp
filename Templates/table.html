@@ -42,21 +42,25 @@
       </nav>
     </header>
 
-    <main>    
-        <table>
-            <h1>
-                <!--Displaying csv file data in the form of a table-->
-                {% for i in tableData %}
-                <h2>{{titles[loop.index]}}</h2>                            
-                {{ i|safe }}
-                {% endfor %}     
-            </h1> 
-        </table>
-        <style>
-            table, th, td {border: 1px solid black; border-collapse: collapse;}
-        </style>
-    </main>
-
+        <div class="container mt-5">
+        <h1>Data Table</h1>
+        {% for table_html in tableData %}
+        <div >
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        {% for header in titles %}
+                        <th scope = "col">{{ header }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    <td>{{ table_html|safe }}</td>
+                </tbody>
+            </table>
+        </div>
+        {% endfor %}
+    </div>
     <!-- Footer -->
     <footer class="bg-dark text-white py-3">
         <div class="container text-center">
