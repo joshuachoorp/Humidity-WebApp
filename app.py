@@ -95,8 +95,10 @@ def downloadFile(filename):
 # Shows contents of csv file
 @app.route('/table/')
 def table():
-    data = readCsv(os.getcwd() + "/Datasets/combinedRegionData.csv")
-    return render_template('table.html', tableData=[data.to_html()], titles=[''])
+    data = pd.read_csv('Datasets/combinedRegionData.csv', encoding='latin1')
+    data_dict_list = data.to_dict(orient='records')
+    headers = data.columns.tolist()
+    return render_template('table.html', headers=headers, data = data_dict_list)
 
 
 # Prediction Page
@@ -247,3 +249,4 @@ def convertGraphToB64(plot):
     img.seek(0)
     plotB64 = base64.b64encode(img.getvalue()).decode('utf8')
     return plotB64
+
