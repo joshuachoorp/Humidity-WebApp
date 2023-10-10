@@ -163,8 +163,9 @@ def prophet_for_region(region_name, axs, train_size):
     multivariate_df = region_df[['Date'] + target + features + ['Region']].copy()
     multivariate_df.columns = ['ds', 'y'] + features + ['Region']
     train = multivariate_df.iloc[:train_size, :]
-    x_train, y_train = pd.DataFrame(multivariate_df.iloc[:90, [0, 2, 3]]), pd.DataFrame(multivariate_df.iloc[:90, 1])
-    x_valid, y_valid = pd.DataFrame(multivariate_df.iloc[90:, [0, 2, 3]]), pd.DataFrame(multivariate_df.iloc[90:, 1])
+    # divide train_size by 5 due to the 5 regions. This is to ensure that the train and test set are of the same size
+    x_train, y_train = pd.DataFrame(multivariate_df.iloc[:int(train_size/5), [0, 2, 3]]), pd.DataFrame(multivariate_df.iloc[:int(train_size/5), 1])
+    x_valid, y_valid = pd.DataFrame(multivariate_df.iloc[int(train_size/5):, [0, 2, 3]]), pd.DataFrame(multivariate_df.iloc[int(train_size/5):, 1])
 
     model = Prophet()
     model.add_regressor('Mean Temperature (°C)')
