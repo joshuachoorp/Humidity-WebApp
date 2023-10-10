@@ -11,3 +11,4 @@ prophet
 mplcursors
 plotly
 Functions
+openpyxl
