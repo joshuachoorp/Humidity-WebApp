@@ -1,13 +1,11 @@
 """
 Flask backend of Humidity-Webapp
 """
-#Check for required libraries in the system
+
+# Check for required libraries in the system
+# Will Download libraries from requirements.txt if any libraries not found
 from testRequirements import checkReq
 checkReq()
-from pathlib import Path
-import base64
-import os
-from io import BytesIO
 
 # Imports from PlotWeather file
 from Functions import dataGroup, dataPlot, canvasName, dataCreateDiv
@@ -16,7 +14,12 @@ from Functions import dataGroup, dataPlot, canvasName, dataCreateDiv
 from Functions import linear_regression, correlation, overview_data, predictionHumidity
 
 # Imports from 
-from Functions.Filters import month_name_filter
+from Functions import month_name_filter
+
+from pathlib import Path
+import base64
+import os
+from io import BytesIO
 
 from flask import Flask, jsonify, render_template, request, redirect, flash, send_file, send_from_directory, current_app, abort
 import flask
@@ -32,14 +35,6 @@ if __name__ == '__main__':
             from app import app
             #app.run(debug=True)
             app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 3000)))
-
-        # Checks for required packages and installs them if not found
-        # If module required not installed, will throw exception.
-        # If thrown exception, will install modules required based on requirements.txt
-        except ModuleNotFoundError as e:
-            checkReq()
-            print(e)
-            continue
 
         except Exception as e:
             print(e)
@@ -57,25 +52,6 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 @app.route("/")
 def Home():
     return render_template('Dashboard.html')
-
-@app.route('/index')
-def index():
-
-    return render_template('index.html')
-
-
-# Creating dashboard
-@app.route('/dashboard/', methods=['GET', 'POST'])
-def plot():
-    # Passing data to dashboard
-    if request.method == 'POST' and request.form.get('plot') == 'dashboard':
-        pass
-    # Prevents access to dashboard through URL; Only can access through index page's button
-    elif request.method == 'GET':
-        return redirect('/')
-
-    else:
-        return 'Not a valid request method for this route'
 
 
 # Exports chart to backend Downloads folder
@@ -111,47 +87,16 @@ def downloadFile(filename):
         return send_file(filepath + filename, as_attachment=True)
 
     # FileNotFoundError
-    except FileNotFoundError:
-        return abort(404)
+    except Exception as e:
+        return jsonify({'error': str(e)})
 
 
 # Table view page
 # Shows contents of csv file
-@app.route('/table/', methods=['GET', 'POST'])
+@app.route('/table/')
 def table():
-    # Check for if file is uploaded
-    if request.method == 'POST' and request.files['fileName'].filename == '':
-        return redirect('/')
-
-    elif request.method == 'POST':
-        uploadFile = request.files['fileName']
-
-        # Creating table for csv files 
-        if uploadFile.filename.lower().endswith(('.csv')):
-            data = readCsv(uploadFile)
-            return render_template('table.html', tables=[data.to_html()], titles=[''])
-
-        # Creating table for json files
-        elif uploadFile.filename.lower().endswith(('.json')):
-            return render_template('table.html')
-
-        # Creating table for txt files
-        elif uploadFile.filename.lower().endswith(('.txt')):
-            return render_template('table.html')
-
-        else:
-            return redirect('/')
-
-    # Back button to main page
-    if request.method == 'POST' and request.form.get('back') == 'back':
-        return redirect('/')
-
-    # Only allow access to this page through the main page
-    elif request.method == 'GET':
-        return redirect('/')
-
-    else:
-        return 'Not a valid request method for this route'
+    data = readCsv(os.getcwd() + "/Datasets/combinedRegionData.csv")
+    return render_template('table.html', tableData=[data.to_html()], titles=[''])
 
 
 # Prediction Page
@@ -172,28 +117,6 @@ def predict():
                            correlationGraph=correlationGraph,
                            overview=overviewGraph,
                            linear=linearGraph)
-
-
-
-
-
-# Function to read csv file
-def readCsv(csvFileName):
-    # Reading data from csv file
-    data = pd.read_csv(csvFileName, encoding='unicode_escape')
-    return data
-
-
-#Function to convert matplotlib graphs to base64 to be sent to html page
-def convertGraphToB64(plot):
-    img = BytesIO()
-    plot.savefig(img, format='png', bbox_inches='tight')
-    img.seek(0)
-    plotB64 = base64.b64encode(img.getvalue()).decode('utf8')
-    return plotB64
-
-
-
 
 
 # North Region Page
@@ -243,13 +166,12 @@ def West():
 
 
 
-
 # Export dataset as csv
 # Allow users to download csv file we used
 @app.route("/ExportFile")
 def exportFile():
 
-    filepath = os.getcwd() + "\Datasets\compiledRegionData.csv"
+    filepath = os.getcwd() + "\Datasets\combinedRegionData.csv"
 
     return send_file(filepath, as_attachment=True)
 
@@ -257,14 +179,6 @@ def exportFile():
 
 # Import file
 # Allow users to import a csv file
-@app.route("/ImportFile")
-def importFile():
-
-    filepath = os.getcwd() + "\Datasets\compiledRegionData.csv"
-
-    return send_file(filepath, as_attachment=True)
-
-
 @app.route('/process-csv', methods=['POST'])
 def process_csv():
 
@@ -313,3 +227,23 @@ def process_csv():
     except Exception as e:
         return jsonify({'error': str(e)})
 
+
+
+
+
+
+
+# Function to read csv file
+def readCsv(csvFileName):
+    # Reading data from csv file
+    data = pd.read_csv(csvFileName, encoding='unicode_escape')
+    return data
+
+
+# Function to convert matplotlib graphs to base64 to be sent to html page
+def convertGraphToB64(plot):
+    img = BytesIO()
+    plot.savefig(img, format='png', bbox_inches='tight')
+    img.seek(0)
+    plotB64 = base64.b64encode(img.getvalue()).decode('utf8')
+    return plotB64

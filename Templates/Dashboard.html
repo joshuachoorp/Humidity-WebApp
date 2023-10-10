@@ -34,6 +34,7 @@
     <div class="navbar-nav">
       <a class="navbar-brand" href="/">Main</a>
       <a class="navbar-brand" href="/prediction">Prediction</a>
+      <a class="navbar-brand" href="/table">Dataset</a>
     </div>
   </div>
   </nav>
@@ -111,11 +112,11 @@
     </div>
 
     <!-- Tile Section Import -->
-    <div  class="d-md-flex flex-md-equal w-100 my-md-3 ps-md-3" onclick="window.location='/ImportFile';" style="background-image: url('Static/images/Import.jpg'); background-size: cover; cursor: pointer;">
+    <div  class="d-md-flex flex-md-equal w-100 my-md-3 ps-md-3" style="background-image: url('Static/images/Import.jpg'); background-size: cover; cursor: pointer;">
       <div class="me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
         <div class="my-3 p-3">
             <h2 class="display-2 text-white">Import</h2>
-            <form id ='submitForm' method="POST" action="/table" enctype="multipart/form-data">
+            <form id ='submitForm' method="POST" action="/process-csv" enctype="multipart/form-data">
               <input type="file" accept=".csv" name="fileName" id = "fileInput"></input>
               <label for="selectBox">Region:</label>
               <select id="selectBox" name="dropdownOption">

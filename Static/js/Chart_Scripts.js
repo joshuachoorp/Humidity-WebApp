@@ -26,7 +26,7 @@ function printDataTemp(dataValue, dataLabel){
     //console.log(nameLabel)
 
     for (var i=3; i < TempLabel.length; i++) {
-      document.write("<td> " + TempLabel[i] + ": " + parseFloat(TempDate[i].toFixed(2)) + "</td>");
+      document.write("<td> " + TempLabel[i] + ": " + parseFloat(TempDate[i].toFixed(2)) + "&nbsp&nbsp&nbsp&nbsp</td>");
       //console.log(nameLabel[i])
     }
 }

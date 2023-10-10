@@ -13,26 +13,24 @@ import numpy as np
 
 
 # Function to read csv file
-def readFile(file = (os.getcwd() + "/Datasets/compiledRegionData.csv")):
-#def readFile(file = "compiledRegionData.csv"):
+def readFile(file = (os.getcwd() + "/Datasets/combinedRegionData.csv")):
+#def readFile(file = "combinedRegionData.csv"):
+
     # Read csv file into Pandas Dataframe
-    # dayfirst= True, parse_dates= True,   index_col=0,
     df = pd.read_csv(file, encoding="unicode-escape", usecols=[0,1,2,3,4,5,6,7])
-    #df = pd.read_csv("Datasets/compiledRegionData.csv", encoding="unicode-escape", usecols=[0,1,2,3,4,5,6,7])
-    #df = df.reset_index(inplace = True)
-    #df = df.set_index('Date')
     pd.set_option('display.max_columns', None)
     df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y')
     return df
 
+# Read csv file
 df = readFile()
 
-# Function to filter through data and return a dictionary 
+# Function to filter through data and return in the form of a dictionary 
 def dataforGraph(region, month, year, index):
     df = readFile()
+    # Filter data according to what is required
     dataFilter_df = df.loc[(df['Region'] == region.capitalize()) & (df['Date'].dt.month == month) & (df['Date'].dt.year == year)]
     dataforGraph_df = dataFilter_df[ [index] ].to_dict()
-    #dataforGraph_Dict = convertToDict(dataforGraph_df)
     return (dataforGraph_df[index].values())
 
 
@@ -57,13 +55,13 @@ def dataPlot(region):
                 labelDates = label_df['Date'].dt.strftime("%d").unique().tolist()
                 label.append(labelDates)
                 valuesHumi.append(list(dataforGraph(region, int(uniqueMonth[j]), int(uniqueYear[i]), "Humidity_Avg")))
-                valuesTemp.append(list(dataforGraph(region, int(uniqueMonth[j]), int(uniqueYear[i]), "Mean Temperature (Â°C)")))
+                valuesTemp.append(list(dataforGraph(region, int(uniqueMonth[j]), int(uniqueYear[i]), "Mean Temperature (°C)")))
 
             except Exception as e:
                 #print(e)
                 pass
     
-
+    # Storing list of datas in a overall list
     dataPlot = [label, valuesHumi, valuesTemp]
 
     return dataPlot
@@ -86,8 +84,7 @@ def dataFilter(region, month, year):
 
 # Create a function to collate the mean/average of the following weather data for 1 month 
 # (Humidity_high, Humidity_avg, Humidity_low, Mean Temp, Max Temp, Lowest Temp)
-
-def calAvg (filteredDf):
+def calAvg(filteredDf):
 
     avg_Hmd_h = 0
     avg_Hmd_a = 0
@@ -101,45 +98,42 @@ def calAvg (filteredDf):
     # iterate through each column in the filtered df
     # if x == column name, proceed to calculate mean
     for x in filteredDf:
+
+        # Ensure that all data in the dataframe are type numbers and not string
+        filteredDf[x] = pd.to_numeric(filteredDf[x], errors='coerce')
+
         if (x == "Humidity_High"):
             avg_Hmd_h = filteredDf[x].mean()
         elif (x == "Humidity_Avg"):
             avg_Hmd_a = filteredDf[x].mean()
         elif (x == 'Humidity_Low'):
             avg_Hmd_l = filteredDf[x].mean()
-        elif (x == 'Mean Temperature (Â°C)'):
+        elif (x == 'Mean Temperature (°C)'):
             avg_MeanTemp = filteredDf[x].mean()
-        elif (x == 'Maximum Temperature (Â°C)'):
+        elif (x == 'Maximum Temperature (°C)'):
             avg_MaxTemp = filteredDf[x].mean()
-        elif (x == "Lowest Temperature (Â°C)"):
+        elif (x == "Lowest Temperature (°C)"):
             avg_LowTemp = filteredDf[x].mean()
 
     # Convert results and store it into Dictionary  
     data = {
-        'Humidity_High': avg_Hmd_h,
-        'Humidity_Avg': avg_Hmd_a,
-        'Humidity_Low': avg_Hmd_l,
-        'Mean Temperature (Â°C)': avg_MeanTemp,
-        'Maximum Temperature (Â°C)': avg_MaxTemp,
-        'Lowest Temperature (Â°C)': avg_LowTemp
+        'Average Humidity_High': avg_Hmd_h,
+        'Average Humidity_Avg': avg_Hmd_a,
+        'Average Humidity_Low': avg_Hmd_l,
+        'Average Mean Temperature (°C)': avg_MeanTemp,
+        'Average Maximum Temperature (°C)': avg_MaxTemp,
+        'Average Lowest Temperature (°C)': avg_LowTemp
     }
-    #df = pd.DataFrame(data)
-    #return df
-    return data
-    #return avg_Hmd_h, avg_Hmd_a, avg_Hmd_l, avg_MeanTemp, avg_MaxTemp, avg_LowTemp   # Results are returned in tuple form
 
-# create variables to store the dictionary, which contains the mean value of all weather data from June to Aug by region
-def calMeanWeatherData(data):
-    meanWeatherData = calAvg(data)
-    return meanWeatherData
+    return data   
 
 
-# Function to get Highest, Mean and Lowest data for each month
+# Function to get Average of the Highest, Mean and Lowest data for each month
 def dataGroup(region):
-    # Look for unique months in dataset
+    # Look for unique months in dataset and store in a list
     uniqueMonth = df['Date'].dt.strftime("%m").unique().tolist()
 
-    # Look for unique months in dataset
+    # Look for unique months in dataset and store in a list
     uniqueYear = df['Date'].dt.strftime("%Y").unique().tolist()
 
     labelDisplay = []
@@ -152,17 +146,18 @@ def dataGroup(region):
             # Try and except to catch any errors on no matches for months and years
             try:
                 monthDisplay.append(uniqueMonth[j])
-                labelDisplay.append(list(calMeanWeatherData(dataFilter(region, int(uniqueMonth[j]), int(uniqueYear[i]))).keys()))
-                valuesDisplay.append(list(calMeanWeatherData(dataFilter(region, int(uniqueMonth[j]), int(uniqueYear[i]))).values()))
+                labelDisplay.append(list(calAvg(dataFilter(region, int(uniqueMonth[j]), int(uniqueYear[i]))).keys()))
+                valuesDisplay.append(list(calAvg(dataFilter(region, int(uniqueMonth[j]), int(uniqueYear[i]))).values()))
+                
             except Exception as e:
-                #print(e)
+                print(e)
                 pass
 
     dataDisplay = [monthDisplay, labelDisplay, valuesDisplay]
 
     return dataDisplay
 
-
+# Function to store items required to create canvas on html page
 def canvasItems(region):
     uniqueMonth = df['Date'].dt.strftime("%m-%y").unique().tolist()
     items = []
@@ -175,7 +170,8 @@ def canvasItems(region):
     return items
 
 
-
+# Collate all data into overall list
+# Each element in the list contains all required data to plot a graph and show relevant on html
 def dataCreateDiv(region):
     cItem = canvasItems(region)
     dataPlotItem = dataPlot(region)
@@ -193,3 +189,5 @@ def dataCreateDiv(region):
         div.append(divElements)
 
     return div
+
+
