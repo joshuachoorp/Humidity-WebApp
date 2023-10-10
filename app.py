@@ -33,7 +33,8 @@ if __name__ == '__main__':
         # Checks for required packages and installs them if not found
         try:
             from app import app
-            app.run(debug=True)
+            #app.run(debug=True)
+            app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 3000)))
 
         except Exception as e:
             print(e)
