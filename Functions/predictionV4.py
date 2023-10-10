@@ -4,7 +4,6 @@ Humidity Prediction
 
 import os
 import pandas as pd
-import time
 # Data visualization
 import pmdarima as pm
 import matplotlib
@@ -48,12 +47,12 @@ def linear_regression():
 
     # Linear Regression for Mean Temperature vs. Mean Humidity
     x1 = np.array(df['Mean Temperature (°C)']).reshape(-1, 1)
-    y1 = df['Humidity_Avg']
+    y = df['Humidity_Avg']
     model1 = LinearRegression()
-    model1.fit(x1, y1)
+    model1.fit(x1, y)
     y_pred1 = model1.predict(x1)
 
-    ax1.scatter(x1, y1, label='Actual Data', color='blue')
+    ax1.scatter(x1, y, label='Actual Data', color='blue')
     ax1.plot(x1, y_pred1, label='Linear Regression Line', color='red')
     ax1.set_xlabel('Mean Temperature (°C)')
     ax1.set_ylabel('Humidity_Avg')
@@ -62,16 +61,15 @@ def linear_regression():
 
     # Linear Regression for Mean Wind Speed vs. Mean Humidity
     x2 = np.array(df['Mean Wind Speed (km/h)']).reshape(-1, 1)
-    y2 = df['Humidity_Avg']
     model2 = LinearRegression()
-    model2.fit(x2, y2)
+    model2.fit(x2, y)
     y_pred2 = model2.predict(x2)
 
-    ax2.scatter(x2, y2, label='Actual Data', color='blue')
+    ax2.scatter(x2, y, label='Actual Data', color='blue')
     ax2.plot(x2, y_pred2, label='Linear Regression Line', color='red')
     ax2.set_xlabel('Mean Wind Speed (km/h)')
     ax2.set_ylabel('Humidity_Avg')
-    ax2.set_title('Linear Regression: Humidity vs. Mean Wind Speed')
+    ax2.set_title('Linear Regression: Humidity vs. Mean Wind Speed (First Difference)')
     ax2.legend()
 
     plt.tight_layout()  # Ensure proper spacing between subplots
@@ -82,6 +80,7 @@ def overview_data():
     # Read the combined data from the CSV file
     df = pd.read_csv(os.getcwd() + "/Datasets/combinedRegionData.csv", encoding="unicode-escape")
     #df = pd.read_csv("combinedRegionData.csv", encoding="unicode-escape")
+
     df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y')
     df.drop(columns=['Humidity_High', 'Humidity_Low', 'Maximum Temperature (°C)',
                     'Lowest Temperature (°C)', 'Max Wind Speed (km/h)'], axis=1, inplace=True)
@@ -107,7 +106,6 @@ def overview_data():
         ax[i].set_ylabel(ylabel=column, fontsize=10)
         ax[i].legend(title='Region', loc='upper right')
     plt.tight_layout()
-    time.sleep(0.1)
     return plt
 
 def visualize_adfuller_results(series, title, ax):
@@ -160,17 +158,17 @@ def prophet_for_region(region_name, axs, train_size):
     region_df['Region'] = label_encoder.fit_transform(region_df['Region'])
 
     # Prepare the DataFrame for Prophet
-    features = ['Mean Temperature (°C)', 'Second_Difference_Wind']
-    target = ['First_Difference_Humidity']
+    features = ['Mean Temperature (°C)', 'First_Difference_Wind']
+    target = ['Humidity_Avg']
     multivariate_df = region_df[['Date'] + target + features + ['Region']].copy()
     multivariate_df.columns = ['ds', 'y'] + features + ['Region']
     train = multivariate_df.iloc[:train_size, :]
-    x_train, y_train = pd.DataFrame(multivariate_df.iloc[:50, [0, 2, 3]]), pd.DataFrame(multivariate_df.iloc[:50, 1])
-    x_valid, y_valid = pd.DataFrame(multivariate_df.iloc[50:, [0, 2, 3]]), pd.DataFrame(multivariate_df.iloc[50:, 1])
+    x_train, y_train = pd.DataFrame(multivariate_df.iloc[:90, [0, 2, 3]]), pd.DataFrame(multivariate_df.iloc[:90, 1])
+    x_valid, y_valid = pd.DataFrame(multivariate_df.iloc[90:, [0, 2, 3]]), pd.DataFrame(multivariate_df.iloc[90:, 1])
 
     model = Prophet()
     model.add_regressor('Mean Temperature (°C)')
-    model.add_regressor('Second_Difference_Wind')
+    model.add_regressor('First_Difference_Wind')
     model.fit(train)
 
     # Predict on valid set
@@ -180,19 +178,19 @@ def prophet_for_region(region_name, axs, train_size):
     score_rmse = math.sqrt(mean_squared_error(y_valid, y_pred['yhat']))
     model.plot(y_pred, ax=axs)
 
-    future_dates = model.make_future_dataframe(periods=89)
+    future_dates = model.make_future_dataframe(periods=30)
     future_dates[features[0]] = df['Mean Temperature (°C)']
-    future_dates[features[1]] = df['Second_Difference_Wind']
-    future_dates['Second_Difference_Wind'].fillna(0, inplace=True)
+    future_dates[features[1]] = df['First_Difference_Wind']
     # Predict for future dates
     forecast = model.predict(future_dates)
     # Plot the forecast
     train_plot = sns.lineplot(x=x_train['ds'], y=y_train['y'], ax=axs, color='red', label='Train Set')
     ground_truth_plot = sns.lineplot(x=x_valid['ds'], y=y_valid['y'], ax=axs, color='orange', label='Ground truth', ci=None)
     forecast_plot = model.plot(forecast, ax=axs)
-    axs.set_title(f'Prediction of the next 3 months for {region_name} region\nMAE: {score_mae:.2f}, RMSE: {score_rmse:.2f}', fontsize=10)
+    axs.set_title(f'Prediction of the next month for {region_name} region\nMAE: {score_mae:.2f}, RMSE: {score_rmse:.2f}', fontsize=10)
     axs.set_xlabel(xlabel='Date', fontsize=10)
     axs.set_ylabel(ylabel='Humidity', fontsize=10)
+    axs.legend(title='Legend', loc='upper left')
     mplcursors.cursor([train_plot, ground_truth_plot, forecast_plot])
     plt.tight_layout()
     return plt
@@ -201,6 +199,7 @@ def prophet_for_region(region_name, axs, train_size):
 # Read the combined data from the CSV file
 df = pd.read_csv(os.getcwd() + "/Datasets/combinedRegionData.csv", encoding="unicode-escape")
 #df = pd.read_csv("combinedRegionData.csv", encoding="unicode-escape")
+
 df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y')
 df.drop(columns=['Humidity_High', 'Humidity_Low', 'Maximum Temperature (°C)',
                  'Lowest Temperature (°C)', 'Max Wind Speed (km/h)'], axis=1, inplace=True)
@@ -218,28 +217,26 @@ df.dropna(subset=columns_with_nan, inplace=True)
 #display_adf(df)
 
 def predictionHumidity():
-    df['Humidity_Avg'] = pd.to_numeric(df['Humidity_Avg'], errors='coerce')
     df['Mean Wind Speed (km/h)'] = pd.to_numeric(df['Mean Wind Speed (km/h)'], errors='coerce')
-    df['First_Difference_Humidity'] = df['Humidity_Avg'].diff().dropna()  # Remove NaN resulting from differencing
-    df['Second_Difference_Wind'] = df['Mean Wind Speed (km/h)'].diff().dropna()  # Remove NaN resulting from differencing
-
+    df['First_Difference_Wind'] = pd.to_numeric(df['Mean Wind Speed (km/h)'], errors='coerce')
+    df['First_Difference_Wind'] = df['Mean Wind Speed (km/h)'].diff()
+    df['First_Difference_Wind'].fillna(0, inplace=True)
 
     # Perform the ADF test on the differenced time series
-    fig, ax = plt.subplots(nrows=2, ncols=1, figsize=(10, 8))
-    visualize_adfuller_results(df['First_Difference_Humidity'].dropna(), 'First_Difference_Humidity', ax[0])
-    visualize_adfuller_results(df['Second_Difference_Wind'].dropna(), 'Second_Difference_Wind', ax[1])
+    fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(10, 8))
+    visualize_adfuller_results(df['First_Difference_Wind'], 'First_Difference_Wind', ax)
     plt.tight_layout()
 
-
     # Split the data into train and test sets
-    train_size = int(0.50 * len(df))
+    train_size = int(0.90 * len(df))
     # Define the regions you want to predict
     regions_to_predict = ['North', 'South', 'East', 'West', 'Central']
     fig, axs = plt.subplots(len(regions_to_predict), 1, figsize=(20, 12))
-
     # Loop through regions and make predictions for each one
     for i, region in enumerate(regions_to_predict):
         predictionGraphs = prophet_for_region(region, axs[i], train_size)
-
     return predictionGraphs
-plt.show()
+
+
+#predictionHumidity()
+#plt.show()
