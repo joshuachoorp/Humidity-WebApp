@@ -4,8 +4,6 @@ Flask backend of Humidity-Webapp
 #Check for required libraries in the system
 from testRequirements import checkReq
 checkReq()
-
-
 from pathlib import Path
 import base64
 import os
