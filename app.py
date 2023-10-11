@@ -43,13 +43,13 @@ if __name__ == '__main__':
         break
 
 # Register the custom filter function
-app = Flask(__name__,static_folder='Static')
+app = Flask(__name__,static_folder='Static', template_folder='templates')
 app.jinja_env.filters['month_name'] = month_name_filter
 app.jinja_env.auto_reload = True
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 # Index Page
-@app.route("/")
+@app.route("/", methods=['GET'])
 def index():
     return render_template('index.html')
 
