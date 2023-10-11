@@ -50,7 +50,7 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 # Index Page
 @app.route("/")
-def Home():
+def index():
     return render_template('index.html')
 
 
