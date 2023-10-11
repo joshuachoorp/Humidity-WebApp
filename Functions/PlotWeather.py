@@ -14,7 +14,7 @@ import numpy as np
 
 # Function to read csv file
 def readFile(file = (os.getcwd() + "/Datasets/combinedRegionData.csv")):
-#def readFile(file = "combinedRegionData.csv"):
+#def readFile(file = "Datasets/combinedRegionData.csv"):
 
     # Read csv file into Pandas Dataframe
     df = pd.read_csv(file, encoding="unicode-escape", usecols=[0,1,2,3,4,5,6,7])

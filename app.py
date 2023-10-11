@@ -65,7 +65,7 @@ def downloadBackEnd():
     barChartBase64 = barChartBase64.replace('data:image/png;base64,', '')
 
     # Writing base64 string to png file to show image of graph
-    with open("Downloads\\" + barChartName + ".png", "wb") as fh:
+    with open(os.getcwd() + "Downloads\\" + barChartName + ".png", "wb") as fh:
         fh.write(base64.b64decode(barChartBase64))
 
     # Adding file type to input chart
@@ -79,7 +79,7 @@ def downloadBackEnd():
 def downloadFile(filename):
 
     # Locate the current working directory and go to Downloads folder
-    filepath = "Downloads/"
+    filepath = os.getcwd() + "Downloads/"
 
     # Try to download the file
     try:
