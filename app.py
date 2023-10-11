@@ -68,6 +68,7 @@ def downloadBackEnd():
     with open(os.getcwd() + "\Downloads\\" + barChartName + ".png", "wb") as fh:
         fh.write(base64.b64decode(barChartBase64))
 
+    print(os.listdir(os.getcwd() + "\Downloads\\"))
     # Adding file type to input chart
     chartName = barChartName + ".png"
 
@@ -79,7 +80,7 @@ def downloadBackEnd():
 def downloadFile(filename):
 
     # Locate the current working directory and go to Downloads folder
-    filepath = os.getcwd() + "/Downloads/"
+    filepath = os.getcwd() + "\Downloads\\"
 
     # Try to download the file
     try:
