@@ -68,8 +68,6 @@ def downloadBackEnd():
     with open(os.getcwd() + "/Downloads/" + barChartName + ".png", "wb") as fh:
         fh.write(base64.b64decode(barChartBase64))
 
-    print(os.listdir(os.getcwd() + "/Downloads/"))
-    print(os.listdir(os.getcwd()))
     # Adding file type to input chart
     chartName = barChartName + ".png"
 
@@ -97,7 +95,7 @@ def downloadFile(filename):
 # Shows contents of csv file
 @app.route('/table/')
 def table():
-    data = pd.read_csv('Datasets/combinedRegionData.csv', encoding='latin1')
+    data = pd.read_csv('/Datasets/combinedRegionData.csv', encoding='latin1')
     data_dict_list = data.to_dict(orient='records')
     headers = data.columns.tolist()
     return render_template('table.html', headers=headers, data = data_dict_list)
@@ -175,7 +173,7 @@ def West():
 @app.route("/ExportFile")
 def exportFile():
 
-    filepath = os.getcwd() + "\Datasets\combinedRegionData.csv"
+    filepath = os.getcwd() + "/Datasets/combinedRegionData.csv"
 
     return send_file(filepath, as_attachment=True)
 
