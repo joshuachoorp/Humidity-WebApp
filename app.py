@@ -79,7 +79,7 @@ def downloadBackEnd():
 def downloadFile(filename):
 
     # Locate the current working directory and go to Downloads folder
-    filepath = os.getcwd() + "Downloads/"
+    filepath = os.getcwd() + "/Downloads/"
 
     # Try to download the file
     try:
@@ -173,7 +173,7 @@ def West():
 @app.route("/ExportFile")
 def exportFile():
 
-    filepath = "\Datasets\combinedRegionData.csv"
+    filepath = os.getcwd() + "\Datasets\combinedRegionData.csv"
 
     return send_file(filepath, as_attachment=True)
 
