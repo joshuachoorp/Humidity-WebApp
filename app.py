@@ -105,10 +105,6 @@ def table():
 # Shows contents of csv file
 @app.route('/prediction', methods=['GET', 'POST'])
 def predict():
-    #Back button to main page
-    if request.form.get('back') == 'back':
-        return redirect('/')
-
     predictionGraph = convertGraphToB64(predictionHumidity())
     correlationGraph = convertGraphToB64(correlation())
     overviewGraph = convertGraphToB64(overview_data())
