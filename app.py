@@ -95,7 +95,7 @@ def downloadFile(filename):
 # Shows contents of csv file
 @app.route('/table/')
 def table():
-    data = pd.read_csv('/Datasets/combinedRegionData.csv', encoding='latin1')
+    data = pd.read_csv((os.getcwd() +'/Datasets/combinedRegionData.csv'), encoding='latin1')
     data_dict_list = data.to_dict(orient='records')
     headers = data.columns.tolist()
     return render_template('table.html', headers=headers, data = data_dict_list)
