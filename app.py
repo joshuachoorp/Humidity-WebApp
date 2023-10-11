@@ -43,7 +43,7 @@ if __name__ == '__main__':
         break
 
 # Register the custom filter function
-app = Flask(__name__, static_folder='static', template_folder='template')
+app = Flask(__name__, static_folder='Static', template_folder='template')
 app.jinja_env.filters['month_name'] = month_name_filter
 app.jinja_env.auto_reload = True
 app.config['TEMPLATES_AUTO_RELOAD'] = True
