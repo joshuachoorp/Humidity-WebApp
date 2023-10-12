@@ -78,7 +78,6 @@
     <script>
       //Using the data parsed from the controller side app.py to generate charts
       createLineChart({{ i[1]|tojson|safe }}, {{ i[2]|tojson|safe }}, {{ i[3]|tojson|safe }}, {{ i[0][0]|tojson|safe }})
-      console.log("line")
     </script>
     {%endfor%}
     <script>
@@ -89,7 +88,7 @@
       function sendLineIN() {
           for (let i = 0; i < canvasName.length; i++) {
               var graphName = lineName[i].value;
-              console.log(lineName[i].value);
+              //console.log(lineName[i].value);
               var graph = canvasName[i];
               var graphDataURL = graph.toDataURL('image/png');
 

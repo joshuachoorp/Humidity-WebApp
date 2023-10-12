@@ -51,8 +51,9 @@ def dataPlot(region):
         for j in range(len(uniqueMonth)):
             # Try and except to catch any errors on no matches for months and years
             try:
-                label_df = df.loc[(df['Date'].dt.month == int(uniqueMonth[j]))]
+                label_df = df.loc[(df['Date'].dt.month == int(uniqueMonth[j])) & (df['Region'] == region)]
                 labelDates = label_df['Date'].dt.strftime("%d").unique().tolist()
+                labelDates.sort()
                 label.append(labelDates)
                 valuesHumi.append(list(dataforGraph(region, int(uniqueMonth[j]), int(uniqueYear[i]), "Humidity_Avg")))
                 valuesTemp.append(list(dataforGraph(region, int(uniqueMonth[j]), int(uniqueYear[i]), "Mean Temperature (°C)")))

@@ -123,6 +123,7 @@ def predict():
 def North():
     # Data for North Region
     chartObj = dataCreateDiv("North")
+    print(chartObj[-1])
     return render_template('North.html', createDiv=chartObj)
 
 
