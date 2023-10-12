@@ -43,14 +43,14 @@ if __name__ == '__main__':
         break
 
 # Register the custom filter function
-app = Flask(__name__,static_folder='Static')
+app = Flask(__name__, static_folder='Static', template_folder='template')
 app.jinja_env.filters['month_name'] = month_name_filter
 app.jinja_env.auto_reload = True
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 # Index Page
-@app.route("/")
-def Home():
+@app.route("/", methods=['GET'])
+def index():
     return render_template('index.html')
 
 
@@ -65,7 +65,7 @@ def downloadBackEnd():
     barChartBase64 = barChartBase64.replace('data:image/png;base64,', '')
 
     # Writing base64 string to png file to show image of graph
-    with open("Downloads\\" + barChartName + ".png", "wb") as fh:
+    with open(os.getcwd() + "/Downloads/" + barChartName + ".png", "wb") as fh:
         fh.write(base64.b64decode(barChartBase64))
 
     # Adding file type to input chart
@@ -79,7 +79,7 @@ def downloadBackEnd():
 def downloadFile(filename):
 
     # Locate the current working directory and go to Downloads folder
-    filepath = os.getcwd() + "\Downloads\\"
+    filepath = os.getcwd() + "/Downloads/"
 
     # Try to download the file
     try:
@@ -95,7 +95,7 @@ def downloadFile(filename):
 # Shows contents of csv file
 @app.route('/table/')
 def table():
-    data = pd.read_csv('Datasets/combinedRegionData.csv', encoding='latin1')
+    data = pd.read_csv((os.getcwd() +'/Datasets/combinedRegionData.csv'), encoding='latin1')
     data_dict_list = data.to_dict(orient='records')
     headers = data.columns.tolist()
     return render_template('table.html', headers=headers, data = data_dict_list)
@@ -105,10 +105,6 @@ def table():
 # Shows contents of csv file
 @app.route('/prediction', methods=['GET', 'POST'])
 def predict():
-    #Back button to main page
-    if request.form.get('back') == 'back':
-        return redirect('/')
-
     predictionGraph = convertGraphToB64(predictionHumidity())
     correlationGraph = convertGraphToB64(correlation())
     overviewGraph = convertGraphToB64(overview_data())
@@ -173,7 +169,7 @@ def West():
 @app.route("/ExportFile")
 def exportFile():
 
-    filepath = os.getcwd() + "\Datasets\combinedRegionData.csv"
+    filepath = os.getcwd() + "/Datasets/combinedRegionData.csv"
 
     return send_file(filepath, as_attachment=True)
 
