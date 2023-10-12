@@ -1,13 +1,6 @@
 // charts.js
 
 
-// Test Function
-function testPrint(data, labels){
-    for (let i = 0, text = "", text1 = ""; i < data.length; i++) {
-        text += data[i] + "<br>";
-        text1 += labels[i] + "<br>";
-    }
-}
 
 function printDataHumi(dataValue, dataLabel){
     var humiDate = dataValue
@@ -34,7 +27,8 @@ function printDataTemp(dataValue, dataLabel){
 // Generate Line Graphs
 function createLineChart(labels, dataHumi, dataTemp, canvasName) {
     for (let i = 0; i < canvasName.length; i++) {
-        //console.log(labels)
+        console.log(canvasName)
+        console.log(labels)
         var ctx = document.getElementById(canvasName).getContext('2d');
         var myChart = new Chart(ctx, {
             type: 'line',
@@ -92,28 +86,6 @@ function createLineChart(labels, dataHumi, dataTemp, canvasName) {
     }
 }
 
-
-// Send line graph canvas to backend
-function sendLine() {
-    var graphName = document.getElementById('lineName').value;
-    var graph = document.getElementById('northJune');
-    var graphDataURL = graph.toDataURL('image/png');
-    console.log(graphDataURL)
-    
-    $.ajax({
-        url: '/dashboard/download',
-        type: 'POST',
-        data: { 'graphBase64' : graphDataURL,
-                'graphName' : graphName
-        },
-        error: function(error) {
-            console.log(error)
-        },
-        timeout: 10000
-        
-    });
-    console.log('done')
-}
 
 
 // Take screenshot of dashboard
