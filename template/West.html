@@ -51,7 +51,7 @@
     <div class="d-md-flex flex-md-equal w-100 my-md-3 ps-md-3">
         <div class="bg-dark me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden">
           <div class="my-3 py-3 c">
-            <h2 class="display-5">West Region {{ i[4] | int | month_name }} 20{{i[0][0][14:16]}} Humidity Data</h2>
+            <h2 class="display-5">West Region {{ i[4] | int | month_name }} 20{{i[0][0][-2:]}} Humidity Data</h2>
               <div style="text-align: center">
                   <table class="text-white " align = "center"> <script>
                     printDataHumi( {{i[6]|tojson|safe}} , {{i[5]|tojson|safe}} )
