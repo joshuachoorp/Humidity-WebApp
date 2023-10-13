@@ -64,13 +64,15 @@ function createLineChart(labels, dataHumi, dataTemp, canvasName) {
                 },
                 scales: {
                     y: {
-                        beginAtZero: true,
+                        beginAtZero: false,
+                        suggestedMin : 20,
                         type: 'linear',
                         display: true,
                         position: 'left',
                     },
                     y1: {
-                        beginAtZero: true,
+                        beginAtZero: false,
+                        suggestedMin : 20,
                         type: 'linear',
                         display: true,
                         position: 'right',

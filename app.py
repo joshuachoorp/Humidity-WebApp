@@ -117,6 +117,8 @@ def predict():
                            linear=linearGraph)
 
 
+
+
 # North Region Page
 # Show graphs and data related to North region
 @app.route("/North")
