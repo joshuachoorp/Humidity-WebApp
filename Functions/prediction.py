@@ -79,7 +79,6 @@ def linear_regression():
 def overview_data():
     # Read the combined data from the CSV file
     df = pd.read_csv(os.getcwd() + "/Datasets/combinedRegionData.csv", encoding="unicode-escape")
-    #df = pd.read_csv("combinedRegionData.csv", encoding="unicode-escape")
 
     df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y')
     df.drop(columns=['Humidity_High', 'Humidity_Low', 'Maximum Temperature (°C)',
@@ -200,7 +199,6 @@ def prophet_for_region(region_name, axs, train_size):
 
 # Read the combined data from the CSV file
 df = pd.read_csv(os.getcwd() + "/Datasets/combinedRegionData.csv", encoding="unicode-escape")
-#df = pd.read_csv("combinedRegionData.csv", encoding="unicode-escape")
 
 df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y')
 df.drop(columns=['Humidity_High', 'Humidity_Low', 'Maximum Temperature (°C)',
@@ -212,11 +210,6 @@ df[columns_with_nan] = df[columns_with_nan].replace('-', np.nan)
 # Drop rows containing NaN values in the specified columns
 df.dropna(subset=columns_with_nan, inplace=True)
 
-
-#linear_regression()
-#overview_data()
-#correlation()
-#display_adf(df)
 
 def predictionHumidity():
     df['Mean Wind Speed (km/h)'] = pd.to_numeric(df['Mean Wind Speed (km/h)'], errors='coerce')
@@ -239,6 +232,3 @@ def predictionHumidity():
         predictionGraphs = prophet_for_region(region, axs[i], train_size)
     return predictionGraphs
 
-
-#predictionHumidity()
-#plt.show()
