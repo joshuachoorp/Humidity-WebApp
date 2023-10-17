@@ -50,7 +50,21 @@ Make sure you have the following software installed on your system:
 `python app.py` 
 
 
-
+### Libraries used 
+Flask
+pandas
+numpy
+matplotlib
+selenium
+seaborn
+bs4
+requests
+pmdarima
+prophet
+mplcursors
+plotly
+Functions
+openpyxl
 
   
 
