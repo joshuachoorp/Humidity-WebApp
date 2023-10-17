@@ -19,9 +19,7 @@ Therefore, there is a need to organize the weather information within the city t
 
 The Humidity Tracker Web Application is hosted online. Please note that due to the use of a free web hosting service, the initial loading may take a minute or two. You can visit the website by clicking the following link:
 
-[ Website]([https://team32.onrender.com])
-
-
+[Website](https://team32.onrender.com)
 
 
 ## Installation
