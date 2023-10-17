@@ -27,9 +27,8 @@ Do note that it takes approximately a minute or 2 to load as we are using a free
 
 The Humidity Tracker Web Application is hosted online. Please note that due to the use of a free web hosting service, the initial loading may take a minute or two. You can visit the website by clicking the following link:
 
-[Humidity Tracker Web Application](https://your-website-link.com)
+[Humidity Tracker Web Application]([https://your-website-link.com](https://team32.onrender.com))
 
-Feel free to explore the live version of the application to view real-time humidity data for Singapore.
 
 
 
