@@ -15,19 +15,11 @@ Therefore, there is a need to organize the weather information within the city t
 -  **Import and Export:** Import source data and export analyzed data.
 
 
-## Real time Website
-
-The Humidity Tracker Web Application is hosted and accessible online. You can visit the website by clicking the following link:
-
-[Humidity Tracker Web Application](https://your-website-link.com)
-
-Do note that it takes approximately a minute or 2 to load as we are using a free hosting service.
-
-## Website Hosting
+## Website Hosted Online
 
 The Humidity Tracker Web Application is hosted online. Please note that due to the use of a free web hosting service, the initial loading may take a minute or two. You can visit the website by clicking the following link:
 
-[Humidity Tracker Web Application]([https://your-website-link.com](https://team32.onrender.com))
+[ Website]([https://team32.onrender.com])
 
 
 
