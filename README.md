@@ -1,6 +1,6 @@
 # INF 1002 Python Project Team 32 
 
-This project was created by a team of 5 students for the python special project module in 2023. It is a web application that performs data scraping from governmental websites to retrieve the humidity level in Singapore and does data cleansing and predictive analysis for useful insights. 
+This project was created by a team of 5 students for the INF1001 Programming Fundamentals: Python special project in 2023. It is a web application that performs data scraping from governmental websites to retrieve the humidity level in Singapore and does data cleansing and predictive analysis for useful insights. 
 
 ## Problem Statement
 Singapore’s hot and humid tropical climate has a significant impact on urban living conditions.  
